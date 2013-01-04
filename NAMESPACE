@@ -1,0 +1,10 @@
+exportPattern("^[[:alpha:]]+")
+
+importFrom(Matrix, summary) 
+importMethodsFrom(lme4, summary) 
+
+export(lmmpower.default)
+export(lmmpower.lme)
+export(lmmpower.gee)
+export(liu.liang.linear.power)
+export(diggle.linear.power)
