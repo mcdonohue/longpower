@@ -31,57 +31,32 @@
 
 \usage{
 
-lmmpower.default(object=NULL,
-   parameter = 2,
-   pct.change = NULL,
-   delta = NULL,
-   t = NULL,
-   sig.level = 0.05,
-   power = 0.80, 
-   alternative = c("two.sided", "one.sided"),
-   beta=NULL,
-   beta.lim=NULL,
-   delta.lim=NULL,
-   sig2.i=NULL,
-   sig2.s=NULL,
-   sig2.e=NULL,
-   cov.s.i=NULL,
-   R=NULL,
-   method=c("diggle", "liuliang"),
-   ...)
+lmmpower.default(object = NULL, n = NULL, parameter = 2, pct.change =
+  NULL, delta = NULL, t = NULL, sig.level = 0.05, power
+  = NULL, alternative = c("two.sided", "one.sided"),
+  beta = NULL, beta.CI = NULL, delta.CI = NULL, sig2.i =
+  NULL, sig2.s = NULL, sig2.e = NULL, cov.s.i = NULL, R
+  = NULL, method = c("edland", "diggle", "liuliang"),
+  ...)
 
-lmmpower.lme(object,
-   parameter = 2,
-   pct.change = NULL,
-   delta = NULL,
-   t = NULL,
-   sig.level = 0.05,
-   power = 0.80, 
-   alternative = c("two.sided", "one.sided"),
-   beta=NULL,
-   beta.lim=NULL,
-   delta.lim=NULL,
-   sig2.i=NULL,
-   sig2.s=NULL,
-   sig2.e=NULL,
-   cov.s.i=NULL,
-   ...)
+lmmpower.lme(object, n = NULL, parameter = 2, pct.change = NULL,
+  delta = NULL, t = NULL, sig.level = 0.05, power =
+  NULL, alternative = c("two.sided", "one.sided"), beta
+  = NULL, beta.CI = NULL, delta.CI = NULL, sig2.i =
+  NULL, sig2.s = NULL, sig2.e = NULL, cov.s.i = NULL,
+  method = c("edland", "diggle", "liuliang"), ...)
    
-lmmpower.gee (object,
-   parameter = 2,
-   pct.change = NULL,
-   delta = NULL,
-   t = NULL,
-   sig.level = 0.05,
-   power = 0.80, 
-   alternative = c("two.sided", "one.sided"),
-   beta=NULL,
-   beta.lim=NULL,
-   delta.lim=NULL,
-   ...)
+lmmpower.gee(object, n = NULL, parameter = 2, pct.change = NULL,
+  delta = NULL, t = NULL, sig.level = 0.05, power =
+  NULL, alternative = c("two.sided", "one.sided"), beta
+  = NULL, beta.CI = NULL, delta.CI = NULL, method =
+  c("diggle", "liuliang"), ...)
 }
 
 \arguments{
+  \item{n}{
+  sample size per group
+}
   \item{object}{
 %%     ~~Describe \code{object} here~~
 an object returned by lme4 of a mixed-effects model object to placebo data assumed to have either a random intercept, or a random intercept and random effect for time (slope); and fixed effect representing the rate of change in a placebo group.
@@ -118,12 +93,12 @@ power
 %%     ~~Describe \code{beta} here~~
 pilot estimate of the placebo effect (slope or rate of change in the outcome)
 }
-  \item{beta.lim}{
-%%     ~~Describe \code{beta.lim} here~~
+  \item{beta.CI}{
+%%     ~~Describe \code{beta.CI} here~~
 95\% confidence limits of the pilot estimate of beta
 }
-  \item{delta.lim}{
-%%     ~~Describe \code{d.lim} here~~
+  \item{delta.CI}{
+%%     ~~Describe \code{d.CI} here~~
 95\% confidence limits of the effect size
 }
   \item{sig2.i}{
@@ -166,12 +141,12 @@ Any parameters not explicitly stated are extracted from the fitted \code{object}
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
-An object of class \code{power.htest} giving the pasm
+An object of class \code{power.htest} giving the calculated sample size, N, per group and other parameters.
 }
 \references{
 Diggle PJ, Heagerty PJ, Liang K-, Zeger SL. Analysis of longitudinal data. Second Edition. Oxford Statistical Science Serires. 2002.
 
-Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. Biometrics, 53(3), 937-47.
+Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
 }
 \author{
 Michael C. Donohue
@@ -185,30 +160,35 @@ Michael C. Donohue
 \code{\link{diggle.linear.power}}
 }
 \examples{
-lmmpower(delta=1.5, t = seq(0,1.5,0.25),
-	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24))
+\dontrun{
+browseVignettes(package = "longpower")
+}
 
+lmmpower(delta=1.5, t = seq(0,1.5,0.25),
+	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)
+lmmpower(n=208, t = seq(0,1.5,0.25),
+	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)
 lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
-	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24))
+	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)
 
 \dontrun{
 library(lme4)
 fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
-lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1))
+lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 
 library(nlme)
 fm2 <- lme(Reaction ~ Days, random=~Days|Subject, sleepstudy)
-lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1))
+lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 
 # random intercept only
 fm3 <- lme(Reaction ~ Days, random=~1|Subject, sleepstudy)
-lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1))
+lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 
 library(gee)
 fm4 <- gee(Reaction ~ Days, id = Subject,
             data = sleepstudy,
             corstr = "exchangeable")
-lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1))
+lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 
 }
 

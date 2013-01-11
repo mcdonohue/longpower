@@ -8,12 +8,15 @@ Linear mixed model sample size calculations.
 This function performs the sample size calculation for a mixed model of repeated measures with general correlation structure. See Lu, Luo, & Chen (2008) for parameter definitions and other details. This function executes Formula (3) on page 4.
 }
 \usage{
-power.mmrm(Ra, ra, sigmaa, Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1,
+power.mmrm(N = NULL, Ra, ra, sigmaa, Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1,
     delta = NULL, sig.level = 0.05, power = NULL, 
     alternative = c("two.sided", "one.sided"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{N}{
+  total sample size
+}
   \item{Ra}{
   correlation matrix for group a
 }
@@ -56,7 +59,7 @@ See Lu, Luo, & Chen (2008).
 The number of subject required per arm to attain the specified \code{power} given \code{sig.level} and the other parameter estimates.
 }
 \references{
-Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. International Journal of Biostatistics, 4, (1)
+Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
 }
 \author{
 Michael C. Donohue
@@ -84,6 +87,18 @@ for(i in 1:8){
   ttest1 <- c(ttest1, Na + Nb)
 }
 data.frame(phi1, phi2, lambda, ztest, ttest1)
+
+Ra <- matrix(0.25, nrow = 4, ncol = 4)
+diag(Ra) <- 1
+ra <- c(1, 0.90, 0.80, 0.70)
+sigmaa <- 1
+power.mmrm(Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5, power = 0.80)
+power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5)
+power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, power = 0.80)
+
+power.mmrm(Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5, power = 0.80, lambda = 2)
+power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5, lambda = 2)
+power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, power = 0.80, lambda = 2)
 }
 \keyword{ power }
 \keyword{ sample size }% __ONLY ONE__ keyword per line

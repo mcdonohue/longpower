@@ -101,7 +101,8 @@ tab = outer(rho, sigma2,
           t=t,
           sigma2=sigma2,
           R=rho,
-          alternative="one.sided")$n)}))
+          alternative="one.sided",
+          power=0.80)$n)}))
 colnames(tab) = paste("sigma2 =", sigma2)
 rownames(tab) = paste("rho =", rho)
 tab
@@ -130,7 +131,7 @@ u = list(u1 = t, u2 = rep(0,n))
 v = list(v1 = cbind(1,1,rep(0,n)),
          v2 = cbind(1,0,t))         
 
-liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, alternative="two.sided")
+liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, alternative="two.sided", power=0.80)
 @
 So the study would require about 208 subjects per arm to achieve 80\% power, with a two-tailed $\alpha=0.05$.
 

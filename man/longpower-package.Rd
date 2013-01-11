@@ -12,7 +12,9 @@
         into marginal model parameters so that the formulas of 
         Diggle et al or Liu and Liang formula can be applied to produce
         sample size calculations for two sample longitudinal designs
-        assuming known variance.}
+        assuming known variance. The package also handles the categorical time
+        Mixed Model of Repeated Measures (MMRM) using the formula of
+        Lu, Luo, and Chen (2008)}
 \details{
 \tabular{ll}{
 Package: \tab longpower\cr
@@ -31,11 +33,14 @@ Steven D. Edland
 \references{
 Diggle PJ, Heagerty PJ, Liang K, Zeger SL. Analysis of longitudinal data. Second Edition. Oxford Statistical Science Serires. 2002.
 
-Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. Biometrics, 53(3), 937-47.
+Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
+
+Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
 }
 \keyword{ package }
 \seealso{
-\code{lmmpower}
+\code{lmmpower}, \code{\link{power.mmrm}}, \code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}}, \code{\link{liu.liang.linear.power}}
+
 %~~ Optional links to other man pages, e.g. ~~
 %~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 }

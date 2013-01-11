@@ -8,10 +8,16 @@ Linear mixed model sample size calculations from Liu & Liang (1997).
 This function performs the sample size calculation for a linear mixed model. See Liu and Liang (1997) for parameter definitions and other details.
 }
 \usage{
-liu.liang.linear.power(delta, u, v, sigma2 = 1, R, sig.level = 0.05, power = 0.8, Pi = rep(1/length(u), length(u)), alternative=c("two.sided","one.sided"))
+liu.liang.linear.power(n = NULL, delta = NULL, u = NULL, v = NULL, sigma2 =
+     1, R = NULL, R.list = NULL, sig.level = 0.05, power =
+     NULL, Pi = rep(1/length(u), length(u)), alternative =
+     c("two.sided", "one.sided"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{n}{
+  One half the total sample size. This formula can accommodate unbalanced group allocation.
+}
   \item{delta}{
   group difference (possibly a vector of differences)
 }
@@ -29,6 +35,10 @@ liu.liang.linear.power(delta, u, v, sigma2 = 1, R, sig.level = 0.05, power = 0.8
 }
   \item{R}{
   the variance-covariance matrix for the repeated measures
+%%     ~~Describe \code{R} here~~
+}
+  \item{R.list}{
+  a list of variance-covariance matrices for the repeated measures, if assumed different in two groups
 %%     ~~Describe \code{R} here~~
 }
   \item{sig.level}{
@@ -56,7 +66,7 @@ The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same len
 %The number of subject required per arm to attain the specified \code{power} given \code{alpha} and the other parameter estimates.
 %}
 \references{
-Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. Biometrics, 53(3), 937-47.
+Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
 }
 %\author{
 %Michael C. Donohue
@@ -69,6 +79,9 @@ Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correl
 \code{\link{lmmpower}}
 }
 \examples{
+\dontrun{
+browseVignettes(package = "longpower")
+}
 # Reproduces the table on page 29 of Diggle et al
 n = 3
 t = c(0,2,5)
@@ -82,7 +95,8 @@ tab = outer(rho, sigma2,
         round(liu.liang.linear.power(
           delta=0.5, u=u, v=v,
           sigma2=sigma2,
-          R=rho, alternative="one.sided")$n)}))
+          R=rho, alternative="one.sided",
+          power=0.80)$n)}))
 colnames(tab) = paste("sigma2 =", sigma2)
 rownames(tab) = paste("rho =", rho)
 tab
@@ -109,7 +123,7 @@ u = list(u1 = t, u2 = rep(0,n))
 v = list(v1 = cbind(1,1,rep(0,n)),
          v2 = cbind(1,0,t))         
 
-liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05)
+liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
 }
 \keyword{ power }
 \keyword{ sample size }% __ONLY ONE__ keyword per line

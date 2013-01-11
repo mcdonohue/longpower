@@ -8,13 +8,18 @@ Linear mixed model sample size calculations.
 This function performs the sample size calculation for a mixed model of repeated measures with AR(1) correlation structure. See Lu, Luo, & Chen (2008) for parameter definitions and other details.
 }
 \usage{
-power.mmrm.ar1(rho, ra, sigmaa, rb = NULL, sigmab = NULL, 
+power.mmrm.ar1(N = NULL, rho = NULL, 
+  ra = NULL, sigmaa = NULL, 
+  rb = NULL, sigmab = NULL, 
   lambda = 1, times = 1:length(ra),
   delta = NULL, sig.level = 0.05, power = NULL, 
   alternative = c("two.sided", "one.sided"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{N}{
+  total sample size
+}
   \item{rho}{
   AR(1) correlation parameter
 }
@@ -57,7 +62,7 @@ See Lu, Luo, & Chen (2008).
 The number of subject required per arm to attain the specified \code{power} given \code{sig.level} and the other parameter estimates.
 }
 \references{
-Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. International Journal of Biostatistics, 4, (1)
+Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
 }
 \author{
 Michael C. Donohue
@@ -88,14 +93,15 @@ matrix(tab, ncol = 6, byrow = TRUE)
 ra <- c(100, 76, 63, 52)/100
 rb <- c(100, 87, 81, 78)/100
 
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = sqrt(1.25/1.75), power = 0.904,
-    delta = 0.9)
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1.25/1.75, power = 0.910,
-    delta = 0.9)
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1, power = 0.903,
-    delta = 0.9)
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 2, power = 0.904,
-    delta = 0.9)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1.25/1.75, power = 0.910, delta = 0.9)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1, power = 0.903, delta = 0.9)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 2, power = 0.904, delta = 0.9)
+
+power.mmrm.ar1(N=81, ra=ra, sigmaa=1, rb = rb, lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
+power.mmrm.ar1(N=87, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1.25/1.75, power = 0.910)
+power.mmrm.ar1(N=80, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1, delta = 0.9)
+power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL)
 }
 \keyword{ power }
 \keyword{ sample size }% __ONLY ONE__ keyword per line
