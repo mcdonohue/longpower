@@ -133,7 +133,7 @@ v = list(v1 = cbind(1,1,rep(0,n)),
 
 liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, alternative="two.sided", power=0.80)
 @
-So the study would require about 208 subjects per arm to achieve 80\% power, with a two-tailed $\alpha=0.05$.
+So the study would require about 207 subjects per arm to achieve 80\% power, with a two-tailed $\alpha=0.05$.
 
 The simple formula provided in Diggel et al. 2002 suggests the required number of subjects can be found by $2(z_\alpha+2_Q)\xi/d^2$, where
 \[

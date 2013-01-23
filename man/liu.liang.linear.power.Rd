@@ -8,15 +8,15 @@ Linear mixed model sample size calculations from Liu & Liang (1997).
 This function performs the sample size calculation for a linear mixed model. See Liu and Liang (1997) for parameter definitions and other details.
 }
 \usage{
-liu.liang.linear.power(n = NULL, delta = NULL, u = NULL, v = NULL, sigma2 =
+liu.liang.linear.power(N = NULL, delta = NULL, u = NULL, v = NULL, sigma2 =
      1, R = NULL, R.list = NULL, sig.level = 0.05, power =
      NULL, Pi = rep(1/length(u), length(u)), alternative =
      c("two.sided", "one.sided"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{n}{
-  One half the total sample size. This formula can accommodate unbalanced group allocation.
+  \item{N}{
+  The total sample size. This formula can accommodate unbalanced group allocation via \code{Pi}. See Liu and Liang (1997) for more details
 }
   \item{delta}{
   group difference (possibly a vector of differences)
@@ -92,11 +92,11 @@ rho = c(0.2, 0.5, 0.8)
 sigma2 = c(100, 200, 300)
 tab = outer(rho, sigma2, 
       Vectorize(function(rho, sigma2){
-        round(liu.liang.linear.power(
+        ceiling(liu.liang.linear.power(
           delta=0.5, u=u, v=v,
           sigma2=sigma2,
           R=rho, alternative="one.sided",
-          power=0.80)$n)}))
+          power=0.80)$N/2)}))
 colnames(tab) = paste("sigma2 =", sigma2)
 rownames(tab) = paste("rho =", rho)
 tab
@@ -123,7 +123,59 @@ u = list(u1 = t, u2 = rep(0,n))
 v = list(v1 = cbind(1,1,rep(0,n)),
          v2 = cbind(1,0,t))         
 
-liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
+liu.liang.linear.power(delta=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
+liu.liang.linear.power(N=416, u=u, v=v, R=R, sig.level=0.05, power=0.80)
+liu.liang.linear.power(N=416, delta = 1.5, u=u, v=v, R=R, sig.level=0.05)
+liu.liang.linear.power(N=416, delta = 1.5, u=u, v=v, R=R, power=0.80, sig.level = NULL)
+
+# Reproduces total sample sizes, m, of Table 1 of Liu and Liang 1997
+tab1 <- data.frame(cbind(
+  n = c(rep(4, 4), rep(2, 4), 1),
+  rho = c(0.0, 0.3, 0.5, 0.8)))
+u = list(u1 = 1, u2 = 1) # intercept
+v = list(v1 = 1, # treatment
+       v2 = 0) # control       
+m <- c()
+for(i in 1:nrow(tab1)){
+  R <- matrix(tab1$rho[i], nrow = tab1$n[i], ncol = tab1$n[i])
+  diag(R) <- 1
+  m <- c(m, liu.liang.linear.power(
+    delta=0.5,
+    u = list(u1 = rep(1, tab1$n[i]), u2 = rep(1, tab1$n[i])), # intercept
+    v = list(v1 = rep(1, tab1$n[i]), # treatment
+             v2 = rep(0, tab1$n[i])), # control       
+    sigma2=1,
+    R=R, alternative="two.sided",
+    power=0.90)$N)
+}
+cbind(tab1, m)
+
+# Reproduces total sample sizes, m, of Table 3.a. of Liu and Liang 1997
+# with unbalanced design
+tab3 <- data.frame(cbind(
+  rho = rep(c(0.0, 0.3, 0.5, 0.8), 2),
+  pi1 = c(rep(0.8, 4), rep(0.2, 4))))
+u = list(u1 = 1, u2 = 1) # intercept
+v = list(v1 = 1, # treatment
+       v2 = 0) # control
+m <- c()
+for(i in 1:nrow(tab3)){
+  R <- matrix(tab3$rho[i], nrow = 4, ncol = 4)
+  diag(R) <- 1
+  m <- c(m, ceiling(liu.liang.linear.power(
+    delta=0.5,
+    u = list(u1 = rep(1, 4), u2 = rep(1, 4)), # intercept
+    v = list(v1 = rep(1, 4), # treatment
+             v2 = rep(0, 4)), # control       
+    sigma2=1,
+    Pi = c(tab3$pi1[i], 1-tab3$pi1[i]),
+    R=R, alternative="two.sided",
+    power=0.90)$N))
+}
+cbind(tab3, m)
+
+
+
 }
 \keyword{ power }
 \keyword{ sample size }% __ONLY ONE__ keyword per line

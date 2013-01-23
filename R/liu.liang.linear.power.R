@@ -1,10 +1,10 @@
-liu.liang.linear.power <- function(n=NULL, delta=NULL, u=NULL, v=NULL, sigma2=1, R=NULL, R.list=NULL,
+liu.liang.linear.power <- function(N=NULL, delta=NULL, u=NULL, v=NULL, sigma2=1, R=NULL, R.list=NULL,
   sig.level=0.05, power=NULL, 
   Pi = rep(1/length(u),length(u)),
   alternative = c("two.sided", "one.sided"))
 {
-  if (sum(sapply(list(n, delta, sigma2, power, sig.level), is.null)) != 1) 
-      stop("exactly one of 'n', 'sigma2', 'delta', 'power', and 'sig.level' must be NULL")
+  if (sum(sapply(list(N, delta, sigma2, power, sig.level), is.null)) != 1) 
+      stop("exactly one of 'N', 'sigma2', 'delta', 'power', and 'sig.level' must be NULL")
   if (!is.null(sig.level) && !is.numeric(sig.level) || any(0 > 
       sig.level | sig.level > 1)) 
       stop("'sig.level' must be numeric in [0, 1]")
@@ -46,33 +46,36 @@ liu.liang.linear.power <- function(n=NULL, delta=NULL, u=NULL, v=NULL, sigma2=1,
 
     Sigma1 <- 0
     for(i in 1:length(u)) 
-    Sigma1 <- Sigma1 + Pi[i]*(t(u[[i]])-Ipl%*%Illinv%*%t(v[[i]]))%*%Rinv[[i]]%*%
-    (u[[i]]-v[[i]]%*%Illinv%*%t(Ipl))                           
+      Sigma1 <- Sigma1 + Pi[i]*(t(u[[i]])-Ipl%*%Illinv%*%t(v[[i]]))%*%Rinv[[i]]%*%
+      (u[[i]]-v[[i]]%*%Illinv%*%t(Ipl))
     Sigma1 <- Sigma1/sigma2
 
-    ceiling((qnorm(1-ifelse(alternative=="two.sided", sig.level/2, sig.level)) + 
-    qnorm(power))^2/
-    (delta%*%Sigma1%*%delta)[1,1])
+    n1 <- (qnorm(1-ifelse(alternative=="two.sided", sig.level/2, sig.level)) + 
+      qnorm(power))^2/
+      (delta%*%Sigma1%*%delta)[1,1]
+    n <- n1/Pi[1]*Pi
+    sum(n)
   })
   
   if (is.null(sig.level)) 
       sig.level <- uniroot(function(sig.level) eval(n.body) - 
-          n, c(1e-10, 1 - 1e-10))$root
+          N, c(1e-10, 1 - 1e-10))$root
   else if (is.null(power)) 
       power <- uniroot(function(power) eval(n.body) - 
-          n, c(1e-3, 1 - 1e-10))$root
+          N, c(1e-3, 1 - 1e-10))$root
   else if (is.null(delta)) 
       delta <- uniroot(function(delta) eval(n.body) - 
-          n, c(1e-10, 1e5))$root
+          N, c(1e-10, 1e5))$root
   else if (is.null(sigma2)) 
       sigma2 <- uniroot(function(sigma2) eval(n.body) - 
-          n, c(1e-10, 1e5))$root
-  n <- eval(n.body)
-
+          N, c(1e-10, 1e5))$root
+  
+  N <- eval(n.body)
+  
   METHOD <- "Longitudinal linear model power calculation (Liu & Liang, 1997)"
-  structure(list(n = n, delta = delta, sigma2 = sigma2, 
+  structure(list(N = N, n = N*Pi, delta = delta, sigma2 = sigma2, 
     sig.level = sig.level, power = power, alternative = alternative,
     R = R,
-    note = "n is *1/2* the total sample size required.",
+    note = "N is total sample size and n is sample size in each group.",
     method = METHOD), class = "power.longtest")
 }

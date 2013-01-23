@@ -41,11 +41,11 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
       sigma <- mean(c(sigmaa, sigmab))
     }
   
-    Na <- as.numeric(ceiling(
+    Na <- as.numeric(
       (phia + lambda * phib)*(qnorm(ifelse(alternative=="two.sided", sig.level/2, sig.level)) + qnorm(1-power))^2*
       sigma^2/delta^2
-    ))
-    Nb <- as.numeric(ceiling(Na/lambda))
+    )
+    Nb <- as.numeric(Na/lambda)
     list(N = Na + Nb, Na = Na, Nb = Nb)
   })
     
@@ -109,11 +109,11 @@ power.mmrm.ar1 <- function(N = NULL, rho = NULL,
         sigma <- mean(c(sigmaa, sigmab))
       }
   
-      Na <- as.numeric(ceiling(
+      Na <- as.numeric(
         (phia + lambda * phib)*(qnorm(ifelse(alternative=="two.sided", sig.level/2, sig.level)) + qnorm(1-power))^2*
         sigma^2/delta^2
-      ))
-      Nb <- as.numeric(ceiling(Na/lambda))
+      )
+      Nb <- as.numeric(Na/lambda)
       list(N = Na + Nb, Na = Na, Nb = Nb)
   })
   

@@ -1,8 +1,8 @@
 Package: longpower
 Type: Package
 Title: Sample size calculations for longitudinal data
-Version: 1.0-3
-Date: 2013-01-11
+Version: 1.0-4
+Date: 2013-01-22
 Author: Michael C. Donohue, Anthony C. Gamst, Steven D. Edland
 Maintainer: Michael C. Donohue <mdonohue@ucsd.edu>
 Description: The longpower package contains functions for computing

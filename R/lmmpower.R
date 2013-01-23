@@ -34,7 +34,7 @@ lmmpower.default <- function(object=NULL,
   method <- match.arg(method)
   
 	m <- length(t)
-	if(is.null(R) & method != "edland"){
+	if(is.null(R) & method %in% c("edland", "liuliang")){
 	  D <- matrix(c(sig2.i, cov.s.i, cov.s.i, sig2.s), nrow=2)
 	  R <- cbind(1,t)%*%D%*%rbind(1,t)  
 	  R <- R + diag(sig2.e, m, m)
@@ -44,8 +44,9 @@ lmmpower.default <- function(object=NULL,
 	  u <- list(u1 = t, u2 = rep(0,m))
 	  v <- list(v1 = cbind(1,1,rep(0,m)),
 	         v2 = cbind(1,0,t))
+	  if(!is.null(n)) N <- n*2 else N <- NULL
 	}
-	    
+
 	results <- switch(method,
 	  edland = edland.linear.power(n=n, delta=delta, t=t, 
       sig2.s=sig2.s, sig2.e=sig2.e, 
@@ -56,7 +57,7 @@ lmmpower.default <- function(object=NULL,
 	    sig.level=sig.level,
 	    power=power,
 	    alternative=alternative),
-	  liuliang = liu.liang.linear.power(n=n, delta, u=u, v=v, R=R, 
+	  liuliang = liu.liang.linear.power(N=N, delta=delta, u=u, v=v, R=R,
 	    sig.level=sig.level,
 	    power=power,
 	    alternative=alternative))
@@ -74,9 +75,9 @@ lmmpower.default <- function(object=NULL,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[1], t=t, R=R, 
 		    sig.level=sig.level,
 		    power=power)$n,
-		  liuliang = liu.liang.linear.power(n=NULL, results$delta.CI[1], u=u, v=v, R=R, 
+		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[1], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power)$n)
+		    power=power)$N/2)
 		n.lower <- switch(method,
 		  edland = edland.linear.power(n=NULL, results$delta.CI[2], t, sig2.s, sig2.e, 
         sig.level=sig.level,
@@ -85,9 +86,9 @@ lmmpower.default <- function(object=NULL,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[2], t=t, R=R, 
 		    sig.level=sig.level,
 		    power=power)$n,
-		  liuliang = liu.liang.linear.power(n=NULL, results$delta.CI[2], u=u, v=v, R=R, 
+		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[2], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power)$n)
+		    power=power)$N/2)
 		n.CI <- c(n.lower, n.upper)
 		if(n.CI[1]>n.CI[2]) n.CI <- n.CI[2:1]
 		results$n.CI <- n.CI 

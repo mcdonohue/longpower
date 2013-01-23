@@ -10,8 +10,8 @@ edland.linear.power <- function(n = NULL, delta = NULL, t = NULL, sig2.s = 0, si
   alternative <- match.arg(alternative)
 
   n.body <- quote({
-    ceiling(2*(qnorm(ifelse(alternative=="two.sided", sig.level/2, sig.level)) + qnorm(1-power))^2 * 
-      (sig2.s + sig2.e/sum((t - mean(t))^2)) / delta^2)
+    2*(qnorm(ifelse(alternative=="two.sided", sig.level/2, sig.level)) + qnorm(1-power))^2 * 
+      (sig2.s + sig2.e/sum((t - mean(t))^2)) / delta^2
   })
   
   if (is.null(sig.level)) 

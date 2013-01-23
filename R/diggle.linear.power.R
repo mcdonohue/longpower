@@ -15,8 +15,8 @@ function(n=NULL, delta=NULL, t=NULL, sigma2=1, R=NULL,
   n.body <- quote({
     V = sigma2*R
     xi = solve(rbind(1,t)%*%solve(V)%*%cbind(1,t))[2,2]
-    ceiling(2*(qnorm(ifelse(alternative=="two.sided", sig.level/2, sig.level)) +
-       qnorm(1-power))^2*xi/delta^2)
+    2*(qnorm(ifelse(alternative=="two.sided", sig.level/2, sig.level)) +
+       qnorm(1-power))^2*xi/delta^2
   })
   
   if (is.null(sig.level)) 
