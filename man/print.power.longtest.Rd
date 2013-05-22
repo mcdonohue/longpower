@@ -1,5 +1,3 @@
-% Adapted form Peter Dalgaard's print.power.htest
-
 \name{print.power.longtest}
 \alias{print.power.longtest}
 \title{Print method for longitudinal data power calculation object}
@@ -23,7 +21,6 @@
 \value{
   none
 }
-
 \seealso{
   \code{\link{liu.liang.linear.power}},
   \code{\link{diggle.linear.power}},

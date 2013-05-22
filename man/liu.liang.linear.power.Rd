@@ -1,6 +1,5 @@
 \name{liu.liang.linear.power}
 \alias{liu.liang.linear.power}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Linear mixed model sample size calculations from Liu & Liang (1997).
 }
@@ -13,7 +12,6 @@ liu.liang.linear.power(N = NULL, delta = NULL, u = NULL, v = NULL, sigma2 =
      NULL, Pi = rep(1/length(u), length(u)), alternative =
      c("two.sided", "one.sided"))
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{N}{
   The total sample size. This formula can accommodate unbalanced group allocation via \code{Pi}. See Liu and Liang (1997) for more details
@@ -22,60 +20,40 @@ liu.liang.linear.power(N = NULL, delta = NULL, u = NULL, v = NULL, sigma2 =
   group difference (possibly a vector of differences)
 }
   \item{u}{
-%%     ~~Describe \code{u} here~~
   a list of covariate vectors or matrices associated with the parameter of interest
 }
   \item{v}{
-%%     ~~Describe \code{v} here~~
   a respective list of covariate vectors or matrices associated with the nuisance parameter
 }
   \item{sigma2}{
   the error variance
-%%     ~~Describe \code{sigma2} here~~
 }
   \item{R}{
   the variance-covariance matrix for the repeated measures
-%%     ~~Describe \code{R} here~~
 }
   \item{R.list}{
   a list of variance-covariance matrices for the repeated measures, if assumed different in two groups
-%%     ~~Describe \code{R} here~~
 }
   \item{sig.level}{
   type one error
-%%     ~~Describe \code{alpha} here~~
 }
   \item{power}{
   power
-%%     ~~Describe \code{power} here~~
 }
   \item{Pi}{
   the proportion of covariates of each type
-%%     ~~Describe \code{Pi} here~~
 }
   \item{alternative}{
   one- or two-sided test
-%%     ~~Describe \code{Pi} here~~
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
 The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same length and sorted with respect to each other. See Liu and Liang (1997) and package vignette for more details.
 }
-%\value{
-%The number of subject required per arm to attain the specified \code{power} given \code{alpha} and the other parameter estimates.
-%}
 \references{
 Liu, G. and Liang, K. Y. (1997) Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
 }
-%\author{
-%Michael C. Donohue
-%}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 \code{\link{lmmpower}}
 }
 \examples{
@@ -173,11 +151,8 @@ for(i in 1:nrow(tab3)){
     power=0.90)$N))
 }
 cbind(tab3, m)
-
-
-
 }
 \keyword{ power }
-\keyword{ sample size }% __ONLY ONE__ keyword per line
+\keyword{ sample size }
 \keyword{ mixed effects }
 \keyword{ random effects }

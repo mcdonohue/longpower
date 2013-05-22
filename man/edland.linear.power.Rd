@@ -1,6 +1,5 @@
 \name{edland.linear.power}
 \alias{edland.linear.power}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Linear mixed model sample size calculations.
 }
@@ -11,7 +10,6 @@ This function performs the sample size calculation for a linear mixed model with
 edland.linear.power(n=NULL, delta=NULL, t=NULL, sig2.s = 0, sig2.e = 1, 
   sig.level = 0.05, power = NULL, alternative = c("two.sided", "one.sided"))
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{n}{
   sample size per group
@@ -36,7 +34,6 @@ edland.linear.power(n=NULL, delta=NULL, t=NULL, sig2.s = 0, sig2.e = 1,
 }
   \item{alternative}{
   one- or two-sided test
-%%     ~~Describe \code{Pi} here~~
 }
 }
 \details{
@@ -50,18 +47,13 @@ Edland, S.D. (2009) Which MRI measure is best for Alzheimer's disease prevention
 \author{
 Michael C. Donohue, Steven D. Edland
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 \code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}
 }
 \examples{
 \dontrun{
 browseVignettes(package = "longpower")
 }
-
 # Reproduces the table on page 29 of Diggle et al
 n = 3
 t = c(0,2,5)
@@ -86,6 +78,6 @@ n = length(t)
 edland.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, sig.level=0.05, power = 0.80)
 }
 \keyword{ power }
-\keyword{ sample size }% __ONLY ONE__ keyword per line
+\keyword{ sample size }
 \keyword{ mixed effects }
 \keyword{ random effects }

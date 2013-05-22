@@ -1,6 +1,5 @@
 \name{power.mmrm.ar1}
 \alias{power.mmrm.ar1}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Linear mixed model sample size calculations.
 }
@@ -15,7 +14,6 @@ power.mmrm.ar1(N = NULL, rho = NULL,
   delta = NULL, sig.level = 0.05, power = NULL, 
   alternative = c("two.sided", "one.sided"))
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{N}{
   total sample size
@@ -67,11 +65,7 @@ Lu, K., Luo, X., Chen, P.-Y. (2008) Sample size estimation for repeated measures
 \author{
 Michael C. Donohue
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 \code{\link{power.mmrm}}, \code{\link{lmmpower}}, \code{\link{diggle.linear.power}}
 }
 \examples{
@@ -104,6 +98,6 @@ power.mmrm.ar1(N=80, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1, delta = 0.9)
 power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL)
 }
 \keyword{ power }
-\keyword{ sample size }% __ONLY ONE__ keyword per line
+\keyword{ sample size }
 \keyword{ mixed effects }
 \keyword{ random effects }

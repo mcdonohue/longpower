@@ -21,14 +21,6 @@
         parameter of interest is assumed to be the rate of change over time
         of the outcome.
 }
-%\section{Methods}{
-%\describe{
-%
-%\item{\code{signature(object = "ANY")}}{ ~~describe this method here }
-%
-%\item{\code{signature(object = "mer")}}{ ~~describe this method here }
-%}}
-
 \usage{
 
 lmmpower.default(object = NULL, n = NULL, parameter = 2, pct.change =
@@ -58,89 +50,65 @@ lmmpower.gee(object, n = NULL, parameter = 2, pct.change = NULL,
   sample size per group
 }
   \item{object}{
-%%     ~~Describe \code{object} here~~
 an object returned by lme4 of a mixed-effects model object to placebo data assumed to have either a random intercept, or a random intercept and random effect for time (slope); and fixed effect representing the rate of change in a placebo group.
 }
   \item{parameter}{
-%%     ~~Describe \code{parameter} here~~
 the name or position of the rate of change parameter of interest, e.g. (\code{"time"}, \code{"t"}, or \code{2} if it is the second specified fixed effect).
 }
   \item{pct.change}{
-%%     ~~Describe \code{pct.change} here~~
 the percent change in the pilot estimate of the parameter of interest (\code{beta}, the placebo/null effect) 
 }
   \item{delta}{
-%%     ~~Describe \code{d} here~~
 the change in the pilot estimate of the parameter of interest, computed from \code{pct.change} if left missing.
 }
   \item{t}{
-%%     ~~Describe \code{t} here~~
 vector of time points
 }
   \item{sig.level}{
-%%     ~~Describe \code{sig.level} here~~
 Type I error
 }
   \item{power}{
-%%     ~~Describe \code{power} here~~
 power
 }
   \item{alternative}{
-%%     ~~Describe \code{alternative} here~~
 \code{"two.sided"} or \code{"one.sided"}
 }
   \item{beta}{
-%%     ~~Describe \code{beta} here~~
 pilot estimate of the placebo effect (slope or rate of change in the outcome)
 }
   \item{beta.CI}{
-%%     ~~Describe \code{beta.CI} here~~
 95\% confidence limits of the pilot estimate of beta
 }
   \item{delta.CI}{
-%%     ~~Describe \code{d.CI} here~~
 95\% confidence limits of the effect size
 }
   \item{sig2.i}{
-%%     ~~Describe \code{sig2.i} here~~
 pilot estimate of variance of random intercept
 }
   \item{sig2.s}{
-%%     ~~Describe \code{sig2.s} here~~
 pilot estimate of variance of random slope
 }
   \item{sig2.e}{
-%%     ~~Describe \code{sig2.e} here~~
 pilot estimate of residual variance
 }
   \item{cov.s.i}{
-%%     ~~Describe \code{cov.s.i} here~~
 pilot estimate of covariance of random slope and intercept
 }
   \item{R}{
-%%     ~~Describe \code{cov.s.i} here~~
 pilot estimate of a marginal model working correlation matrix
 }
   \item{method}{
-%%     ~~Describe \code{\dots} here~~
 the formula to use. Defaults to \code{"diggle"} for Diggle et al (2002). Alternatively
 \code{"liuliang"} can be selected for Liu & Liang (1997).
 }
   \item{...}{
-%%     ~~Describe \code{\dots} here~~
 other arguments}
 }
 
 \details{
-%%  ~~ If necessary, more details than the description above ~~
 Any parameters not explicitly stated are extracted from the fitted \code{object}.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
 An object of class \code{power.htest} giving the calculated sample size, N, per group and other parameters.
 }
 \references{
@@ -151,11 +119,7 @@ Liu, G., and Liang, K. Y. (1997) Sample size calculations for studies with corre
 \author{
 Michael C. Donohue
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
 \code{\link{liu.liang.linear.power}}
 \code{\link{diggle.linear.power}}
 }
@@ -189,14 +153,10 @@ fm4 <- gee(Reaction ~ Days, id = Subject,
             data = sleepstudy,
             corstr = "exchangeable")
 lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
-
 }
-
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ power }
-\keyword{ sample size }% __ONLY ONE__ keyword per line
+\keyword{ sample size }
 \keyword{ mixed effects }
 \keyword{ random effects }
 \keyword{ marginal model }

@@ -1,12 +1,10 @@
 \name{diggle.linear.power}
 \alias{diggle.linear.power}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Linear mixed model sample size calculations.}
 \usage{
   diggle.linear.power(n=NULL, delta=NULL, t=NULL, sigma2 = 1, R=NULL, 
     sig.level = 0.05, power = NULL, alternative = c("two.sided", "one.sided"))
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{n}{sample size per group}
   \item{delta}{group difference in slopes}
@@ -78,6 +76,6 @@ R = R + diag(sig2.e, n, n)
 diggle.linear.power(d=1.5, t=t, R=R, sig.level=0.05, power=0.80)
 }
 \keyword{ power }
-\keyword{ sample size }% __ONLY ONE__ keyword per line
+\keyword{ sample size }
 \keyword{ mixed effects }
 \keyword{ random effects }
