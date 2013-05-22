@@ -1,7 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 
 importFrom(Matrix, summary) 
-importClassesFrom(lme4, lmerMod) 
+importClassesFrom(lme4, mer) 
 
 export(lmmpower.default)
 export(lmmpower.lme)

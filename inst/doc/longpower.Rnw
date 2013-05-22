@@ -1,23 +1,32 @@
-\documentclass[12pt]{article}
-\usepackage{Sweave,amsmath,amsfonts,bm}
-%\usepackage[authoryear,round]{natbib}
-%\bibliographystyle{plainnat}
-\DefineVerbatimEnvironment{Sinput}{Verbatim}
-{formatcom={\vspace{-1ex}},fontshape=sl,
-  fontfamily=courier,fontseries=b, fontsize=\footnotesize}
-\DefineVerbatimEnvironment{Soutput}{Verbatim}
-{formatcom={\vspace{-1ex}},fontfamily=courier,fontseries=b,%
-  fontsize=\footnotesize}
-%%\VignetteIndexEntry{Power calculations for longitudinal data}
-%%\VignetteDepends{longpower}
+\documentclass{article}
+\usepackage{mathpazo,amsmath,amsfonts,bm}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{url}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% \VignetteIndexEntry{Power calculations for longitudinal data}
+% \VignetteEngine{knitr::knitr}
+% \VignetteDepends{longpower}
+
+\makeatother
+
+\begin{document}
+
+<<knitropts, results = 'hide', echo = FALSE, message = FALSE>>=
+library(knitr)
+opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, tidy = FALSE, comment = NA)
+@
+
 \title{Power for linear models of longitudinal data with applications to Alzheimer's Disease Phase II study design}
 \author{Michael C. Donohue, Steven D. Edland, Anthony C. Gamst\\
 Division of Biostatistics and Bioinformatics\\
 University of California, San Diego}
-\begin{document}
-\SweaveOpts{engine=R,eps=FALSE,pdf=TRUE,strip.white=true}
-\SweaveOpts{include=FALSE}
-\setkeys{Gin}{width=\textwidth}
 
 \newcommand{\var}{\mathrm{var}}
 \newcommand{\corr}{\mathrm{corr}}
@@ -32,19 +41,19 @@ University of California, San Diego}
 \maketitle
 
 \section{Introduction}
-We will discuss power and sample size estimation for randomized placebo controlled studies in which the primary inference is based on the interaction of treatment and time in a linear mixed effects model (Laird and Ware 1982). We will demonstrate how the sample size formulas of Liu and Liang (1997) for marginal or generalized estimating equation (GEE) models (Zeger and Liang 1986) can be adapted for mixed effects models. Finally, using mixed effects model estimates based on data from the Alzheimer's Disease Neuroimaging Initiative (ADNI), we will give examples of sample size calculations for models with and without baseline covariates which may help explain heterogeneity in cognitive decline and improve power.
+We will discuss power and sample size estimation for randomized placebo controlled studies in which the primary inference is based on the interaction of treatment and time in a linear mixed effects model \citep{laird}. We will demonstrate how the sample size formulas of \citep{liu} for marginal or model fit by generalized estimating equation (GEE) \citep{zeger} can be adapted for mixed effects models. Finally, using mixed effects model estimates based on data from the Alzheimer's Disease Neuroimaging Initiative (ADNI), we will give examples of sample size calculations for models with and without baseline covariates which may help explain heterogeneity in cognitive decline and improve power.
 
 \section{Power calculations}
 \subsection{Exchangeable correlation and random intercept models}
-Suppose we wish to estimate the required sample size for inference regarding the interaction of treatment and time in a longitudinal, placebo controlled study. Such calculations are relatively straightforward when the inference is based on a GEE model in which the correlation structure is assumed to be ``exchangeable.'' An exchangeable correlation structure specifies that all observations from within the same cluster, or repeated measures on the same subject, are equally correlated. This is exactly equivalent to a random effects model which includes a random intercept for each cluster of correlated observations. Sample sizes for study designs using these models can be calculated using a simple formula such as that in Diggle et al. 2002, page 29. The formula requires the number visits, the interval between visits, the estimated model variance ($\sigma^2$), the within subject correlation ($\rho$), and of course the usual sample size calculation inputs (power, significance level, and effect size). 
+Suppose we wish to estimate the required sample size for inference regarding the interaction of treatment and time in a longitudinal, placebo controlled study. Such calculations are relatively straightforward when the inference is based on a GEE model in which the correlation structure is assumed to be ``exchangeable.'' An exchangeable correlation structure specifies that all observations from within the same cluster, or repeated measures on the same subject, are equally correlated. This is exactly equivalent to a random effects model which includes a random intercept for each cluster of correlated observations. Sample sizes for study designs using these models can be calculated using a simple formula such as that in \citep{diggle}, page 29. The formula requires the number visits, the interval between visits, the estimated model variance ($\sigma^2$), the within subject correlation ($\rho$), and of course the usual sample size calculation inputs (power, significance level, and effect size). 
 
-To translate the formula of Diggle et al. 2002 to the random effects setting, let us first consider the details of the assumed error structure of the GEE framework. The GEE model assumes that the response for subject $i$ at time $t_{ij}$, denoted $Y_{ij}$, is the group mean, dependent on time and treatment, plus an error term $\varepsilon_{ij}$. Or, borrowing notation from Diggle et al. 2002, for group A:
+To translate the formula of \cite{diggle} to the random effects setting, let us first consider the details of the assumed error structure of the GEE framework. The GEE model assumes that the response for subject $i$ at time $t_{ij}$, denoted $Y_{ij}$, is the group mean, dependent on time and treatment, plus an error term $\varepsilon_{ij}$. Or, borrowing notation from \cite{diggle}, for group A:
 \[
 Y_{ij} = \beta_{0A} + \beta_{1A}t_{ij} + \varepsilon_{ij},\quad i=1,\ldots,m; j=1,\ldots,n.
 \]
 and similarly for Group B. The null hypothesis is $H_0: d=\beta_{1A} - \beta_{1B} = 0$. Under an exchangeable correlation structure  $\var(Y_{ij})=\var(\varepsilon_{ij})=\sigma^2$ and $\corr(Y_{ij},Y_{ik})=\corr(\varepsilon_{ij}, \varepsilon_{ik})=\rho$, for all subjects, $i$, and time points $j, k$. 
 
-In the mixed effects framework we can assume a random intercept model which is equivalent to the GEE model with exchangeable correlation structure. In this case we believe $\varepsilon_{ij} = \alpha_i + \varepsilon_{ij}^*$, where $\alpha_i$ is the random intercept term shared by all observations and $\varepsilon_{ij}^*$ are independent and identically distributed (iid) error terms. We see that $\var(Y_{ij})=\var(\varepsilon_{ij})=\var(\alpha_i) + \var(\varepsilon_{ij}^*)$ and $\corr(Y_{ij},Y_{ik})=E[(\alpha_i + \varepsilon_{ij}^*)(\alpha_i + \varepsilon_{ik}^*)]/\sigma^2=\var(\alpha_i)/\sigma^2$. The variance of the random intercept, $\var(\alpha_i)$, and the residual variance, $\var(\varepsilon_{ij})$, are easily obtainable from the output of mixed effects fitting software so that one might fit a random effects model to pilot data to educate a power calculation using the GEE formula of Diggle et al. 2002. Assuming equal numbers in the placebo and active groups, a common visit schedule for all subjects ($t_{ij} = t_{kj}$ for all $i,j,k$), and a random intercept model; the number of subjects per group is:
+In the mixed effects framework we can assume a random intercept model which is equivalent to the GEE model with exchangeable correlation structure. In this case we believe $\varepsilon_{ij} = \alpha_i + \varepsilon_{ij}^*$, where $\alpha_i$ is the random intercept term shared by all observations and $\varepsilon_{ij}^*$ are independent and identically distributed (iid) error terms. We see that $\var(Y_{ij})=\var(\varepsilon_{ij})=\var(\alpha_i) + \var(\varepsilon_{ij}^*)$ and $\corr(Y_{ij},Y_{ik})=E[(\alpha_i + \varepsilon_{ij}^*)(\alpha_i + \varepsilon_{ik}^*)]/\sigma^2=\var(\alpha_i)/\sigma^2$. The variance of the random intercept, $\var(\alpha_i)$, and the residual variance, $\var(\varepsilon_{ij})$, are easily obtainable from the output of mixed effects fitting software so that one might fit a random effects model to pilot data to educate a power calculation using the GEE formula of \cite{diggle}. Assuming equal numbers in the placebo and active groups, a common visit schedule for all subjects ($t_{ij} = t_{kj}$ for all $i,j,k$), and a random intercept model; the number of subjects per group is:
 \[
 m = \frac{2(z_\alpha + z_Q)^2(\var(\alpha_i) + \var(\varepsilon_{ij}^*))^2(1-\var(\alpha_i)/\sigma^2)}{ns_x^2d^2}
 \]
@@ -59,9 +68,9 @@ where we use $\varepsilon_{ij}^*$ again to denote iid error and reserve $\vareps
 \[
 \Sigma = [(\var(\alpha_{0})+t_{j}t_{k}\var(\alpha_{1}) + (t_{j}+t_{k})\cov(\alpha_{0},\alpha_{1}))]_{jk}+{\rm diag}(\var(\varepsilon^*_j))
 \]
- Armed with this specification of the covariance matrix one can use the sample size formula of Liu and Liang (1997) for linear GEE models (page 941). (Warning: The formula given on the bottom page 29 of Diggle et al. 2002 for general correlation matrices, $R$, is wrong).
+ Armed with this specification of the covariance matrix one can use the sample size formula of \cite{liu} for linear GEE models (page 941). (Warning: The formula given on the bottom page 29 of \cite{diggle} for general correlation matrices, $R$, is wrong).
 
-The formula for linear models provided by Liu and Liang (1997) is useful for testing $H_0: \bm{\psi=0}$ for any linear model of the form:
+The formula for linear models provided by \cite{liu} is useful for testing $H_0: \bm{\psi=0}$ for any linear model of the form:
 \[
 Y_{ij} = \x_{ij}'\bm{\psi} + \mathbf{z}_{ij}'\bm{\lambda} + \varepsilon_{ij}
 \]
@@ -72,11 +81,7 @@ Y_{ij}=\beta_0 + \beta_1\{{\rm Group}_{i}=A\} + \beta_2t_{ij} + \beta_3t_{ij}\{{
 That is, the parameter of interest for the interaction of treatment and time is $\psi = \beta_3$ and nuisance parameter is $\bm{\lambda} = (\beta_0,\beta_1,\beta_2)'$. The covariates are distributed as $\x_{i} = (t_1, \ldots, t_n)'$ and $\mathbf{z}_j = [\mathbf{1}\, \mathbf{0}\, \x_i]_{n\times3}$ with probability 1/2 (active group); and $\x_{i} = \mathbf{0}$ and $\mathbf{z}_j = [\mathbf{1}\, \mathbf{0}\, \x_i]_{n\times3}$ with probability 1/2 (placebo group).
 
 The Liu and Liang's formula for linear models can be coded In R as:
-<<echo=FALSE, results=hide>>=
-options(prompt=" ", continue="  ")
-#library(mvtnorm)
-@
-<<echo=TRUE, results=hide>>=
+<<echo=TRUE, results='hide'>>=
 library(longpower)
 @
 <<echo=TRUE>>=
@@ -85,7 +90,7 @@ liu.liang.linear.power
 
 The parameters include \texttt{d}, the effect size (possibly vector); \texttt{u}, the list of covariate vectors or matrices associated with the parameter of interest; \texttt{v}, the respective list of covariate vectors or matrices associated with the nuisance parameter; \texttt{sigma2}, the error variance; \texttt{R}, the correlation structure; and \texttt{Pi} the proportion of covariates of each type (\texttt{u}, \texttt{v}, and \texttt{Pi} are expected to be the same length and sorted with respect to each other).
 
-For example, we can reproduce the table exchangeable correlations on page 29 of Diggle et al for the case of $\bm{t} = (0,2,5)'$, $\alpha=0.05$, power=0.80, and $d=0.5$ as follows:
+For example, we can reproduce the table exchangeable correlations on page 29 of \cite{diggle} for the case of $\bm{t} = (0,2,5)'$, $\alpha=0.05$, power=0.80, and $d=0.5$ as follows:
 <<>>=
 n = 3
 t = c(0,2,5)
@@ -131,11 +136,11 @@ u = list(u1 = t, u2 = rep(0,n))
 v = list(v1 = cbind(1,1,rep(0,n)),
          v2 = cbind(1,0,t))         
 
-liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, alternative="two.sided", power=0.80)
+liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
 @
 So the study would require about 207 subjects per arm to achieve 80\% power, with a two-tailed $\alpha=0.05$.
 
-The simple formula provided in Diggel et al. 2002 suggests the required number of subjects can be found by $2(z_\alpha+2_Q)\xi/d^2$, where
+The simple formula provided in \cite{diggle} suggests the required number of subjects can be found by $2(z_\alpha+2_Q)\xi/d^2$, where
 \[
 \xi_\textrm{WRONG}=
   \left(\begin{array}{cc}
@@ -159,7 +164,7 @@ Executing this for our Alzheimer's example, we get a sample size of:
 x = (rbind(1,t)%*%solve(R)%*%cbind(1,t))[2,2]
 x*2*(qnorm(1-0.05/2) + qnorm(0.80))^2/1.5^2
 @
-which is clearly wrong. In fact, there is a typo in Diggle, et al (2002). The correct formula for $\xi$ is:
+which is clearly wrong. In fact, there is a typo in \cite{diggle}. The correct formula for $\xi$ is:
 \begin{equation}\label{eq:diggle3}
 \xi = 
   \left(\begin{array}{cc}
@@ -184,7 +189,7 @@ x = solve(rbind(1,t)%*%solve(R)%*%cbind(1,t))[2,2]
 x*2*(qnorm(1-0.05/2) + qnorm(0.80))^2/1.5^2
 @
 
-Similary, using Liu and Liang 1997, we attempt to derive the correct closed form formula for this specific linear model. The required sample size per group is given as
+Similarly, using \cite{liu}, we attempt to derive the correct closed form formula for this specific linear model. The required sample size per group is given as
 \[
 m = \nu/(\psi_1'\tilde\Sigma_1\psi_1)
 \]
@@ -227,7 +232,8 @@ Applying this to our working example:
 X = t(v[[1]])%*%solve(R)%*%v[[1]] + 
     t(v[[2]])%*%solve(R)%*%v[[2]]
 
-Sigma1 = ((t(u[[1]])%*%solve(R)%*%t-t(u[[1]])%*%solve(R)%*%v[[1]]%*%solve(X)%*%t(v[[1]])%*%solve(R)%*%t)/2)
+Sigma1 = ((t(u[[1]])%*%solve(R)%*%t - 
+           t(u[[1]])%*%solve(R)%*%v[[1]]%*%solve(X)%*%t(v[[1]])%*%solve(R)%*%t)/2)
 
 (qnorm(1-0.05/2) + qnorm(0.80))^2/(Sigma1*(1.5)^2)
 @
@@ -272,13 +278,15 @@ Sigma1 = ((t(u[[1]])%*%solve(R)%*%t-t(u[[1]])%*%solve(R)%*%v[[1]]%*%solve(X)%*%t
 %sum(sim)/B
 %@
 
-\section{References}
-\begin{itemize}
-\item Diggle PJ, Heagerty PJ, Liang K-, Zeger SL. Analysis of longitudinal data. Second Edition. Oxford Statistical Science Serires. 2002.
-\item Laird, N.M. and Ware, J.H. (1982) Random-Effects Models for Longitudinal Data, Biometrics, 38, 963-974.
-\item Liu G, Liang KY. Sample size calculations for studies with correlated observations. Biometrics. 1997;53:937-47.
-\item Zeger, S.L. and Liang, K.Y. (1986) Longitudinal data analysis for discrete and continuous outcomes. Biometrics, 42 121--130.
-\end{itemize}
+% \section{References}
+% \begin{itemize}
+% \item Diggle PJ, Heagerty PJ, Liang K-, Zeger SL. Analysis of longitudinal data. Second Edition. Oxford Statistical Science Series. 2002.
+% \item Laird, N.M. and Ware, J.H. (1982) Random-Effects Models for Longitudinal Data, Biometrics, 38, 963-974.
+% \item Liu G, Liang KY. Sample size calculations for studies with correlated observations. Biometrics. 1997;53:937-47.
+% \item Zeger, S.L. and Liang, K.Y. (1986) Longitudinal data analysis for discrete and continuous outcomes. Biometrics, 42 121--130.
+% \end{itemize}
 
+\bibliographystyle{jss}
+\bibliography{longpower}
 
 \end{document}

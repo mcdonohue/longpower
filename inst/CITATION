@@ -6,7 +6,7 @@
      
      citEntry(entry="Manual",
               title = "longpower: Power and sample size calculators for linear mixed models",
-              author = personList(as.person("Michael C. Donohue"), as.person("Steven D. Edland")),
+              author = personList(as.person("Michael C. Donohue"), as.person("Anthony C. Gamst"), as.person("Steven D. Edland")),
               year = year,
               note = vers,
      

@@ -218,7 +218,7 @@ lmmpower.gee <- function(object,
 		method=method, ...)
 }
 
-setMethod("lmmpower", signature(object = "lmerMod"),
+setMethod("lmmpower", signature(object = "mer"),
   function(object, 
    n = NULL, 
    parameter = 2,

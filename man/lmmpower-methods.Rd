@@ -2,7 +2,7 @@
 \docType{methods}
 \alias{lmmpower-methods}
 \alias{lmmpower,ANY-method}
-\alias{lmmpower,lmerMod-method}
+\alias{lmmpower,mer-method}
 \alias{lmmpower}
 \alias{lmmpower.default}
 \alias{lmmpower.lme}
