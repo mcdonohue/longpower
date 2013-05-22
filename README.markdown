@@ -5,5 +5,5 @@ The longpower package contains functions for computing power and sample size for
 ## To install, from an R prompt:
 
 ```r
-install_packages("longpower")
+install.packages("longpower")
 ```
