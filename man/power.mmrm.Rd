@@ -59,7 +59,7 @@ See Lu, Luo, & Chen (2008).
 The number of subject required per arm to attain the specified \code{power} given \code{sig.level} and the other parameter estimates.
 }
 \references{
-Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
+Lu, K., Luo, X., Chen, P.-Y. (2008) Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
 }
 \author{
 Michael C. Donohue

@@ -66,7 +66,7 @@ The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same len
 %The number of subject required per arm to attain the specified \code{power} given \code{alpha} and the other parameter estimates.
 %}
 \references{
-Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
+Liu, G. and Liang, K. Y. (1997) Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
 }
 %\author{
 %Michael C. Donohue

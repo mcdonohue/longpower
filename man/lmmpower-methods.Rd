@@ -1,12 +1,12 @@
 \name{lmmpower-methods}
 \docType{methods}
 \alias{lmmpower-methods}
+\alias{lmmpower,ANY-method}
+\alias{lmmpower,lmerMod-method}
 \alias{lmmpower}
 \alias{lmmpower.default}
 \alias{lmmpower.lme}
 \alias{lmmpower.gee}
-\alias{lmmpower,ANY-method}
-\alias{lmmpower,mer-method}
 \title{Sample size calculations for linear mixed models of rate of change based on lmer, lme, or gee "placebo" pilot estimates.
 }
 \description{These functions compute
@@ -144,9 +144,9 @@ Any parameters not explicitly stated are extracted from the fitted \code{object}
 An object of class \code{power.htest} giving the calculated sample size, N, per group and other parameters.
 }
 \references{
-Diggle PJ, Heagerty PJ, Liang K-, Zeger SL. Analysis of longitudinal data. Second Edition. Oxford Statistical Science Serires. 2002.
+Diggle P.J., Heagerty P.J., Liang K., Zeger S.L. (2002) \emph{Analysis of longitudinal data}. Second Edition. Oxford Statistical Science Series.
 
-Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
+Liu, G., and Liang, K. Y. (1997) Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
 }
 \author{
 Michael C. Donohue

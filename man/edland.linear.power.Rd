@@ -45,7 +45,7 @@ This function will also provide sample size estimates for linear mixed models wi
 The number of subject required per arm to attain the specified \code{power} given \code{sig.level} and the other parameter estimates.
 }
 \references{
-Edland SD (2009) Which MRI measure is best for Alzheimer's disease prevention trials: Statistical considerations of power and sample size. 2009 Joint Stat Meeting Proceedings. 4996-4999.
+Edland, S.D. (2009) Which MRI measure is best for Alzheimer's disease prevention trials: Statistical considerations of power and sample size. \emph{Joint Stat Meeting Proceedings}. 4996-4999.
 }
 \author{
 Michael C. Donohue, Steven D. Edland

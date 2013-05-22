@@ -1,70 +1,38 @@
 \name{diggle.linear.power}
 \alias{diggle.linear.power}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-Linear mixed model sample size calculations.
-}
-\description{
-This function performs the sample size calculation for a linear mixed model. See Diggle et al (2002) for parameter definitions and other details.
-}
+\title{Linear mixed model sample size calculations.}
 \usage{
-diggle.linear.power(n=NULL, delta=NULL, t=NULL, sigma2 = 1, R=NULL, sig.level = 0.05, power = NULL, alternative = c("two.sided", "one.sided"))
+  diggle.linear.power(n=NULL, delta=NULL, t=NULL, sigma2 = 1, R=NULL, 
+    sig.level = 0.05, power = NULL, alternative = c("two.sided", "one.sided"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{n}{
-  sample size per group
-}
-  \item{delta}{
-  group difference in slopes
-}
-  \item{t}{
-  the observation times
-%%     ~~Describe \code{sigma2} here~~
-}
-  \item{sigma2}{
-  the marginal model (GEE) scale parameter
-%%     ~~Describe \code{sigma2} here~~
-}
-  \item{R}{
-  the working correlation matrix (or variance-covariance matrix if \code{sigma2}
+  \item{n}{sample size per group}
+  \item{delta}{group difference in slopes}
+  \item{t}{the observation times}
+  \item{sigma2}{the marginal model (GEE) scale parameter}
+  \item{R}{the working correlation matrix (or variance-covariance matrix if \code{sigma2}
   is 1). If \code{R} is a scalar, an exchangeable working correlation matrix
-  will be assumed.
-%%     ~~Describe \code{R} here~~
-}
-  \item{sig.level}{
-  type one error
-%%     ~~Describe \code{sig.level} here~~
-}
-  \item{power}{
-  power
-%%     ~~Describe \code{power} here~~
-}
-  \item{alternative}{
-  one- or two-sided test
-%%     ~~Describe \code{Pi} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same length and sorted with respect to each other. See Diggle, et al (1997) and package vignette for more details.
+  will be assumed.}
+  \item{sig.level}{Type I error}
+  \item{power}{power}
+  \item{alternative}{one- or two-sided test}
 }
 \value{
 The number of subject required per arm to attain the specified \code{power} given \code{sig.level} and the other parameter estimates.
 }
+\description{
+This function performs the sample size calculation for a linear mixed model. See Diggle et al (2002) for parameter definitions and other details.
+}
+\details{
+The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same length and sorted with respect to each other. See Diggle, et al (1997) and package vignette for more details.
+}
 \references{
-Diggle PJ, Heagerty PJ, Liang K, Zeger SL. Analysis of longitudinal data. Second Edition. Oxford Statistical Science Serires. 2002.
+Diggle P.J., Heagerty P.J., Liang K., Zeger S.L. (2002) \emph{Analysis of longitudinal data}. Second Edition. Oxford Statistical Science Series.
 }
-\author{
-Michael C. Donohue, Steven D. Edland
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}
-}
+\author{Michael C. Donohue, Steven D. Edland}
+\seealso{\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}}
 \examples{
 \dontrun{
 browseVignettes(package = "longpower")

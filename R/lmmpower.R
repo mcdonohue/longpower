@@ -218,7 +218,7 @@ lmmpower.gee <- function(object,
 		method=method, ...)
 }
 
-setMethod("lmmpower", signature(object = "mer"),
+setMethod("lmmpower", signature(object = "lmerMod"),
   function(object, 
    n = NULL, 
    parameter = 2,
@@ -247,7 +247,7 @@ setMethod("lmmpower", signature(object = "mer"),
 	alternative <- match.arg(alternative)
   method <- match.arg(method)
   
-	if(is.numeric(parameter)) parameter <- rownames(summary(object)@coefs)[parameter]
+	if(is.numeric(parameter)) parameter <- rownames(coef(summary(object)))[parameter]
 	
 	tab <- lme4::VarCorr(object)
 	if(length(tab)>1) stop("Too many grouping levels. Function is 
@@ -273,7 +273,7 @@ setMethod("lmmpower", signature(object = "mer"),
 	         ifelse(nrow(tab)==2, tab[2 ,2], NA))
 	# residual var
 	if(is.null(sig2.e))
-	  sig2.e = as.numeric(summary(object)@REmat[summary(object)@REmat[,"Groups"]=="Residual", "Variance"])
+	  sig2.e = summary(object)$sigma^2
 	# covariance of slope and intercept
 	if(is.null(cov.s.i))
     cov.s.i = ifelse(nrow(tab)==1, 0, 
