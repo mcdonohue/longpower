@@ -1,8 +1,8 @@
 Package: longpower
 Type: Package
 Title: Sample size calculations for longitudinal data
-Version: 1.0-7
-Date: 2013-05-22
+Version: 1.0-8
+Date: 2013-05-28
 Author: Michael C. Donohue, Anthony C. Gamst, Steven D. Edland
 Maintainer: Michael C. Donohue <mdonohue@ucsd.edu>
 Description: The longpower package contains functions for computing
@@ -17,7 +17,8 @@ Description: The longpower package contains functions for computing
         size calculations for two sample longitudinal designs assuming
         known variance.
 License: GPL (>= 2)
-Depends: Matrix, lme4, methods, nlme, knitr
+Depends: R (>= 3.0.0), Matrix, lme4, methods, nlme
+Suggests: knitr
 LazyLoad: yes
 VignetteBuilder: knitr
 URL: http://mdonohue.bitbucket.org/longpower

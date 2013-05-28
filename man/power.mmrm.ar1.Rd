@@ -87,15 +87,31 @@ matrix(tab, ncol = 6, byrow = TRUE)
 ra <- c(100, 76, 63, 52)/100
 rb <- c(100, 87, 81, 78)/100
 
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1.25/1.75, power = 0.910, delta = 0.9)
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1, power = 0.903, delta = 0.9)
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 2, power = 0.904, delta = 0.9)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
+  lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9
+)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
+  lambda = 1.25/1.75, power = 0.910, delta = 0.9
+)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
+  lambda = 1, power = 0.903, delta = 0.9
+)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
+  lambda = 2, power = 0.904, delta = 0.9
+)
 
-power.mmrm.ar1(N=81, ra=ra, sigmaa=1, rb = rb, lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
-power.mmrm.ar1(N=87, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1.25/1.75, power = 0.910)
-power.mmrm.ar1(N=80, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 1, delta = 0.9)
-power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb, lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL)
+power.mmrm.ar1(N=81, ra=ra, sigmaa=1, rb = rb, 
+  lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9
+)
+power.mmrm.ar1(N=87, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
+  lambda = 1.25/1.75, power = 0.910
+)
+power.mmrm.ar1(N=80, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
+  lambda = 1, delta = 0.9
+)
+power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
+  lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL
+)
 }
 \keyword{ power }
 \keyword{ sample size }
