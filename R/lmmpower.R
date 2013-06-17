@@ -273,7 +273,7 @@ setMethod("lmmpower", signature(object = "mer"),
 	         ifelse(nrow(tab)==2, tab[2 ,2], NA))
 	# residual var
 	if(is.null(sig2.e))
-	  sig2.e = summary(object)$sigma^2
+	  sig2.e = sigma(summary(object))^2
 	# covariance of slope and intercept
 	if(is.null(cov.s.i))
     cov.s.i = ifelse(nrow(tab)==1, 0, 
