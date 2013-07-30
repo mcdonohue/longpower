@@ -1,69 +1,55 @@
 \name{power.mmrm}
 \alias{power.mmrm}
-\title{
-Linear mixed model sample size calculations.
-}
-\description{
-This function performs the sample size calculation for a mixed model of repeated measures with general correlation structure. See Lu, Luo, & Chen (2008) for parameter definitions and other details. This function executes Formula (3) on page 4.
-}
+\title{Linear mixed model sample size calculations.}
 \usage{
-power.mmrm(N = NULL, Ra, ra, sigmaa, Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1,
-    delta = NULL, sig.level = 0.05, power = NULL, 
+  power.mmrm(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
+    Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1,
+    delta = NULL, sig.level = 0.05, power = NULL,
     alternative = c("two.sided", "one.sided"))
 }
 \arguments{
-  \item{N}{
-  total sample size
-}
-  \item{Ra}{
-  correlation matrix for group a
-}
-  \item{ra}{
-  retention in group a
-}
-  \item{sigmaa}{
-  standard deviation of observation of interest in group a
-}
-  \item{Rb}{
-  correlation matrix for group a
-}
-  \item{rb}{
-  retention in group b
-}
-  \item{sigmab}{
-  standard deviation of observation of interest in group b. If NULL, \code{sigmab} is
-  assumed same as \code{sigmaa}. If not NULL, \code{sigmaa} and \code{sigmab} are averaged.
-}
-  \item{lambda}{
-  allocation ratio
-}
-  \item{delta}{
-  effect size
-}
-  \item{sig.level}{
-  type one error
-}
-  \item{power}{
-  power
-}
-  \item{alternative}{
-  one- or two-sided test
-}
-}
-\details{
-See Lu, Luo, & Chen (2008).
+  \item{N}{total sample size}
+
+  \item{Ra}{correlation matrix for group a}
+
+  \item{ra}{retention in group a}
+
+  \item{sigmaa}{standard deviation of observation of
+  interest in group a}
+
+  \item{Rb}{correlation matrix for group a}
+
+  \item{rb}{retention in group b}
+
+  \item{sigmab}{standard deviation of observation of
+  interest in group b. If NULL, \code{sigmab} is assumed
+  same as \code{sigmaa}. If not NULL, \code{sigmaa} and
+  \code{sigmab} are averaged.}
+
+  \item{lambda}{allocation ratio}
+
+  \item{delta}{effect size}
+
+  \item{sig.level}{type one error}
+
+  \item{power}{power}
+
+  \item{alternative}{one- or two-sided test}
 }
 \value{
-The number of subject required per arm to attain the specified \code{power} given \code{sig.level} and the other parameter estimates.
+  The number of subject required per arm to attain the
+  specified \code{power} given \code{sig.level} and the
+  other parameter estimates.
 }
-\references{
-Lu, K., Luo, X., Chen, P.-Y. (2008) Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. \emph{International Journal of Biostatistics}, 4, (1)
+\description{
+  This function performs the sample size calculation for a
+  mixed model of repeated measures with general correlation
+  structure. See Lu, Luo, & Chen (2008) for parameter
+  definitions and other details. This function executes
+  Formula (3) on page 4.
 }
-\author{
-Michael C. Donohue
-}
-\seealso{
-\code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}}, \code{\link{diggle.linear.power}}
+\details{
+  See Lu, Luo, & Chen (2008).
 }
 \examples{
 # reproduce Table 1 from Lu, Luo, & Chen (2008)
@@ -94,7 +80,23 @@ power.mmrm(Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5, power = 0.80, lambda 
 power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5, lambda = 2)
 power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, power = 0.80, lambda = 2)
 }
-\keyword{ power }
-\keyword{ sample size }
-\keyword{ mixed effects }
-\keyword{ random effects }
+\author{
+  Michael C. Donohue
+}
+\references{
+  Lu, K., Luo, X., Chen, P.-Y. (2008) Sample size
+  estimation for repeated measures analysis in randomized
+  clinical trials with missing data. \emph{International
+  Journal of Biostatistics}, 4, (1)
+}
+\seealso{
+  \code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}},
+  \code{\link{diggle.linear.power}}
+}
+\keyword{effects}
+\keyword{mixed}
+\keyword{power}
+\keyword{random}
+\keyword{sample}
+\keyword{size}
+

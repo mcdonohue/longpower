@@ -101,7 +101,7 @@ rho = c(0.2, 0.5, 0.8)
 sigma2 = c(100, 200, 300)
 tab = outer(rho, sigma2, 
       Vectorize(function(rho, sigma2){
-        round(diggle.linear.power(
+        ceiling(diggle.linear.power(
           d=0.5,
           t=t,
           sigma2=sigma2,

@@ -218,7 +218,7 @@ lmmpower.gee <- function(object,
 		method=method, ...)
 }
 
-setMethod("lmmpower", signature(object = "mer"),
+setMethod("lmmpower", signature(object = "merMod"),
   function(object, 
    n = NULL, 
    parameter = 2,
@@ -258,7 +258,7 @@ setMethod("lmmpower", signature(object = "mer"),
 	  	equipped to handle at most a random intercept and slope.")
   m <- length(t)
 	if(is.null(beta))	
-	  beta = coef(summary(object))[parameter,'Estimate']
+	  beta = fixef(object)[parameter][[1]]
 	if(is.null(beta.CI))	
 	  beta.CI = rep(coef(summary(object))[parameter,"Estimate"],2) + 
 	    c(-1,1)*qnorm(0.025)*coef(summary(object))[parameter,"Std. Error"]
@@ -273,7 +273,7 @@ setMethod("lmmpower", signature(object = "mer"),
 	         ifelse(nrow(tab)==2, tab[2 ,2], NA))
 	# residual var
 	if(is.null(sig2.e))
-	  sig2.e = sigma(summary(object))^2
+	  sig2.e = getME(object, "sigma")^2
 	# covariance of slope and intercept
 	if(is.null(cov.s.i))
     cov.s.i = ifelse(nrow(tab)==1, 0, 

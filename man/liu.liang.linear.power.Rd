@@ -1,60 +1,54 @@
 \name{liu.liang.linear.power}
 \alias{liu.liang.linear.power}
-\title{
-Linear mixed model sample size calculations from Liu & Liang (1997).
-}
-\description{
-This function performs the sample size calculation for a linear mixed model. See Liu and Liang (1997) for parameter definitions and other details.
-}
+\title{Linear mixed model sample size calculations from Liu & Liang (1997).}
 \usage{
-liu.liang.linear.power(N = NULL, delta = NULL, u = NULL, v = NULL, sigma2 =
-     1, R = NULL, R.list = NULL, sig.level = 0.05, power =
-     NULL, Pi = rep(1/length(u), length(u)), alternative =
-     c("two.sided", "one.sided"))
+  liu.liang.linear.power(N = NULL, delta = NULL, u = NULL,
+    v = NULL, sigma2 = 1, R = NULL, R.list = NULL,
+    sig.level = 0.05, power = NULL,
+    Pi = rep(1/length(u), length(u)),
+    alternative = c("two.sided", "one.sided"))
 }
 \arguments{
-  \item{N}{
-  The total sample size. This formula can accommodate unbalanced group allocation via \code{Pi}. See Liu and Liang (1997) for more details
+  \item{N}{The total sample size. This formula can
+  accommodate unbalanced group allocation via \code{Pi}.
+  See Liu and Liang (1997) for more details}
+
+  \item{delta}{group difference (possibly a vector of
+  differences)}
+
+  \item{u}{a list of covariate vectors or matrices
+  associated with the parameter of interest}
+
+  \item{v}{a respective list of covariate vectors or
+  matrices associated with the nuisance parameter}
+
+  \item{sigma2}{the error variance}
+
+  \item{R}{the variance-covariance matrix for the repeated
+  measures}
+
+  \item{R.list}{a list of variance-covariance matrices for
+  the repeated measures, if assumed different in two
+  groups}
+
+  \item{sig.level}{type one error}
+
+  \item{power}{power}
+
+  \item{Pi}{the proportion of covariates of each type}
+
+  \item{alternative}{one- or two-sided test}
 }
-  \item{delta}{
-  group difference (possibly a vector of differences)
-}
-  \item{u}{
-  a list of covariate vectors or matrices associated with the parameter of interest
-}
-  \item{v}{
-  a respective list of covariate vectors or matrices associated with the nuisance parameter
-}
-  \item{sigma2}{
-  the error variance
-}
-  \item{R}{
-  the variance-covariance matrix for the repeated measures
-}
-  \item{R.list}{
-  a list of variance-covariance matrices for the repeated measures, if assumed different in two groups
-}
-  \item{sig.level}{
-  type one error
-}
-  \item{power}{
-  power
-}
-  \item{Pi}{
-  the proportion of covariates of each type
-}
-  \item{alternative}{
-  one- or two-sided test
-}
+\description{
+  This function performs the sample size calculation for a
+  linear mixed model. See Liu and Liang (1997) for
+  parameter definitions and other details.
 }
 \details{
-The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same length and sorted with respect to each other. See Liu and Liang (1997) and package vignette for more details.
-}
-\references{
-Liu, G. and Liang, K. Y. (1997) Sample size calculations for studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
-}
-\seealso{
-\code{\link{lmmpower}}
+  The parameters \code{u}, \code{v}, and \code{Pi} are
+  expected to be the same length and sorted with respect to
+  each other. See Liu and Liang (1997) and package vignette
+  for more details.
 }
 \examples{
 \dontrun{
@@ -65,10 +59,10 @@ n = 3
 t = c(0,2,5)
 u = list(u1 = t, u2 = rep(0,n))
 v = list(v1 = cbind(1,1,rep(0,n)),
-         v2 = cbind(1,0,t))         
+         v2 = cbind(1,0,t))
 rho = c(0.2, 0.5, 0.8)
 sigma2 = c(100, 200, 300)
-tab = outer(rho, sigma2, 
+tab = outer(rho, sigma2,
       Vectorize(function(rho, sigma2){
         ceiling(liu.liang.linear.power(
           delta=0.5, u=u, v=v,
@@ -90,7 +84,7 @@ sig2.e = 10
 cov.s.i <- 0.8*sqrt(sig2.i)*sqrt(sig2.s)
 
 cov.t <- function(t1, t2, sig2.i, sig2.s, cov.s.i){
-        sig2.i + t1*t2*sig2.s + (t1+t2)*cov.s.i 
+        sig2.i + t1*t2*sig2.s + (t1+t2)*cov.s.i
 }
 
 t = seq(0,1.5,0.25)
@@ -99,7 +93,7 @@ R = outer(t, t, function(x,y){cov.t(x,y, sig2.i, sig2.s, cov.s.i)})
 R = R + diag(sig2.e, n, n)
 u = list(u1 = t, u2 = rep(0,n))
 v = list(v1 = cbind(1,1,rep(0,n)),
-         v2 = cbind(1,0,t))         
+         v2 = cbind(1,0,t))
 
 liu.liang.linear.power(delta=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
 liu.liang.linear.power(N=416, u=u, v=v, R=R, sig.level=0.05, power=0.80)
@@ -112,7 +106,7 @@ tab1 <- data.frame(cbind(
   rho = c(0.0, 0.3, 0.5, 0.8)))
 u = list(u1 = 1, u2 = 1) # intercept
 v = list(v1 = 1, # treatment
-       v2 = 0) # control       
+       v2 = 0) # control
 m <- c()
 for(i in 1:nrow(tab1)){
   R <- matrix(tab1$rho[i], nrow = tab1$n[i], ncol = tab1$n[i])
@@ -121,7 +115,7 @@ for(i in 1:nrow(tab1)){
     delta=0.5,
     u = list(u1 = rep(1, tab1$n[i]), u2 = rep(1, tab1$n[i])), # intercept
     v = list(v1 = rep(1, tab1$n[i]), # treatment
-             v2 = rep(0, tab1$n[i])), # control       
+             v2 = rep(0, tab1$n[i])), # control
     sigma2=1,
     R=R, alternative="two.sided",
     power=0.90)$N)
@@ -144,7 +138,7 @@ for(i in 1:nrow(tab3)){
     delta=0.5,
     u = list(u1 = rep(1, 4), u2 = rep(1, 4)), # intercept
     v = list(v1 = rep(1, 4), # treatment
-             v2 = rep(0, 4)), # control       
+             v2 = rep(0, 4)), # control
     sigma2=1,
     Pi = c(tab3$pi1[i], 1-tab3$pi1[i]),
     R=R, alternative="two.sided",
@@ -152,7 +146,18 @@ for(i in 1:nrow(tab3)){
 }
 cbind(tab3, m)
 }
-\keyword{ power }
-\keyword{ sample size }
-\keyword{ mixed effects }
-\keyword{ random effects }
+\references{
+  Liu, G. and Liang, K. Y. (1997) Sample size calculations
+  for studies with correlated observations.
+  \emph{Biometrics}, 53(3), 937-47.
+}
+\seealso{
+  \code{\link{lmmpower}}
+}
+\keyword{effects}
+\keyword{mixed}
+\keyword{power}
+\keyword{random}
+\keyword{sample}
+\keyword{size}
+
