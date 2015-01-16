@@ -23,7 +23,7 @@ lmmpower.default <- function(object=NULL,
 {
 	if(sum(!sapply(list(delta, pct.change), is.null))==2) 	
 		stop("Only one of delta and pct.change must be specified.")
-	if(is.null(delta)&!is.null(beta))
+	if(is.null(delta)&!is.null(beta)&!is.null(pct.change))
 	  delta<-pct.change*beta
   if (sum(sapply(list(n, delta, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
@@ -52,15 +52,15 @@ lmmpower.default <- function(object=NULL,
       sig2.s=sig2.s, sig2.e=sig2.e, 
       sig.level=sig.level,
       power=power,
-      alternative=alternative),
+      alternative=alternative,...),
 	  diggle = diggle.linear.power(n=n, delta=delta, t=t, R=R, 
 	    sig.level=sig.level,
 	    power=power,
-	    alternative=alternative),
+	    alternative=alternative,...),
 	  liuliang = liu.liang.linear.power(N=N, delta=delta, u=u, v=v, R=R,
 	    sig.level=sig.level,
 	    power=power,
-	    alternative=alternative))
+	    alternative=alternative,...))
 
 	if(is.null(delta.CI)&!is.null(beta.CI)) results$delta.CI <- (results$delta/beta)*beta.CI
 	if(!is.null(beta)) results$beta <- beta
@@ -71,24 +71,24 @@ lmmpower.default <- function(object=NULL,
 		  edland = edland.linear.power(n=NULL, results$delta.CI[1], t=t, sig2.s, sig2.e, 
   	    sig.level=sig.level,
   	    power=power,
-  	    alternative=alternative)$n,
+  	    alternative=alternative,...)$n,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[1], t=t, R=R, 
 		    sig.level=sig.level,
-		    power=power)$n,
+		    power=power,...)$n,
 		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[1], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power)$N/2)
+		    power=power,...)$N/2)
 		n.lower <- switch(method,
 		  edland = edland.linear.power(n=NULL, results$delta.CI[2], t, sig2.s, sig2.e, 
         sig.level=sig.level,
         power=power,
-        alternative=alternative)$n,
+        alternative=alternative,...)$n,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[2], t=t, R=R, 
 		    sig.level=sig.level,
-		    power=power)$n,
+		    power=power,...)$n,
 		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[2], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power)$N/2)
+		    power=power,...)$N/2)
 		n.CI <- c(n.lower, n.upper)
 		if(n.CI[1]>n.CI[2]) n.CI <- n.CI[2:1]
 		results$n.CI <- n.CI 

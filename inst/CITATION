@@ -1,8 +1,7 @@
      citHeader("To cite package 'longpower' in publications use:")
      
-     desc <- packageDescription("longpower")
-     year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
-     vers <- paste("R package version", desc$Version)
+     year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
+     vers <- paste("R package version", meta$Version)
      
      citEntry(entry="Manual",
               title = "longpower: Power and sample size calculators for linear mixed models",
