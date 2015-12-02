@@ -22,6 +22,7 @@
 #' @param power power
 #' @param Pi the proportion of covariates of each type
 #' @param alternative one- or two-sided test
+#' @tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
 #' @seealso \code{\link{lmmpower}}
 #' @references Liu, G. and Liang, K. Y. (1997) Sample size calculations for
 #' studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
@@ -127,7 +128,8 @@
 liu.liang.linear.power <- function(N=NULL, delta=NULL, u=NULL, v=NULL, sigma2=1, R=NULL, R.list=NULL,
   sig.level=0.05, power=NULL, 
   Pi = rep(1/length(u),length(u)),
-  alternative = c("two.sided", "one.sided"))
+  alternative = c("two.sided", "one.sided"),
+  tol = .Machine$double.eps^0.25)
 {
   if (sum(sapply(list(N, delta, sigma2, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'N', 'sigma2', 'delta', 'power', and 'sig.level' must be NULL")
@@ -183,20 +185,22 @@ liu.liang.linear.power <- function(N=NULL, delta=NULL, u=NULL, v=NULL, sigma2=1,
     sum(n)
   })
   
-  if (is.null(sig.level)) 
-      sig.level <- uniroot(function(sig.level) eval(n.body) - 
-          N, c(1e-10, 1 - 1e-10))$root
+  if(is.null(N))
+    N <- eval(n.body)
+  else if (is.null(sig.level)) 
+    sig.level <- uniroot(function(sig.level) eval(n.body) - N, 
+      c(1e-10, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(power)) 
-      power <- uniroot(function(power) eval(n.body) - 
-          N, c(1e-3, 1 - 1e-10))$root
+    power <- uniroot(function(power) eval(n.body) - N, 
+      c(1e-3, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(delta)) 
-      delta <- uniroot(function(delta) eval(n.body) - 
-          N, c(1e-10, 1e5))$root
+    delta <- uniroot(function(delta) eval(n.body) - N, 
+      sqrt(sigma2) * c(1e-7, 1e+7), tol=tol, extendInt = "downX")$root
   else if (is.null(sigma2)) 
-      sigma2 <- uniroot(function(sigma2) eval(n.body) - 
-          N, c(1e-10, 1e5))$root
-  
-  N <- eval(n.body)
+    sigma2 <- uniroot(function(sigma2) eval(n.body) - N, 
+      delta * c(1e-7, 1e+7), tol=tol, extendInt = "yes")$root
+  else # Shouldn't happen
+    stop("internal error", domain = NA)
   
   METHOD <- "Longitudinal linear model power calculation (Liu & Liang, 1997)"
   structure(list(N = N, n = N*Pi, delta = delta, sigma2 = sigma2, 

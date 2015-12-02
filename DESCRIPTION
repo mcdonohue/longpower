@@ -1,10 +1,10 @@
 Package: longpower
 Type: Package
 Title: Sample size calculations for longitudinal data
-Version: 1.0-11
-Date: 2013-07-29
+Version: 1.0-12
+Date: 2015-12-02
 Author: Michael C. Donohue, Anthony C. Gamst, Steven D. Edland
-Maintainer: Michael C. Donohue <mdonohue@ucsd.edu>
+Maintainer: Michael C. Donohue <mdonohue@usc.edu>
 Description: The longpower package contains functions for computing
     power and sample size for linear models of longitudinal data
     based on the formula due to Liu and Liang (1997) and Diggle et

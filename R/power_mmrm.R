@@ -21,6 +21,7 @@
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
+#' @tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue
@@ -64,7 +65,8 @@
 power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL, 
   Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1,
   delta = NULL, sig.level = 0.05, power = NULL, 
-  alternative = c("two.sided", "one.sided"))
+  alternative = c("two.sided", "one.sided"),
+  tol = .Machine$double.eps^0.25)
 {
   if (sum(sapply(list(N, delta, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'N', 'delta', 'power', and 'sig.level' must be NULL")
@@ -110,20 +112,25 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
     Nb <- as.numeric(Na/lambda)
     list(N = Na + Nb, Na = Na, Nb = Nb)
   })
-    
-  if (is.null(sig.level)) 
-      sig.level <- uniroot(function(sig.level) eval(n.body)$N - 
-          N, c(1e-10, 1 - 1e-10))$root
+
+
+  if(is.null(N)){
+    Ns <- eval(n.body)
+    Na <- Ns$Na
+    Nb <- Ns$Nb    
+  }    
+  else if (is.null(sig.level)) 
+    sig.level <- uniroot(function(sig.level) eval(n.body)$N - N, 
+      c(1e-10, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(power)) 
-      power <- uniroot(function(power) eval(n.body)$N - 
-          N, c(1e-3, 1 - 1e-10))$root
+    power <- uniroot(function(power) eval(n.body)$N - N, 
+      c(1e-3, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(delta)) 
-      delta <- uniroot(function(delta) eval(n.body)$N - 
-          N, c(1e-10, 1e5))$root
-    
-  Ns <- eval(n.body)
-  Na <- Ns$Na
-  Nb <- Ns$Nb
+    delta <- uniroot(function(delta) eval(n.body)$N - N, 
+      sigma * c(1e-7, 1e+7), tol=tol, extendInt = "downX")$root
+  else # Shouldn't happen
+    stop("internal error", domain = NA)
+
   METHOD <- "Power for Mixed Model of Repeated Measures (Lu, Luo, & Chen, 2008)"
   structure(list(n1 = Na, n2 = Nb, 
         retention1 = ra[-length(ra)], retention2 = rb[-length(rb)], 

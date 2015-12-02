@@ -19,6 +19,7 @@ lmmpower.default <- function(object=NULL,
    cov.s.i=NULL,
    R=NULL,
    method = c("edland", "diggle", "liuliang"),
+   tol = .Machine$double.eps^0.25,
    ...)
 {
 	if(sum(!sapply(list(delta, pct.change), is.null))==2) 	
@@ -52,15 +53,15 @@ lmmpower.default <- function(object=NULL,
       sig2.s=sig2.s, sig2.e=sig2.e, 
       sig.level=sig.level,
       power=power,
-      alternative=alternative,...),
+      alternative=alternative,tol=tol,...),
 	  diggle = diggle.linear.power(n=n, delta=delta, t=t, R=R, 
 	    sig.level=sig.level,
 	    power=power,
-	    alternative=alternative,...),
+	    alternative=alternative,tol=tol,...),
 	  liuliang = liu.liang.linear.power(N=N, delta=delta, u=u, v=v, R=R,
 	    sig.level=sig.level,
 	    power=power,
-	    alternative=alternative,...))
+	    alternative=alternative,tol=tol,...))
 
 	if(is.null(delta.CI)&!is.null(beta.CI)) results$delta.CI <- (results$delta/beta)*beta.CI
 	if(!is.null(beta)) results$beta <- beta
@@ -71,24 +72,24 @@ lmmpower.default <- function(object=NULL,
 		  edland = edland.linear.power(n=NULL, results$delta.CI[1], t=t, sig2.s, sig2.e, 
   	    sig.level=sig.level,
   	    power=power,
-  	    alternative=alternative,...)$n,
+  	    alternative=alternative,tol=tol,...)$n,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[1], t=t, R=R, 
 		    sig.level=sig.level,
-		    power=power,...)$n,
+		    power=power,tol=tol,...)$n,
 		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[1], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power,...)$N/2)
+		    power=power,tol=tol,...)$N/2)
 		n.lower <- switch(method,
 		  edland = edland.linear.power(n=NULL, results$delta.CI[2], t, sig2.s, sig2.e, 
         sig.level=sig.level,
         power=power,
-        alternative=alternative,...)$n,
+        alternative=alternative,tol=tol,...)$n,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[2], t=t, R=R, 
 		    sig.level=sig.level,
-		    power=power,...)$n,
+		    power=power,tol=tol,...)$n,
 		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[2], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power,...)$N/2)
+		    power=power,tol=tol,...)$N/2)
 		n.CI <- c(n.lower, n.upper)
 		if(n.CI[1]>n.CI[2]) n.CI <- n.CI[2:1]
 		results$n.CI <- n.CI 
@@ -119,6 +120,7 @@ lmmpower.lme <- function(object,
    sig2.e=NULL,
    cov.s.i=NULL,
    method = c("edland", "diggle", "liuliang"),
+   tol = .Machine$double.eps^0.25,
    ...)
 {
 	alternative <- match.arg(alternative)
@@ -169,7 +171,8 @@ lmmpower.lme <- function(object,
 		sig2.s = sig2.s,
 		sig2.e = sig2.e,
 		cov.s.i = cov.s.i, 
-		method = method, ...)
+		method = method,
+    tol=tol, ...)
 }
 
 lmmpower.gee <- function(object,
@@ -185,6 +188,7 @@ lmmpower.gee <- function(object,
    beta.CI=NULL,
    delta.CI=NULL,
    method = c("diggle", "liuliang"),
+   tol = .Machine$double.eps^0.25,
    ...)
 {
 	alternative <- match.arg(alternative)
@@ -215,7 +219,8 @@ lmmpower.gee <- function(object,
 		delta.CI=delta.CI,
 		R=R,
 		t=t, 
-		method=method, ...)
+		method=method,
+    tol=tol, ...)
 }
 
 setMethod("lmmpower", signature(object = "merMod"),
@@ -236,6 +241,7 @@ setMethod("lmmpower", signature(object = "merMod"),
    sig2.e=NULL,
    cov.s.i=NULL,
    method = c("edland", "diggle", "liuliang"),
+   tol = .Machine$double.eps^0.25,
    ...)
 {
   if (!(sum(sapply(list(n, delta, power, sig.level), is.null)) == 1 |
@@ -294,5 +300,6 @@ setMethod("lmmpower", signature(object = "merMod"),
 		sig2.s=sig2.s,
 		sig2.e=sig2.e,
 		cov.s.i=cov.s.i, 
-		method = method, ...)
+		method = method, 
+    tol=tol, ...)
 })
