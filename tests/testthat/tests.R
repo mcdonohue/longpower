@@ -2,7 +2,6 @@ library(longpower)
 context("Power/sample size calculations")
 
 test_that("Reproduce table for exchangeable correlation on page 29 of Diggle et al. (1994)", {
-
   n = 3
   t = c(0,2,5)
   u = list(u1 = t, u2 = rep(0,n))
@@ -21,8 +20,8 @@ test_that("Reproduce table for exchangeable correlation on page 29 of Diggle et 
             power=0.80)$n)}))
   expect_identical(tab, 
     matrix(c(313, 625, 938,
-                196, 391, 586,
-                79, 157, 235), ncol = 3, byrow = TRUE)
+             196, 391, 586,
+             79,  157, 235), ncol = 3, byrow = TRUE)
   )
 })
 
@@ -79,7 +78,7 @@ test_that("lmmpower", {
   expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
   	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903)
   expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
-  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$delta, 1.49748557462127)
+  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$delta, 1.49751028943272)
   expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
   	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903)
 

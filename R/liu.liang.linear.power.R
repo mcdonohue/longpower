@@ -22,7 +22,7 @@
 #' @param power power
 #' @param Pi the proportion of covariates of each type
 #' @param alternative one- or two-sided test
-#' @param tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
+#' @param tol	numerical tolerance used in root finding.
 #' @seealso \code{\link{lmmpower}}
 #' @references Liu, G. and Liang, K. Y. (1997) Sample size calculations for
 #' studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.
@@ -129,7 +129,7 @@ liu.liang.linear.power <- function(N=NULL, delta=NULL, u=NULL, v=NULL, sigma2=1,
   sig.level=0.05, power=NULL, 
   Pi = rep(1/length(u),length(u)),
   alternative = c("two.sided", "one.sided"),
-  tol = .Machine$double.eps^0.25)
+  tol = .Machine$double.eps^2)
 {
   if (sum(sapply(list(N, delta, sigma2, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'N', 'sigma2', 'delta', 'power', and 'sig.level' must be NULL")

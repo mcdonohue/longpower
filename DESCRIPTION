@@ -37,3 +37,4 @@ Collate:
     'lmmpower.R'
     'power_mmrm.R'
     'print.power.longtest.R'
+RoxygenNote: 5.0.1

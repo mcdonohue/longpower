@@ -21,7 +21,7 @@
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
-#' @param tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
+#' @param tol	numerical tolerance used in root finding.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue
@@ -66,7 +66,7 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
   Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1,
   delta = NULL, sig.level = 0.05, power = NULL, 
   alternative = c("two.sided", "one.sided"),
-  tol = .Machine$double.eps^0.25)
+  tol = .Machine$double.eps^2)
 {
   if (sum(sapply(list(N, delta, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'N', 'delta', 'power', and 'sig.level' must be NULL")

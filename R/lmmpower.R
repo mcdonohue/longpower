@@ -60,8 +60,7 @@ setGeneric("lmmpower")
 #' @param method the formula to use. Defaults
 #' to \code{"diggle"} for Diggle et al (2002). Alternatively \code{"liuliang"}
 #' can be selected for Liu & Liang (1997).
-#' @param tol numerical tolerance used in root finding, the default providing
-#' (at least) four significant digits.
+#' @param tol numerical tolerance used in root finding.
 #' @param ... other arguments
 #' @return An object of class \code{power.htest} giving the calculated sample
 #' size, N, per group and other parameters.
@@ -128,7 +127,7 @@ lmmpower.default <- function(object=NULL,
    cov.s.i=NULL,
    R=NULL,
    method = c("edland", "diggle", "liuliang"),
-   tol = .Machine$double.eps^0.25,
+   tol = .Machine$double.eps^2,
    ...)
 {
 	if(sum(!sapply(list(delta, pct.change), is.null))==2) 	
@@ -234,7 +233,7 @@ lmmpower.lme <- function(object,
    sig2.e=NULL,
    cov.s.i=NULL,
    method = c("edland", "diggle", "liuliang"),
-   tol = .Machine$double.eps^0.25,
+   tol = .Machine$double.eps^2,
    ...)
 {
 	alternative <- match.arg(alternative)
@@ -303,7 +302,7 @@ lmmpower.gee <- function(object,
    beta.CI=NULL,
    delta.CI=NULL,
    method = c("diggle", "liuliang"),
-   tol = .Machine$double.eps^0.25,
+   tol = .Machine$double.eps^2,
    ...)
 {
 	alternative <- match.arg(alternative)
@@ -358,7 +357,7 @@ setMethod("lmmpower", signature(object = "merMod"),
    sig2.e=NULL,
    cov.s.i=NULL,
    method = c("edland", "diggle", "liuliang"),
-   tol = .Machine$double.eps^0.25,
+   tol = .Machine$double.eps^2,
    ...)
 {
   if (!(sum(sapply(list(n, delta, power, sig.level), is.null)) == 1 |
