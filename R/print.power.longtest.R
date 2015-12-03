@@ -7,12 +7,14 @@
 #' \code{method} is displayed as a title, the \code{note} as a footnote, and
 #' the remaining elements are given in an aligned \sQuote{name = value} format.
 #' 
+#' @docType methods
 #' @param x Object of class \code{"power.longtest"}.
 #' @param \dots further arguments to be passed to or from methods.
 #' @return none
 #' @seealso \code{\link{liu.liang.linear.power}},
 #' \code{\link{diggle.linear.power}}, \code{\link{lmmpower}},
 #' @keywords longtest
+#' @export
 print.power.longtest <- function(x, ...)
 {
   cat("\n    ", x$method, "\n\n")

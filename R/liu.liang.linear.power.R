@@ -22,7 +22,7 @@
 #' @param power power
 #' @param Pi the proportion of covariates of each type
 #' @param alternative one- or two-sided test
-#' @tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
+#' @param tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
 #' @seealso \code{\link{lmmpower}}
 #' @references Liu, G. and Liang, K. Y. (1997) Sample size calculations for
 #' studies with correlated observations. \emph{Biometrics}, 53(3), 937-47.

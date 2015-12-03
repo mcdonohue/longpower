@@ -21,7 +21,7 @@
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
-#' @tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
+#' @param tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue
@@ -77,6 +77,12 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
 
   # formula (3) on page 4 in
   # Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. International Journal of Biostatistics, 4, (1)
+
+  if(is.null(sigmab)){
+    sigma <- sigmaa
+  }else{
+    sigma <- mean(c(sigmaa, sigmab))
+  }
     
   n.body <- quote({
     Ia <- 0
@@ -99,12 +105,6 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
     }
     phib <- solve(Ib)[j,j]  
 
-    if(is.null(sigmab)){
-      sigma <- sigmaa
-    }else{
-      sigma <- mean(c(sigmaa, sigmab))
-    }
-  
     Na <- as.numeric(
       (phia + lambda * phib)*(qnorm(ifelse(alternative=="two.sided", sig.level/2, sig.level)) + qnorm(1-power))^2*
       sigma^2/delta^2
@@ -240,6 +240,12 @@ power.mmrm.ar1 <- function(N = NULL, rho = NULL,
   
   phia <- phib <- NULL
   
+  if(is.null(sigmab)){
+    sigma <- sigmaa
+  }else{
+    sigma <- mean(c(sigmaa, sigmab))
+  }
+
   n.body <- quote({
       J <- length(ra)
       phia <- 1/ra[J] - sum(
@@ -253,11 +259,6 @@ power.mmrm.ar1 <- function(N = NULL, rho = NULL,
       }else{
         rb <- ra
         phib <- phia
-      }
-      if(is.null(sigmab)){
-        sigma <- sigmaa
-      }else{
-        sigma <- mean(c(sigmaa, sigmab))
       }
   
       Na <- as.numeric(

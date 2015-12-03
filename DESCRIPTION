@@ -1,6 +1,6 @@
 Package: longpower
 Type: Package
-Title: Sample size calculations for longitudinal data
+Title: Sample Size Calculations for Longitudinal Data
 Version: 1.0-12
 Date: 2015-12-02
 Author: Michael C. Donohue, Anthony C. Gamst, Steven D. Edland
@@ -25,7 +25,8 @@ Depends:
     methods
 Suggests:
     knitr,
-    gee
+    gee,
+    testthat
 LazyLoad: yes
 VignetteBuilder: knitr
 URL: https://bitbucket.org/mdonohue/longpower

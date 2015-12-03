@@ -1,6 +1,115 @@
+
+#' @export
 lmmpower <- function(object, ...) UseMethod("lmmpower")
 setGeneric("lmmpower")
 
+#' Sample size calculations for linear mixed models of rate of change based on
+#' lmer, lme, or gee "placebo" pilot estimates.
+#' 
+#' These functions compute sample size for linear mixed models based on the
+#' formula due to Diggle (2002) or Liu and Liang (1997).  These formulae are
+#' expressed in terms of marginal model or Generalized Estimating Equations
+#' (GEE) parameters.  These functions translate pilot mixed effect model
+#' parameters (e.g. random intercept and/or slope, fixed effects, etc.)  into
+#' marginal model parameters so that either formula can be applied to
+#' equivalent affect. Pilot estimates are assumed to be from an appropriate
+#' "placebo" group and the parameter of interest is assumed to be the rate of
+#' change over time of the outcome.
+#' 
+#' Any parameters not explicitly stated are extracted from the fitted
+#' \code{object}.
+#' 
+#' @name lmmpower
+#' @aliases lmmpower-methods lmmpower,ANY-method lmmpower,merMod-method
+#' lmmpower.default lmmpower.lme lmmpower.gee lmmpower.numeric
+#' @docType methods
+#' @param object an object returned by lme4
+#' @param n sample size per group
+#' of a mixed-effects model object to placebo data assumed to have either a
+#' random intercept, or a random intercept and random effect for time (slope);
+#' and fixed effect representing the rate of change in a placebo group.
+#' @param parameter the name or position
+#' of the rate of change parameter of interest, e.g. (\code{"time"},
+#' \code{"t"}, or \code{2} if it is the second specified fixed effect).
+#' @param pct.change the percent change
+#' in the pilot estimate of the parameter of interest (\code{beta}, the
+#' placebo/null effect)
+#' @param delta the change in the pilot estimate
+#' of the parameter of interest, computed from \code{pct.change} if left
+#' missing.
+#' @param t vector of time points
+#' @param sig.level Type I error
+#' @param power power
+#' @param alternative \code{"two.sided"} or \code{"one.sided"}
+#' @param beta pilot estimate of the placebo
+#' effect (slope or rate of change in the outcome)
+#' @param beta.CI 95\% confidence limits of
+#' the pilot estimate of beta
+#' @param delta.CI 95\% confidence limits of
+#' the effect size
+#' @param sig2.i pilot estimate of variance
+#' of random intercept
+#' @param sig2.s pilot estimate of variance
+#' of random slope
+#' @param sig2.e pilot estimate of residual
+#' variance
+#' @param cov.s.i pilot estimate of
+#' covariance of random slope and intercept
+#' @param R pilot estimate of a marginal
+#' model working correlation matrix
+#' @param method the formula to use. Defaults
+#' to \code{"diggle"} for Diggle et al (2002). Alternatively \code{"liuliang"}
+#' can be selected for Liu & Liang (1997).
+#' @param tol numerical tolerance used in root finding, the default providing
+#' (at least) four significant digits.
+#' @param ... other arguments
+#' @return An object of class \code{power.htest} giving the calculated sample
+#' size, N, per group and other parameters.
+#' @author Michael C. Donohue
+#' @seealso \code{\link{liu.liang.linear.power}}
+#' \code{\link{diggle.linear.power}}
+#' @references Diggle P.J., Heagerty P.J., Liang K., Zeger S.L. (2002)
+#' \emph{Analysis of longitudinal data}. Second Edition. Oxford Statistical
+#' Science Series.
+#' 
+#' Liu, G., and Liang, K. Y. (1997) Sample size calculations for studies with
+#' correlated observations. \emph{Biometrics}, 53(3), 937-47.
+#' @keywords power sample size mixed effects random effects marginal model
+#' methods
+#' @examples
+#' 
+#' \dontrun{
+#' browseVignettes(package = "longpower")
+#' }
+#' 
+#' lmmpower(delta=1.5, t = seq(0,1.5,0.25),
+#' 	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)
+#' lmmpower(n=208, t = seq(0,1.5,0.25),
+#' 	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)
+#' lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
+#' 	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)
+#' 
+#' \dontrun{
+#' library(lme4)
+#' fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
+#' lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
+#' 
+#' library(nlme)
+#' fm2 <- lme(Reaction ~ Days, random=~Days|Subject, sleepstudy)
+#' lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
+#' 
+#' # random intercept only
+#' fm3 <- lme(Reaction ~ Days, random=~1|Subject, sleepstudy)
+#' lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
+#' 
+#' library(gee)
+#' fm4 <- gee(Reaction ~ Days, id = Subject,
+#'             data = sleepstudy,
+#'             corstr = "exchangeable")
+#' lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
+#' }
+#' 
+#' @export
 lmmpower.default <- function(object=NULL,
    n=NULL,
    parameter = 2,
@@ -103,6 +212,11 @@ lmmpower.default <- function(object=NULL,
 	structure(results, class = "power.longtest")
 }
 
+#' @export
+lmmpower.numeric <- lmmpower.default
+
+#' @importFrom nlme getVarCov
+#' @export
 lmmpower.lme <- function(object,
    n = NULL,
    parameter = 2,
@@ -128,7 +242,7 @@ lmmpower.lme <- function(object,
   
 	if(is.numeric(parameter)) parameter <- rownames(summary(object)$tTable)[parameter]
 	
-	tab <- nlme::getVarCov(object)
+	tab <- getVarCov(object)
 
 	if(nrow(tab)>2) stop("Too many random effects. Function is 
 	  	equipped to handle at most a random intercept and slope.")
@@ -175,6 +289,7 @@ lmmpower.lme <- function(object,
     tol=tol, ...)
 }
 
+#' @export
 lmmpower.gee <- function(object,
    n = NULL,
    parameter = 2,
@@ -223,6 +338,8 @@ lmmpower.gee <- function(object,
     tol=tol, ...)
 }
 
+#' @importFrom lme4 VarCorr fixef getME
+#' @export
 setMethod("lmmpower", signature(object = "merMod"),
   function(object, 
    n = NULL, 
@@ -255,7 +372,7 @@ setMethod("lmmpower", signature(object = "merMod"),
   
 	if(is.numeric(parameter)) parameter <- rownames(coef(summary(object)))[parameter]
 	
-	tab <- lme4::VarCorr(object)
+	tab <- VarCorr(object)
 	if(length(tab)>1) stop("Too many grouping levels. Function is 
 	  	equipped to handle at most one grouping level.")
 	tab <- tab[[1]]

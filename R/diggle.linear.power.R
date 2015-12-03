@@ -17,7 +17,7 @@
 #' @param sig.level Type I error
 #' @param power power
 #' @param alternative one- or two-sided test
-#' @tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
+#' @param tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue, Steven D. Edland

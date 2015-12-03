@@ -14,7 +14,7 @@
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
-#' @tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
+#' @param tol	numerical tolerance used in root finding, the default providing (at least) four significant digits.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue, Steven D. Edland
@@ -52,6 +52,7 @@
 #' 
 #' edland.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, sig.level=0.05, power = 0.80)
 #' 
+#' @export edland.linear.power
 edland.linear.power <- function(n = NULL, delta = NULL, t = NULL, sig2.s = 0, sig2.e = 1, 
    sig.level=0.05, power=NULL,
    alternative = c("two.sided", "one.sided"),
