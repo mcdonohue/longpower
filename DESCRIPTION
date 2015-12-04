@@ -19,14 +19,13 @@ Description: The longpower package contains functions for computing
 License: GPL (>= 2)
 Depends:
     R (>= 3.0.0),
-    Matrix,
     lme4 (>= 1.0),
-    nlme,
-    methods
+    nlme
 Suggests:
     knitr,
     gee,
-    testthat
+    testthat,
+    methods
 LazyLoad: yes
 VignetteBuilder: knitr
 URL: https://bitbucket.org/mdonohue/longpower

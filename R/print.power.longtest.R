@@ -1,3 +1,12 @@
+#' Constructor function for class \code{"power.longtest"}
+#' 
+#' @param object a list.
+#' @return an object of class \code{"power.longtest"}
+#' @export power.longtest
+power.longtest <- function(object){
+    structure(object, class = "power.longtest")
+}
+
 #' Print method for longitudinal data power calculation object
 #' 
 #' Print object of class \code{"power.longtest"} in nice layout.
@@ -7,13 +16,13 @@
 #' \code{method} is displayed as a title, the \code{note} as a footnote, and
 #' the remaining elements are given in an aligned \sQuote{name = value} format.
 #' 
-#' @docType methods
 #' @param x Object of class \code{"power.longtest"}.
 #' @param \dots further arguments to be passed to or from methods.
 #' @return none
 #' @seealso \code{\link{liu.liang.linear.power}},
 #' \code{\link{diggle.linear.power}}, \code{\link{lmmpower}},
 #' @keywords longtest
+#' @method print power.longtest
 #' @export
 print.power.longtest <- function(x, ...)
 {

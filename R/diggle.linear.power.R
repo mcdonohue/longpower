@@ -71,6 +71,8 @@
 #' 
 #' diggle.linear.power(d=1.5, t=t, R=R, sig.level=0.05, power=0.80)
 #' 
+#' @importFrom stats coef qnorm uniroot
+#' 
 #' @export diggle.linear.power
 diggle.linear.power <-
 function(n=NULL, delta=NULL, t=NULL, sigma2=1, R=NULL, 
