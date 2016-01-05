@@ -78,30 +78,38 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
   # formula (3) on page 4 in
   # Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. International Journal of Biostatistics, 4, (1)
 
+  if(is.null(sigmaa)) stop('sigmaa must be supplied')
+  
   if(is.null(sigmab)){
     sigma <- sigmaa
   }else{
     sigma <- mean(c(sigmaa, sigmab))
   }
     
+  if(is.null(rb)) rb <- ra
+  ra0 <- c(ra, 0)
+  rb0 <- c(rb, 0)
+  if(is.null(Rb)) Rb <- Ra
+    
+  if(nrow(Ra)!=ncol(Ra)) stop('Ra must be square matrix')
+  if(nrow(Rb)!=ncol(Rb)) stop('Rb must be square matrix')
+  if(length(ra)!=nrow(Ra)) stop('Ra and ra are not conformable')
+  if(length(rb)!=nrow(Rb)) stop('Rb and rb are not conformable')
+
   n.body <- quote({
     Ia <- 0
-    ra <- c(ra, 0)
     for(j in 1:nrow(Ra)){
       Raj <- matrix(0, nrow(Ra), nrow(Ra))
       Raj[1:j, 1:j] <- solve(Ra[1:j, 1:j])
-      Ia <- Ia + (ra[j] - ra[j+1]) * Raj
+      Ia <- Ia + (ra0[j] - ra0[j+1]) * Raj
     }
     phia <- solve(Ia)[j,j]
 
-    if(is.null(rb)) rb <- ra
-    if(is.null(Rb)) Rb <- Ra
     Ib <- 0
-    rb <- c(rb, 0)
     for(j in 1:nrow(Rb)){
       Rbj <- matrix(0, nrow(Rb), nrow(Rb))
       Rbj[1:j, 1:j] <- solve(Rb[1:j, 1:j])
-      Ib <- Ib + (rb[j] - rb[j+1]) * Rbj
+      Ib <- Ib + (rb0[j] - rb0[j+1]) * Rbj
     }
     phib <- solve(Ib)[j,j]  
 
@@ -110,30 +118,25 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
       sigma^2/delta^2
     )
     Nb <- as.numeric(Na/lambda)
-    list(N = Na + Nb, Na = Na, Nb = Nb)
+    Na + Nb
   })
 
-
-  if(is.null(N)){
-    Ns <- eval(n.body)
-    Na <- Ns$Na
-    Nb <- Ns$Nb    
-  }    
-  else if (is.null(sig.level)) 
-    sig.level <- uniroot(function(sig.level) eval(n.body)$N - N, 
+  if (is.null(sig.level)) 
+    sig.level <- uniroot(function(sig.level) eval(n.body) - N, 
       c(1e-10, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(power)) 
-    power <- uniroot(function(power) eval(n.body)$N - N, 
+    power <- uniroot(function(power) eval(n.body) - N, 
       c(1e-3, 1-1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(delta)) 
-    delta <- uniroot(function(delta) eval(n.body)$N - N, 
+    delta <- uniroot(function(delta) eval(n.body) - N, 
       sigma * c(1e-7, 1e+7), tol=tol, extendInt = "downX")$root
-  else # Shouldn't happen
-    stop("internal error", domain = NA)
+  
+  Na <- Nb <- NULL
+  N <- eval(n.body)
 
   METHOD <- "Power for Mixed Model of Repeated Measures (Lu, Luo, & Chen, 2008)"
   structure(list(n1 = Na, n2 = Nb, 
-        retention1 = ra[-length(ra)], retention2 = rb[-length(rb)], 
+        retention1 = ra, retention2 = rb, 
         delta = delta, sig.level = sig.level, 
         power = power, alternative = alternative, 
         method = METHOD), class = "power.htest")
@@ -165,6 +168,7 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
+#' @param tol	numerical tolerance used in root finding.
 #' @return The number of subject required per arm to attain the specified
 #' \code{power} given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue
@@ -195,37 +199,30 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
 #' rb <- c(100, 87, 81, 78)/100
 #' 
 #' power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9
-#' )
+#'                lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
 #' power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = 1.25/1.75, power = 0.910, delta = 0.9
-#' )
+#'                lambda = 1.25/1.75, power = 0.910, delta = 0.9)
 #' power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = 1, power = 0.903, delta = 0.9
-#' )
-#' power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = 2, power = 0.904, delta = 0.9
-#' )
+#'                lambda = 1, power = 0.903, delta = 0.9)
+#' power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb,
+#'                lambda = 2, power = 0.904, delta = 0.9)
 #' 
 #' power.mmrm.ar1(N=81, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9
-#' )
-#' power.mmrm.ar1(N=87, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = 1.25/1.75, power = 0.910
-#' )
+#'                lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
+#' power.mmrm.ar1(N=87, rho=0.6, ra=ra, sigmaa=1, rb = rb,
+#'                lambda = 1.25/1.75, power = 0.910)
 #' power.mmrm.ar1(N=80, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = 1, delta = 0.9
-#' )
-#' power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-#'   lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL
-#' )
+#'                lambda = 1, delta = 0.9)
+#' power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb,
+#'                lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL)
 #' 
 #' @export power.mmrm.ar1
 power.mmrm.ar1 <- function(N = NULL, rho = NULL, 
   ra = NULL, sigmaa = NULL, rb = NULL, sigmab = NULL, 
   lambda = 1, times = 1:length(ra),
   delta = NULL, sig.level = 0.05, power = NULL, 
-  alternative = c("two.sided", "one.sided"))
+  alternative = c("two.sided", "one.sided"),
+  tol = .Machine$double.eps^2)
 {
   if (sum(sapply(list(N, rho, delta, power, sig.level), is.null)) != 1) 
       stop("exactly one of 'N', 'rho', 'delta', 'power', and 'sig.level' must be NULL")
@@ -233,12 +230,14 @@ power.mmrm.ar1 <- function(N = NULL, rho = NULL,
       sig.level | sig.level > 1)) 
       stop("'sig.level' must be numeric in [0, 1]")
   alternative <- match.arg(alternative)
-
+  
   # formula (3) on page 4 in
   # Lu, K., Luo, X., & Chen, P.-Y. (July 14, 2008). Sample size estimation for repeated measures analysis in randomized clinical trials with missing data. International Journal of Biostatistics, 4, (1)
   if(length(times) != length(ra)) stop("ra and times should be the same length")
   
   phia <- phib <- NULL
+  
+  if(is.null(sigmaa)) stop('sigmaa must be supplied')
   
   if(is.null(sigmab)){
     sigma <- sigmaa
@@ -266,29 +265,28 @@ power.mmrm.ar1 <- function(N = NULL, rho = NULL,
         sigma^2/delta^2
       )
       Nb <- as.numeric(Na/lambda)
-      list(N = Na + Nb, Na = Na, Nb = Nb)
+      Na + Nb
   })
   
   if (is.null(sig.level)) 
-      sig.level <- uniroot(function(sig.level) eval(n.body)$N - 
-          N, c(1e-10, 1 - 1e-10))$root
+      sig.level <- uniroot(function(sig.level) eval(n.body) - N,
+          c(1e-10, 1 - 1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(power)) 
-      power <- uniroot(function(power) eval(n.body)$N - 
-          N, c(1e-3, 1 - 1e-10))$root
+      power <- uniroot(function(power) eval(n.body) - N, 
+          c(1e-3, 1 - 1e-10), tol=tol, extendInt = "yes")$root
   else if (is.null(delta)) 
-      delta <- uniroot(function(delta) eval(n.body)$N - 
-          N, c(1e-10, 1e5))$root
+      delta <- uniroot(function(delta) eval(n.body) - N, 
+          sigma * c(1e-10, 1e5), tol=tol, extendInt = "downX")$root
   else if (is.null(rho)) 
-      rho <- uniroot(function(rho) eval(n.body)$N - 
-          N, c(1e-10, 1 - 1e-10))$root
+      rho <- uniroot(function(rho) eval(n.body) - N, 
+          c(1e-10, 1 - 1e-10), tol=tol, extendInt = "yes")$root
     
-  Ns <- eval(n.body)
-  Na <- Ns$Na
-  Nb <- Ns$Nb
-  
+  Na <- Nb <- NULL
+  N <- eval(n.body)
+
   METHOD <- "Power for Mixed Model of Repeated Measures (Lu, Luo, & Chen, 2008)"
   structure(list(n1 = Na, n2 = Nb, rho = rho, 
-        retention1 = ra[-length(ra)], retention2 = rb[-length(rb)],
+        retention1 = ra, retention2 = rb,
         phi1 = phia, phi2 = phib, 
         delta = delta, times = times, sig.level = sig.level, 
         power = power, alternative = alternative, 

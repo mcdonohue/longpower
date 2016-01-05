@@ -7,7 +7,7 @@
 power.mmrm.ar1(N = NULL, rho = NULL, ra = NULL, sigmaa = NULL,
   rb = NULL, sigmab = NULL, lambda = 1, times = 1:length(ra),
   delta = NULL, sig.level = 0.05, power = NULL,
-  alternative = c("two.sided", "one.sided"))
+  alternative = c("two.sided", "one.sided"), tol = .Machine$double.eps^2)
 }
 \arguments{
 \item{N}{total sample size}
@@ -35,6 +35,8 @@ NULL, \code{sigmab} is assumed same as \code{sigmaa}. If not NULL,
 \item{power}{power}
 
 \item{alternative}{one- or two-sided test}
+
+\item{tol}{numerical tolerance used in root finding.}
 }
 \value{
 The number of subject required per arm to attain the specified
@@ -69,30 +71,22 @@ ra <- c(100, 76, 63, 52)/100
 rb <- c(100, 87, 81, 78)/100
 
 power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-  lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9
-)
+               lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
 power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-  lambda = 1.25/1.75, power = 0.910, delta = 0.9
-)
+               lambda = 1.25/1.75, power = 0.910, delta = 0.9)
 power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-  lambda = 1, power = 0.903, delta = 0.9
-)
-power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-  lambda = 2, power = 0.904, delta = 0.9
-)
+               lambda = 1, power = 0.903, delta = 0.9)
+power.mmrm.ar1(rho=0.6, ra=ra, sigmaa=1, rb = rb,
+               lambda = 2, power = 0.904, delta = 0.9)
 
 power.mmrm.ar1(N=81, ra=ra, sigmaa=1, rb = rb, 
-  lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9
-)
-power.mmrm.ar1(N=87, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-  lambda = 1.25/1.75, power = 0.910
-)
+               lambda = sqrt(1.25/1.75), power = 0.904, delta = 0.9)
+power.mmrm.ar1(N=87, rho=0.6, ra=ra, sigmaa=1, rb = rb,
+               lambda = 1.25/1.75, power = 0.910)
 power.mmrm.ar1(N=80, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-  lambda = 1, delta = 0.9
-)
-power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb, 
-  lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL
-)
+               lambda = 1, delta = 0.9)
+power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb,
+               lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL)
 
 }
 \author{
