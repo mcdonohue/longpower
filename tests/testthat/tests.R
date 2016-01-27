@@ -100,3 +100,22 @@ test_that("lmmpower", {
               corstr = "exchangeable"), type = 'message'), type = 'output')
   expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 18.845000035132)
 })
+
+test_that("power.mmrm.ar1", {
+  Orthodont$t <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+
+  fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
+    Orthodont,
+    correlation = corAR1(form = ~ t | Subject),
+    weights = varIdent(form = ~ 1 | age) )
+
+  C <- corMatrix(fmOrth.corAR1$modelStruct$corStruct)[[1]]
+  sigmaa <- fmOrth.corAR1$sigma *
+            coef(fmOrth.corAR1$modelStruct$varStruct, unconstrained = FALSE)['14']
+  ra <- seq(1,0.80,length=nrow(C))
+  
+  expect_equal(
+    power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)$delta,
+    power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)$delta
+  )
+})

@@ -61,6 +61,53 @@
 #' power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, delta = 0.5, lambda = 2)
 #' power.mmrm(N = 174, Ra = Ra, ra = ra, sigmaa = sigmaa, power = 0.80, lambda = 2)
 #' 
+#' # Extracting paramaters from gls objects with general correlation
+#' 
+#' # Create time index:
+#' Orthodont$t <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+#' with(Orthodont, table(t, age))
+#' 
+#' fmOrth.corSym <- gls( distance ~ Sex * I(age - 11), 
+#'   Orthodont,
+#'   correlation = corSymm(form = ~ t | Subject),
+#'   weights = varIdent(form = ~ 1 | age) )
+#' summary(fmOrth.corSym)$tTable
+#' 
+#' C <- corMatrix(fmOrth.corSym$modelStruct$corStruct)[[1]]
+#' sigmaa <- fmOrth.corSym$sigma * 
+#'           coef(fmOrth.corSym$modelStruct$varStruct, unconstrained = FALSE)['14']
+#' ra <- seq(1,0.80,length=nrow(C))
+#' power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)
+#' 
+#' # Extracting paramaters from gls objects with compound symmetric correlation
+#' 
+#' fmOrth.corCompSymm <- gls( distance ~ Sex * I(age - 11), 
+#'   Orthodont,
+#'   correlation = corCompSymm(form = ~ t | Subject),
+#'   weights = varIdent(form = ~ 1 | age) )
+#' summary(fmOrth.corCompSymm)$tTable
+#' 
+#' C <- corMatrix(fmOrth.corCompSymm$modelStruct$corStruct)[[1]]
+#' sigmaa <- fmOrth.corCompSymm$sigma *
+#'           coef(fmOrth.corCompSymm$modelStruct$varStruct, unconstrained = FALSE)['14']
+#' ra <- seq(1,0.80,length=nrow(C))
+#' power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)
+#' 
+#' # Extracting paramaters from gls objects with AR1 correlation
+#' 
+#' fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
+#'   Orthodont,
+#'   correlation = corAR1(form = ~ t | Subject),
+#'   weights = varIdent(form = ~ 1 | age) )
+#' summary(fmOrth.corAR1)$tTable
+#' 
+#' C <- corMatrix(fmOrth.corAR1$modelStruct$corStruct)[[1]]
+#' sigmaa <- fmOrth.corAR1$sigma *
+#'           coef(fmOrth.corAR1$modelStruct$varStruct, unconstrained = FALSE)['14']
+#' ra <- seq(1,0.80,length=nrow(C))
+#' power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)
+#' power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)
+#' 
 #' @export power.mmrm
 power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL, 
   Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1,
@@ -215,6 +262,21 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
 #'                lambda = 1, delta = 0.9)
 #' power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb,
 #'                lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL)
+#' 
+#' # Extracting paramaters from gls objects with AR1 correlation
+#' 
+#' fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
+#'   Orthodont,
+#'   correlation = corAR1(form = ~ t | Subject),
+#'   weights = varIdent(form = ~ 1 | age) )
+#' summary(fmOrth.corAR1)$tTable
+#' 
+#' C <- corMatrix(fmOrth.corAR1$modelStruct$corStruct)[[1]]
+#' sigmaa <- fmOrth.corAR1$sigma *
+#'           coef(fmOrth.corAR1$modelStruct$varStruct, unconstrained = FALSE)['14']
+#' ra <- seq(1,0.80,length=nrow(C))
+#' power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)
+#' power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)
 #' 
 #' @export power.mmrm.ar1
 power.mmrm.ar1 <- function(N = NULL, rho = NULL, 
