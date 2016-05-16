@@ -2,7 +2,7 @@
 % Please edit documentation in R/diggle.linear.power.R
 \name{diggle.linear.power}
 \alias{diggle.linear.power}
-\title{Linear mixed model sample size calculations.}
+\title{Sample size calculations for difference in slopes between two groups.}
 \usage{
 diggle.linear.power(n = NULL, delta = NULL, t = NULL, sigma2 = 1,
   R = NULL, sig.level = 0.05, power = NULL, alternative = c("two.sided",
@@ -15,7 +15,7 @@ diggle.linear.power(n = NULL, delta = NULL, t = NULL, sigma2 = 1,
 
 \item{t}{the observation times}
 
-\item{sigma2}{the marginal model (GEE) scale parameter}
+\item{sigma2}{the residual variance}
 
 \item{R}{the working correlation matrix (or variance-covariance matrix if
 \code{sigma2} is 1). If \code{R} is a scalar, an exchangeable working
@@ -34,13 +34,12 @@ The number of subject required per arm to attain the specified
 \code{power} given \code{sig.level} and the other parameter estimates.
 }
 \description{
-This function performs the sample size calculation for a linear mixed model.
-See Diggle et al (2002) for parameter definitions and other details.
+This function performs the sample size calculation for difference in slopes 
+between two groups. See Diggle et al (2002) for parameter definitions 
+and other details.
 }
 \details{
-The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same
-length and sorted with respect to each other. See Diggle, et al (1997) and
-package vignette for more details.
+See Diggle, et al (1997) and package vignette for more details.
 }
 \examples{
 

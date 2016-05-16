@@ -1,16 +1,15 @@
-#' Linear mixed model sample size calculations.
+#' Sample size calculations for difference in slopes between two groups.
 #' 
-#' This function performs the sample size calculation for a linear mixed model.
-#' See Diggle et al (2002) for parameter definitions and other details.
+#' This function performs the sample size calculation for difference in slopes 
+#' between two groups. See Diggle et al (2002) for parameter definitions 
+#' and other details.
 #' 
-#' The parameters \code{u}, \code{v}, and \code{Pi} are expected to be the same
-#' length and sorted with respect to each other. See Diggle, et al (1997) and
-#' package vignette for more details.
+#' See Diggle, et al (1997) and package vignette for more details.
 #' 
 #' @param n sample size per group
 #' @param delta group difference in slopes
 #' @param t the observation times
-#' @param sigma2 the marginal model (GEE) scale parameter
+#' @param sigma2 the residual variance
 #' @param R the working correlation matrix (or variance-covariance matrix if
 #' \code{sigma2} is 1). If \code{R} is a scalar, an exchangeable working
 #' correlation matrix will be assumed.
