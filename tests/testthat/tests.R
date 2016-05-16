@@ -1,4 +1,5 @@
 library(longpower)
+
 context("Power/sample size calculations")
 
 test_that("Reproduce table for exchangeable correlation on page 29 of Diggle et al. (1994)", {
@@ -84,7 +85,7 @@ test_that("lmmpower", {
 
   library(lme4)
   fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
-  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4699256666055)
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4699286748582)
 
   library(nlme)
   fm2 <- lme(Reaction ~ Days, random=~Days|Subject, sleepstudy)
@@ -102,11 +103,12 @@ test_that("lmmpower", {
 })
 
 test_that("power.mmrm.ar1", {
-  Orthodont$t <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+  library(nlme)
+  Orthodont$t.index <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
 
   fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
     Orthodont,
-    correlation = corAR1(form = ~ t | Subject),
+    correlation = corAR1(form = ~ t.index | Subject),
     weights = varIdent(form = ~ 1 | age) )
 
   C <- corMatrix(fmOrth.corAR1$modelStruct$corStruct)[[1]]
@@ -117,5 +119,46 @@ test_that("power.mmrm.ar1", {
   expect_equal(
     power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)$delta,
     power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)$delta
+  )
+})
+
+test_that("Reproduce Diggle et al page 29 using liu.liang.linear.power", {
+  t = c(0,2,5)
+  n = length(t)
+  u = list(u1 = t, u2 = rep(0,n))
+  v = list(v1 = cbind(1,1,t),
+           v2 = cbind(1,0,t))
+  rho = c(0.2, 0.5, 0.8)
+  sigma2 = c(100, 200, 300)
+  tab.ll = outer(rho, sigma2, 
+       Vectorize(function(rho, sigma2){
+         ceiling(liu.liang.linear.power(
+           delta=0.5, u=u, v=v,
+           sigma2=sigma2,
+           R=rho, alternative="one.sided",
+           power=0.80)$N/2)}))
+  expect_equal(
+    as.numeric(tab.ll),
+    c(313, 196, 79, 625, 391, 157, 938, 586, 235)
+  )
+})
+
+test_that("Reproduce Diggle et al page 30 using liu.liang.linear.power", {
+  n = 3
+  u = list(u1 = rep(1,n), u2 = rep(0,n))
+  v = list(v1 = rep(1,n),
+           v2 = rep(1,n))
+  rho = c(0.2, 0.5, 0.8)
+  delta = c(20, 30, 40, 50)/100
+  tab = outer(rho, delta, 
+       Vectorize(function(rho, delta){
+         ceiling(liu.liang.linear.power(
+           delta=delta, u=u, v=v,
+           sigma2=1,
+           R=rho, alternative="one.sided",
+           power=0.80)$N/2)}))
+  expect_equal(
+    as.numeric(tab),
+    c(145, 207, 268, 65, 92, 120, 37, 52, 67, 24, 33, 43)
   )
 })

@@ -64,12 +64,12 @@
 #' # Extracting paramaters from gls objects with general correlation
 #' 
 #' # Create time index:
-#' Orthodont$t <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
-#' with(Orthodont, table(t, age))
+#' Orthodont$t.index <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+#' with(Orthodont, table(t.index, age))
 #' 
 #' fmOrth.corSym <- gls( distance ~ Sex * I(age - 11), 
 #'   Orthodont,
-#'   correlation = corSymm(form = ~ t | Subject),
+#'   correlation = corSymm(form = ~ t.index | Subject),
 #'   weights = varIdent(form = ~ 1 | age) )
 #' summary(fmOrth.corSym)$tTable
 #' 
@@ -83,7 +83,7 @@
 #' 
 #' fmOrth.corCompSymm <- gls( distance ~ Sex * I(age - 11), 
 #'   Orthodont,
-#'   correlation = corCompSymm(form = ~ t | Subject),
+#'   correlation = corCompSymm(form = ~ t.index | Subject),
 #'   weights = varIdent(form = ~ 1 | age) )
 #' summary(fmOrth.corCompSymm)$tTable
 #' 
@@ -97,7 +97,7 @@
 #' 
 #' fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
 #'   Orthodont,
-#'   correlation = corAR1(form = ~ t | Subject),
+#'   correlation = corAR1(form = ~ t.index | Subject),
 #'   weights = varIdent(form = ~ 1 | age) )
 #' summary(fmOrth.corAR1)$tTable
 #' 
@@ -265,9 +265,13 @@ power.mmrm <- function(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
 #' 
 #' # Extracting paramaters from gls objects with AR1 correlation
 #' 
+#' # Create time index:
+#' Orthodont$t.index <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+#' with(Orthodont, table(t.index, age))
+#' 
 #' fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
 #'   Orthodont,
-#'   correlation = corAR1(form = ~ t | Subject),
+#'   correlation = corAR1(form = ~ t.index | Subject),
 #'   weights = varIdent(form = ~ 1 | age) )
 #' summary(fmOrth.corAR1)$tTable
 #' 

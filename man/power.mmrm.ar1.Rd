@@ -88,6 +88,25 @@ power.mmrm.ar1(N=80, rho=0.6, ra=ra, sigmaa=1, rb = rb,
 power.mmrm.ar1(N=84, rho=0.6, ra=ra, sigmaa=1, rb = rb,
                lambda = 2, power = 0.904, delta = 0.9, sig.level = NULL)
 
+# Extracting paramaters from gls objects with AR1 correlation
+
+# Create time index:
+Orthodont$t.index <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+with(Orthodont, table(t.index, age))
+
+fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
+  Orthodont,
+  correlation = corAR1(form = ~ t.index | Subject),
+  weights = varIdent(form = ~ 1 | age) )
+summary(fmOrth.corAR1)$tTable
+
+C <- corMatrix(fmOrth.corAR1$modelStruct$corStruct)[[1]]
+sigmaa <- fmOrth.corAR1$sigma *
+          coef(fmOrth.corAR1$modelStruct$varStruct, unconstrained = FALSE)['14']
+ra <- seq(1,0.80,length=nrow(C))
+power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)
+power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)
+
 }
 \author{
 Michael C. Donohue
