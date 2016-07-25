@@ -85,7 +85,7 @@ test_that("lmmpower", {
 
   library(lme4)
   fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
-  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4699286748582)
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4699286748582, tolerance = 1e-04)
 
   library(nlme)
   fm2 <- lme(Reaction ~ Days, random=~Days|Subject, sleepstudy)
