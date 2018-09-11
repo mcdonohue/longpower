@@ -5,8 +5,9 @@
 \title{Sample size calculations for difference in slopes between two groups.}
 \usage{
 diggle.linear.power(n = NULL, delta = NULL, t = NULL, sigma2 = 1,
-  R = NULL, sig.level = 0.05, power = NULL, alternative = c("two.sided",
-  "one.sided"), tol = .Machine$double.eps^2)
+  R = NULL, sig.level = 0.05, power = NULL,
+  alternative = c("two.sided", "one.sided"),
+  tol = .Machine$double.eps^2)
 }
 \arguments{
 \item{n}{sample size per group}
@@ -87,9 +88,6 @@ R = R + diag(sig2.e, n, n)
 diggle.linear.power(d=1.5, t=t, R=R, sig.level=0.05, power=0.80)
 
 }
-\author{
-Michael C. Donohue, Steven D. Edland
-}
 \references{
 Diggle P.J., Heagerty P.J., Liang K., Zeger S.L. (2002)
 \emph{Analysis of longitudinal data}. Second Edition. Oxford Statistical
@@ -98,10 +96,12 @@ Science Series.
 \seealso{
 \code{\link{lmmpower}}, \code{\link{diggle.linear.power}}
 }
+\author{
+Michael C. Donohue, Steven D. Edland
+}
 \keyword{effects}
 \keyword{mixed}
 \keyword{power}
 \keyword{random}
 \keyword{sample}
 \keyword{size}
-

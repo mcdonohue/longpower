@@ -3,22 +3,23 @@
 \docType{methods}
 \name{lmmpower}
 \alias{lmmpower}
+\alias{lmmpower.default}
+\alias{lmmpower-methods}
 \alias{lmmpower,ANY-method}
 \alias{lmmpower,merMod-method}
-\alias{lmmpower-methods}
-\alias{lmmpower.default}
-\alias{lmmpower.gee}
 \alias{lmmpower.lme}
+\alias{lmmpower.gee}
 \alias{lmmpower.numeric}
 \title{Sample size calculations for linear mixed models of rate of change based on
 lmer, lme, or gee "placebo" pilot estimates.}
 \usage{
-lmmpower.default(object = NULL, n = NULL, parameter = 2,
+\method{lmmpower}{default}(object = NULL, n = NULL, parameter = 2,
   pct.change = NULL, delta = NULL, t = NULL, sig.level = 0.05,
-  power = NULL, alternative = c("two.sided", "one.sided"), beta = NULL,
-  beta.CI = NULL, delta.CI = NULL, sig2.i = NULL, sig2.s = NULL,
-  sig2.e = NULL, cov.s.i = NULL, R = NULL, method = c("edland",
-  "diggle", "liuliang"), tol = .Machine$double.eps^2, ...)
+  power = NULL, alternative = c("two.sided", "one.sided"),
+  beta = NULL, beta.CI = NULL, delta.CI = NULL, sig2.i = NULL,
+  sig2.s = NULL, sig2.e = NULL, cov.s.i = NULL, R = NULL,
+  method = c("edland", "diggle", "liuliang"),
+  tol = .Machine$double.eps^2, ...)
 }
 \arguments{
 \item{object}{an object returned by lme4}
@@ -133,9 +134,6 @@ lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 }
 
 }
-\author{
-Michael C. Donohue
-}
 \references{
 Diggle P.J., Heagerty P.J., Liang K., Zeger S.L. (2002)
 \emph{Analysis of longitudinal data}. Second Edition. Oxford Statistical
@@ -148,6 +146,9 @@ correlated observations. \emph{Biometrics}, 53(3), 937-47.
 \code{\link{liu.liang.linear.power}}
 \code{\link{diggle.linear.power}}
 }
+\author{
+Michael C. Donohue
+}
 \keyword{effects}
 \keyword{marginal}
 \keyword{methods}
@@ -157,4 +158,3 @@ correlated observations. \emph{Biometrics}, 53(3), 937-47.
 \keyword{random}
 \keyword{sample}
 \keyword{size}
-

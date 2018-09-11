@@ -4,8 +4,8 @@
 \alias{power.mmrm}
 \title{Linear mixed model sample size calculations.}
 \usage{
-power.mmrm(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL, Rb = NULL,
-  rb = NULL, sigmab = NULL, lambda = 1, delta = NULL,
+power.mmrm(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
+  Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1, delta = NULL,
   sig.level = 0.05, power = NULL, alternative = c("two.sided",
   "one.sided"), tol = .Machine$double.eps^2)
 }
@@ -129,9 +129,6 @@ power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)
 power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)
 
 }
-\author{
-Michael C. Donohue
-}
 \references{
 Lu, K., Luo, X., Chen, P.-Y. (2008) Sample size estimation for
 repeated measures analysis in randomized clinical trials with missing data.
@@ -141,10 +138,12 @@ repeated measures analysis in randomized clinical trials with missing data.
 \code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}},
 \code{\link{diggle.linear.power}}
 }
+\author{
+Michael C. Donohue
+}
 \keyword{effects}
 \keyword{mixed}
 \keyword{power}
 \keyword{random}
 \keyword{sample}
 \keyword{size}
-

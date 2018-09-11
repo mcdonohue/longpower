@@ -15,4 +15,3 @@ an object of class \code{"power.longtest"}
 \description{
 Constructor function for class \code{"power.longtest"}
 }
-

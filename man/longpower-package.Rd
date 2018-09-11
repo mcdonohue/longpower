@@ -22,10 +22,6 @@ and Chen (2008)
 1.0\cr Date: \tab 2013-05-22\cr License: \tab GPL (>= 2)\cr LazyLoad: \tab
 yes\cr }
 }
-\author{
-Michael C. Donohue <mdonohue@usc.edu> Anthony C. Gamst Steven D.
-Edland
-}
 \references{
 Diggle PJ, Heagerty PJ, Liang K, Zeger SL. (2002) \emph{Analysis
 of longitudinal data}. Second Edition.  Oxford Statistical Science Series.
@@ -43,5 +39,8 @@ measures analysis in randomized clinical trials with missing data.
 \code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}},
 \code{\link{liu.liang.linear.power}}
 }
+\author{
+Michael C. Donohue <mdonohue@usc.edu> Anthony C. Gamst Steven D.
+Edland
+}
 \keyword{package}
-

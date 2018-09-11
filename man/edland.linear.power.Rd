@@ -6,7 +6,8 @@
 \usage{
 edland.linear.power(n = NULL, delta = NULL, t = NULL, sig2.s = 0,
   sig2.e = 1, sig.level = 0.05, power = NULL,
-  alternative = c("two.sided", "one.sided"), tol = .Machine$double.eps^2)
+  alternative = c("two.sided", "one.sided"),
+  tol = .Machine$double.eps^2)
 }
 \arguments{
 \item{n}{sample size per group}
@@ -68,9 +69,6 @@ n = length(t)
 edland.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, sig.level=0.05, power = 0.80)
 
 }
-\author{
-Michael C. Donohue, Steven D. Edland
-}
 \references{
 Edland, S.D. (2009) Which MRI measure is best for Alzheimer's
 disease prevention trials: Statistical considerations of power and sample
@@ -80,10 +78,12 @@ size. \emph{Joint Stat Meeting Proceedings}. 4996-4999.
 \code{\link{lmmpower}}, \code{\link{diggle.linear.power}},
 \code{\link{liu.liang.linear.power}}
 }
+\author{
+Michael C. Donohue, Steven D. Edland
+}
 \keyword{effects}
 \keyword{mixed}
 \keyword{power}
 \keyword{random}
 \keyword{sample}
 \keyword{size}
-

@@ -28,4 +28,3 @@ the remaining elements are given in an aligned \sQuote{name = value} format.
 \code{\link{diggle.linear.power}}, \code{\link{lmmpower}},
 }
 \keyword{longtest}
-

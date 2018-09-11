@@ -108,6 +108,7 @@ setGeneric("lmmpower")
 #' lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 #' }
 #' 
+#' @method lmmpower default
 #' @export
 lmmpower.default <- function(object=NULL,
    n=NULL,
@@ -212,9 +213,11 @@ lmmpower.default <- function(object=NULL,
 }
 
 #' @export
+#' @method lmmpower numeric
 lmmpower.numeric <- lmmpower.default
 
 #' @importFrom nlme getVarCov
+#' @method lmmpower lme
 #' @export
 lmmpower.lme <- function(object,
    n = NULL,
@@ -288,6 +291,7 @@ lmmpower.lme <- function(object,
     tol=tol, ...)
 }
 
+#' @method lmmpower gee
 #' @export
 lmmpower.gee <- function(object,
    n = NULL,

@@ -7,7 +7,8 @@
 power.mmrm.ar1(N = NULL, rho = NULL, ra = NULL, sigmaa = NULL,
   rb = NULL, sigmab = NULL, lambda = 1, times = 1:length(ra),
   delta = NULL, sig.level = 0.05, power = NULL,
-  alternative = c("two.sided", "one.sided"), tol = .Machine$double.eps^2)
+  alternative = c("two.sided", "one.sided"),
+  tol = .Machine$double.eps^2)
 }
 \arguments{
 \item{N}{total sample size}
@@ -108,9 +109,6 @@ power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)
 power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)
 
 }
-\author{
-Michael C. Donohue
-}
 \references{
 Lu, K., Luo, X., Chen, P.-Y. (2008) Sample size estimation for
 repeated measures analysis in randomized clinical trials with missing data.
@@ -120,10 +118,12 @@ repeated measures analysis in randomized clinical trials with missing data.
 \code{\link{power.mmrm}}, \code{\link{lmmpower}},
 \code{\link{diggle.linear.power}}
 }
+\author{
+Michael C. Donohue
+}
 \keyword{effects}
 \keyword{mixed}
 \keyword{power}
 \keyword{random}
 \keyword{sample}
 \keyword{size}
-
