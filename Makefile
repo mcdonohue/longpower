@@ -20,6 +20,9 @@ build: roxy
 	cd ..;\
 	R CMD build $(PKGNAME)
 
+test:
+	R -q -e "library(devtools); test('.')"
+
 install: build
 	cd ..;\
 	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz

@@ -1,7 +1,6 @@
 
 #' @export
 lmmpower <- function(object, ...) UseMethod("lmmpower")
-setGeneric("lmmpower")
 
 #' Sample size calculations for linear mixed models of rate of change based on
 #' lmer, lme, or gee "placebo" pilot estimates.
@@ -108,9 +107,9 @@ setGeneric("lmmpower")
 #' lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 #' }
 #' 
-#' @method lmmpower default
+#' @rdname lmmpower
 #' @export
-lmmpower.default <- function(object=NULL,
+lmmpower.numeric <- function(object=NULL,
    n=NULL,
    parameter = 2,
    pct.change = NULL,
@@ -212,12 +211,16 @@ lmmpower.default <- function(object=NULL,
 	structure(results, class = "power.longtest")
 }
 
+#' @rdname lmmpower
 #' @export
-#' @method lmmpower numeric
-lmmpower.numeric <- lmmpower.default
+lmmpower.default <- lmmpower.numeric
+
+#' @rdname lmmpower
+#' @export
+lmmpower.double <- lmmpower.numeric
 
 #' @importFrom nlme getVarCov
-#' @method lmmpower lme
+#' @rdname lmmpower
 #' @export
 lmmpower.lme <- function(object,
    n = NULL,
@@ -291,7 +294,7 @@ lmmpower.lme <- function(object,
     tol=tol, ...)
 }
 
-#' @method lmmpower gee
+#' @rdname lmmpower
 #' @export
 lmmpower.gee <- function(object,
    n = NULL,

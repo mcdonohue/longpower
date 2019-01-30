@@ -48,7 +48,7 @@ test_that("Reproduce Table 1 from Lu, Luo, & Chen (2008)", {
     c(168.11876898305, 189.133615105931, 244.966998329937, 252.178153474575, 252.178153474575, 315.222691843219, 
       336.2375379661, 378.267230211862), c(170.147602556564, 191.157604171059, 246.982211011525, 254.192519905287, 
         254.192519905287, 317.23132678479, 338.244744929957, 380.272061544442)))
-  expect_equal(tab, tab2)
+  expect_equal(tab, tab2, tolerance = 1e-03)
 })
 
 test_that("Reproduce Table 2 from Lu, Luo, & Chen (2008)", {
@@ -72,34 +72,41 @@ test_that("Reproduce Table 2 from Lu, Luo, & Chen (2008)", {
              1.25, 1.2247445108099, 1.18392908471514, 1.13886229048648, 1.08796962333115, 1.03089517940421, 
              1.42857142857143, 1.38254161826624, 1.31065330422472, 1.23318260782795, 1.14702199890211, 1.0514263712482, 
              1.66666666666667, 1.59010470647863, 1.47488822527398, 1.35405269950478, 1.221989488974, 1.07728040119987),
-           ncol = 6, byrow = TRUE))
+           ncol = 6, byrow = TRUE), tolerance = 1e-03)
 })
 
 test_that("lmmpower", {
   expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
-  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903)
+  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903, 
+    tolerance = 1e-03)
   expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
-  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$delta, 1.49751028943272)
+  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$delta, 1.49751028943272, 
+    tolerance = 1e-03)
   expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
-  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903)
+  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903, 
+    tolerance = 1e-03)
 
   library(lme4)
   fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
-  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4699286748582, tolerance = 1e-04)
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4699286748582, 
+    tolerance = 1e-03)
 
   library(nlme)
   fm2 <- lme(Reaction ~ Days, random=~Days|Subject, sleepstudy)
-  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4693809183413)
+  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4693809183413, 
+    tolerance = 1e-03)
 
   # random intercept only
   fm3 <- lme(Reaction ~ Days, random=~1|Subject, sleepstudy)
-  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 18.5332152601122)
+  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 18.5332152601122, 
+    tolerance = 1e-03)
 
   library(gee)
   trash <- capture.output(capture.output(fm4 <- gee(Reaction ~ Days, id = Subject,
               data = sleepstudy,
               corstr = "exchangeable"), type = 'message'), type = 'output')
-  expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 18.845000035132)
+  expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 18.845000035132, 
+    tolerance = 1e-03)
 })
 
 test_that("power.mmrm.ar1", {
@@ -118,7 +125,8 @@ test_that("power.mmrm.ar1", {
   
   expect_equal(
     power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)$delta,
-    power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)$delta
+    power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)$delta, 
+    tolerance = 1e-03
   )
 })
 
@@ -139,7 +147,8 @@ test_that("Reproduce Diggle et al page 29 using liu.liang.linear.power", {
            power=0.80)$N/2)}))
   expect_equal(
     as.numeric(tab.ll),
-    c(313, 196, 79, 625, 391, 157, 938, 586, 235)
+    c(313, 196, 79, 625, 391, 157, 938, 586, 235), 
+    tolerance = 1e-03
   )
 })
 
@@ -159,6 +168,7 @@ test_that("Reproduce Diggle et al page 30 using liu.liang.linear.power", {
            power=0.80)$N/2)}))
   expect_equal(
     as.numeric(tab),
-    c(145, 207, 268, 65, 92, 120, 37, 52, 67, 24, 33, 43)
+    c(145, 207, 268, 65, 92, 120, 37, 52, 67, 24, 33, 43), 
+    tolerance = 1e-03
   )
 })
