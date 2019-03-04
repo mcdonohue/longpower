@@ -1,6 +1,7 @@
 
 #' @export
 lmmpower <- function(object, ...) UseMethod("lmmpower")
+setGeneric("lmmpower")
 
 #' Sample size calculations for linear mixed models of rate of change based on
 #' lmer, lme, or gee "placebo" pilot estimates.
@@ -20,7 +21,7 @@ lmmpower <- function(object, ...) UseMethod("lmmpower")
 #' 
 #' @name lmmpower
 #' @aliases lmmpower-methods lmmpower,ANY-method lmmpower,merMod-method
-#' lmmpower.default lmmpower.lme lmmpower.gee lmmpower.numeric
+#' lmmpower.default lmmpower.lme lmmpower.gee lmmpower.numeric lmmpower.double
 #' @docType methods
 #' @param object an object returned by lme4
 #' @param n sample size per group
@@ -107,9 +108,9 @@ lmmpower <- function(object, ...) UseMethod("lmmpower")
 #' lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 #' }
 #' 
-#' @rdname lmmpower
+#' @method lmmpower double
 #' @export
-lmmpower.numeric <- function(object=NULL,
+lmmpower.double <- function(object=NULL,
    n=NULL,
    parameter = 2,
    pct.change = NULL,
@@ -211,16 +212,17 @@ lmmpower.numeric <- function(object=NULL,
 	structure(results, class = "power.longtest")
 }
 
-#' @rdname lmmpower
 #' @export
-lmmpower.default <- lmmpower.numeric
+#' @method lmmpower numeric
+lmmpower.numeric <- lmmpower.double
 
-#' @rdname lmmpower
 #' @export
-lmmpower.double <- lmmpower.numeric
+#' @method lmmpower default
+lmmpower.default <- lmmpower.double 
+
 
 #' @importFrom nlme getVarCov
-#' @rdname lmmpower
+#' @method lmmpower lme
 #' @export
 lmmpower.lme <- function(object,
    n = NULL,
@@ -294,7 +296,7 @@ lmmpower.lme <- function(object,
     tol=tol, ...)
 }
 
-#' @rdname lmmpower
+#' @method lmmpower gee
 #' @export
 lmmpower.gee <- function(object,
    n = NULL,
@@ -346,8 +348,7 @@ lmmpower.gee <- function(object,
 
 #' @importFrom lme4 VarCorr fixef getME
 #' @export
-setMethod("lmmpower", signature(object = "merMod"),
-  function(object, 
+lmmpower.merMod <- function(object, 
    n = NULL, 
    parameter = 2,
    pct.change = NULL,
@@ -425,4 +426,5 @@ setMethod("lmmpower", signature(object = "merMod"),
 		cov.s.i=cov.s.i, 
 		method = method, 
     tol=tol, ...)
-})
+}
+setMethod("lmmpower", "merMod", lmmpower.merMod)

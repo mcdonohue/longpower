@@ -3,52 +3,23 @@
 \docType{methods}
 \name{lmmpower}
 \alias{lmmpower}
-\alias{lmmpower.numeric}
+\alias{lmmpower.double}
 \alias{lmmpower-methods}
 \alias{lmmpower,ANY-method}
 \alias{lmmpower,merMod-method}
 \alias{lmmpower.default}
 \alias{lmmpower.lme}
 \alias{lmmpower.gee}
-\alias{lmmpower.double}
+\alias{lmmpower.numeric}
 \title{Sample size calculations for linear mixed models of rate of change based on
 lmer, lme, or gee "placebo" pilot estimates.}
 \usage{
-lmmpower.numeric(object = NULL, n = NULL, parameter = 2,
+\method{lmmpower}{double}(object = NULL, n = NULL, parameter = 2,
   pct.change = NULL, delta = NULL, t = NULL, sig.level = 0.05,
   power = NULL, alternative = c("two.sided", "one.sided"),
   beta = NULL, beta.CI = NULL, delta.CI = NULL, sig2.i = NULL,
   sig2.s = NULL, sig2.e = NULL, cov.s.i = NULL, R = NULL,
   method = c("edland", "diggle", "liuliang"),
-  tol = .Machine$double.eps^2, ...)
-
-lmmpower.default(object = NULL, n = NULL, parameter = 2,
-  pct.change = NULL, delta = NULL, t = NULL, sig.level = 0.05,
-  power = NULL, alternative = c("two.sided", "one.sided"),
-  beta = NULL, beta.CI = NULL, delta.CI = NULL, sig2.i = NULL,
-  sig2.s = NULL, sig2.e = NULL, cov.s.i = NULL, R = NULL,
-  method = c("edland", "diggle", "liuliang"),
-  tol = .Machine$double.eps^2, ...)
-
-lmmpower.double(object = NULL, n = NULL, parameter = 2,
-  pct.change = NULL, delta = NULL, t = NULL, sig.level = 0.05,
-  power = NULL, alternative = c("two.sided", "one.sided"),
-  beta = NULL, beta.CI = NULL, delta.CI = NULL, sig2.i = NULL,
-  sig2.s = NULL, sig2.e = NULL, cov.s.i = NULL, R = NULL,
-  method = c("edland", "diggle", "liuliang"),
-  tol = .Machine$double.eps^2, ...)
-
-lmmpower.lme(object, n = NULL, parameter = 2, pct.change = NULL,
-  delta = NULL, t = NULL, sig.level = 0.05, power = NULL,
-  alternative = c("two.sided", "one.sided"), beta = NULL,
-  beta.CI = NULL, delta.CI = NULL, sig2.i = NULL, sig2.s = NULL,
-  sig2.e = NULL, cov.s.i = NULL, method = c("edland", "diggle",
-  "liuliang"), tol = .Machine$double.eps^2, ...)
-
-lmmpower.gee(object, n = NULL, parameter = 2, pct.change = NULL,
-  delta = NULL, t = NULL, sig.level = 0.05, power = NULL,
-  alternative = c("two.sided", "one.sided"), beta = NULL,
-  beta.CI = NULL, delta.CI = NULL, method = c("diggle", "liuliang"),
   tol = .Machine$double.eps^2, ...)
 }
 \arguments{
