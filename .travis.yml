@@ -2,4 +2,9 @@
 
 language: r
 r: devel
+sudo: false
 cache: packages
+
+latex: true
+r_build_args: '--no-build-vignettes'
+r_check_args: '--ignore-vignettes'
