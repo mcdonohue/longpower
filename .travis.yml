@@ -1,0 +1,28 @@
+## https://docs.travis-ci.com/user/languages/r/
+
+language: r
+sudo: false
+r: devel
+cache: packages
+
+## this saves time; it also stops us from getting R CMD check warnings
+## (which get promoted to errors/build failures unless we specify
+## "warnings_are_errors: false" here ...)
+r_build_args: "--no-build-vignettes"
+
+env:
+ - LME4_TEST_LEVEL=2
+
+
+## need travis_wait because checks take 10+ minutes ...
+after_success:
+  - travis_wait Rscript -e 'library(covr); codecov()'
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+branches:
+  only:
+    - master
