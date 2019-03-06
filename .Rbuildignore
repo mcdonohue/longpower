@@ -10,3 +10,4 @@ README.md
 Makefile
 ^.*\.Rproj$
 \.travis\.yml
+^\.Rproj\.user$
