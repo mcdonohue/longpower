@@ -1,6 +1,8 @@
 # longpower: Sample size calculations for longitudinal data
 
-The longpower package contains functions for computing power and sample size for linear models of longitudinal data based on the formulas due to Liu and Liang (1997) <DOI:10.2307/2533554>, Diggle et al (2002) <ISBN:9780199676750>, and Lu, Luo, and Chen (2008) <DOI:10.2202/1557-4679.1098>.
+[![Build Status](https://travis-ci.org/mcdonohue/longpower.svg?branch=master)](https://travis-ci.org/https://travis-ci.org/mcdonohue/longpower.svg?branch=master)[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/longpower?color=blue)](http://cran.r-project.org/package=longpower)[![Downloads](http://cranlogs.r-pkg.org/badges/longpower?color=blue)](http://cran.rstudio.com/package=longpower)
+
+Compute power and sample size for linear models of longitudinal data. Supported models include mixed-effects models and models fit by generalized least squares and generalized estimating equations..
 
 ## To install via CRAN:
 
@@ -8,7 +10,7 @@ The longpower package contains functions for computing power and sample size for
 install.packages("longpower")
 ```
 
-## To install via bitbucket:
+## To install via github:
 
 ```r
 # install.packages('devtools')
