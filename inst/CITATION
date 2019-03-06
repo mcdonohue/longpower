@@ -4,15 +4,15 @@
      vers <- paste("R package version", meta$Version)
      
      citEntry(entry="Manual",
-              title = "longpower: Power and sample size calculators for linear mixed models",
-              author = personList(as.person("Michael C. Donohue"), as.person("Anthony C. Gamst"), as.person("Steven D. Edland")),
+              title = "longpower: Power and sample size calculations for linear mixed models",
+              author = personList(as.person("Michael C. Donohue")),
               year = year,
               note = vers,
      
               textVersion =
-              paste("Michael C Donohue, Steven D Edland (",
+              paste("Michael C Donohue, (",
                     year,
-                    "). longpower: Power and sample size calculators for longitudinal data. ",
+                    "). longpower: Power and sample size calculations for longitudinal data. ",
                     vers, ".", sep=""))
 
      citEntry(entry="book",
@@ -36,3 +36,14 @@
               volume = "53(3)",
               pages = "937-47",
               textVersion = "Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. Biometrics, 53(3), 937-47.")
+
+     citEntry(entry="article",
+              title = "Sample size estimation for repeated measures analysis in randomized clinical trials with missing data",
+              author = personList(as.person("K. Lu"),
+                                  as.person("X. Luo"),
+                                  as.person("P.-Y. Chen")),
+              year = 2008,
+              journal = "International Journal of Biostatistics",
+              volume = "4(1)",
+              pages = "937-47",
+              textVersion = "Lu, K., Luo, X. & Chen, P. (2008). Sample Size Estimation for Repeated Measures Analysis in Randomized Clinical Trials with Missing Data. The International Journal of Biostatistics, 4(1).")

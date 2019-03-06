@@ -108,9 +108,9 @@ setGeneric("lmmpower")
 #' lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)
 #' }
 #' 
-#' @method lmmpower double
+#' @method lmmpower default
 #' @export
-lmmpower.double <- function(object=NULL,
+lmmpower.default <- function(object=NULL,
    n=NULL,
    parameter = 2,
    pct.change = NULL,
@@ -213,13 +213,12 @@ lmmpower.double <- function(object=NULL,
 }
 
 #' @export
-#' @method lmmpower numeric
-lmmpower.numeric <- lmmpower.double
+#' @method lmmpower double
+lmmpower.double <- lmmpower.default
 
 #' @export
-#' @method lmmpower default
-lmmpower.default <- lmmpower.double 
-
+#' @method lmmpower numeric
+lmmpower.numeric <- lmmpower.default
 
 #' @importFrom nlme getVarCov
 #' @method lmmpower lme
@@ -348,7 +347,8 @@ lmmpower.gee <- function(object,
 
 #' @importFrom lme4 VarCorr fixef getME
 #' @export
-lmmpower.merMod <- function(object, 
+setMethod("lmmpower", signature(object = "merMod"),
+  function(object, 
    n = NULL, 
    parameter = 2,
    pct.change = NULL,
@@ -426,5 +426,4 @@ lmmpower.merMod <- function(object,
 		cov.s.i=cov.s.i, 
 		method = method, 
     tol=tol, ...)
-}
-setMethod("lmmpower", "merMod", lmmpower.merMod)
+})

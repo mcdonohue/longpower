@@ -24,9 +24,9 @@ opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, tidy = FALSE, comm
 @
 
 \title{Power for linear models of longitudinal data with applications to Alzheimer's Disease Phase II study design}
-\author{Michael C. Donohue, Steven D. Edland, Anthony C. Gamst\\
-Division of Biostatistics and Bioinformatics\\
-University of California, San Diego}
+\author{Michael C. Donohue\\
+Alzheimer's Therapeutic Research Institute\\
+University of Southern California}
 
 \newcommand{\var}{\mathrm{var}}
 \newcommand{\corr}{\mathrm{corr}}
