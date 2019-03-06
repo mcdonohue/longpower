@@ -8,3 +8,5 @@ vignettes/figure
 vignettes/cache
 README.md
 Makefile
+^.*\.Rproj$
+\.travis\.yml
