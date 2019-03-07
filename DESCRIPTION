@@ -7,7 +7,10 @@ Author: Michael C. Donohue
 Maintainer: Michael C. Donohue <mdonohue@usc.edu>
 Description: Compute power and sample size for linear models of longitudinal
     data. Supported models include mixed-effects models and models fit by
-    generalized least squares and generalized estimating equations.
+    generalized least squares and generalized estimating equations. Relevant
+    formulas are derived by Liu and Liang (1997) <DOI:10.2307/2533554>, 
+    Diggle et al (2002) <ISBN:9780199676750>, and Lu, Luo, and Chen (2008)
+    <DOI:10.2202/1557-4679.1098>.
 License: GPL (>= 2)
 Depends:
     R (>= 3.0.0),
