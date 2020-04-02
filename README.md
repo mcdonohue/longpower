@@ -13,6 +13,6 @@ install.packages("longpower")
 ## To install via github:
 
 ```r
-# install.packages('devtools')
-devtools::install_github("mcdonohue/longpower")
+# install.packages('remotes')
+remotes::install_github("mcdonohue/longpower")
 ```
