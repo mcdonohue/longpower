@@ -3,24 +3,39 @@
 \docType{methods}
 \name{lmmpower}
 \alias{lmmpower}
-\alias{lmmpower.double}
+\alias{lmmpower.default}
 \alias{lmmpower-methods}
 \alias{lmmpower,ANY-method}
 \alias{lmmpower,merMod-method}
-\alias{lmmpower.default}
 \alias{lmmpower.lme}
 \alias{lmmpower.gee}
 \alias{lmmpower.numeric}
+\alias{lmmpower.double}
 \title{Sample size calculations for linear mixed models of rate of change based on
 lmer, lme, or gee "placebo" pilot estimates.}
 \usage{
-\method{lmmpower}{double}(object = NULL, n = NULL, parameter = 2,
-  pct.change = NULL, delta = NULL, t = NULL, sig.level = 0.05,
-  power = NULL, alternative = c("two.sided", "one.sided"),
-  beta = NULL, beta.CI = NULL, delta.CI = NULL, sig2.i = NULL,
-  sig2.s = NULL, sig2.e = NULL, cov.s.i = NULL, R = NULL,
+\method{lmmpower}{default}(
+  object = NULL,
+  n = NULL,
+  parameter = 2,
+  pct.change = NULL,
+  delta = NULL,
+  t = NULL,
+  sig.level = 0.05,
+  power = NULL,
+  alternative = c("two.sided", "one.sided"),
+  beta = NULL,
+  beta.CI = NULL,
+  delta.CI = NULL,
+  sig2.i = NULL,
+  sig2.s = NULL,
+  sig2.e = NULL,
+  cov.s.i = NULL,
+  R = NULL,
   method = c("edland", "diggle", "liuliang"),
-  tol = .Machine$double.eps^2, ...)
+  tol = .Machine$double.eps^2,
+  ...
+)
 }
 \arguments{
 \item{object}{an object returned by lme4}

@@ -1,4 +1,5 @@
 .gitignore
+.github
 tikzDictionary$
 aux$
 log$
@@ -11,3 +12,4 @@ Makefile
 ^.*\.Rproj$
 \.travis\.yml
 ^\.Rproj\.user$
+^cran-comments\.md$

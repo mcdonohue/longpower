@@ -4,10 +4,21 @@
 \alias{power.mmrm}
 \title{Linear mixed model sample size calculations.}
 \usage{
-power.mmrm(N = NULL, Ra = NULL, ra = NULL, sigmaa = NULL,
-  Rb = NULL, rb = NULL, sigmab = NULL, lambda = 1, delta = NULL,
-  sig.level = 0.05, power = NULL, alternative = c("two.sided",
-  "one.sided"), tol = .Machine$double.eps^2)
+power.mmrm(
+  N = NULL,
+  Ra = NULL,
+  ra = NULL,
+  sigmaa = NULL,
+  Rb = NULL,
+  rb = NULL,
+  sigmab = NULL,
+  lambda = 1,
+  delta = NULL,
+  sig.level = 0.05,
+  power = NULL,
+  alternative = c("two.sided", "one.sided"),
+  tol = .Machine$double.eps^2
+)
 }
 \arguments{
 \item{N}{total sample size}
