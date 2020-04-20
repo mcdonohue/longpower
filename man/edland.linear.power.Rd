@@ -3,49 +3,93 @@
 \name{edland.linear.power}
 \alias{edland.linear.power}
 \title{Linear mixed model sample size calculations.}
-\usage{
-edland.linear.power(
-  n = NULL,
-  delta = NULL,
-  t = NULL,
-  sig2.s = 0,
-  sig2.e = 1,
-  sig.level = 0.05,
-  power = NULL,
-  alternative = c("two.sided", "one.sided"),
-  tol = .Machine$double.eps^2
-)
-}
 \arguments{
-\item{n}{sample size per group}
+\item{n}{sample size, group 1}
 
-\item{delta}{group difference in slopes}
+\item{lambda}{allocation ratio (= (sample size group 1)/(sample size group 2)}
+
+\item{delta}{group difference in fixed effect slopes}
 
 \item{t}{the observation times}
 
-\item{sig2.s}{variance of random slope}
+\item{sig2.s}{variance of random slopes, group 1}
 
-\item{sig2.e}{residual variance}
+\item{sig2.s_2}{variance of random slopes, group 2 (defaults to sig2.s)}
+
+\item{sig2.int}{variance of random intercepts, group 1}
+
+\item{sig2.int_2}{variance of random intercepts, group 2 (defaults to sig2.int)}
+
+\item{sig.b0b1}{covariance of random slopes and intercepts,group 1}
+
+\item{sig.b0b1_2}{covariance of random slopes and intercepts, group 2 (defaults to sig.b0b1)}
+
+\item{sig2.e}{residual variance, group 1}
+
+\item{sig2.e_2}{residual variance, group 2 (defaults to sig2.e)}
+
+\item{p}{proportion vector for group 1, if i indexes visits, p[i] = the proportion whose last visit was at visit i (p sums to 1)}
+
+\item{p_2}{proportion vector for group 2 (defaults to p)}
 
 \item{sig.level}{type one error}
 
 \item{power}{power}
 
 \item{alternative}{one- or two-sided test}
-
-\item{tol}{numerical tolerance used in root finding.}
 }
 \value{
-The number of subject required per arm to attain the specified
-\code{power} given \code{sig.level} and the other parameter estimates.
+One of the number of subject required per arm, the \code{power}, or detectible effect size given \code{sig.level} and the other parameter estimates.
 }
 \description{
-This function performs the sample size calculation for a linear mixed model
-with random slope.
+This function performs sample size calculations for the linear mixed model
+with random intercepts and slopes when used to test for differences in fixed 
+effects slope between groups. Input parameters are random effect variance 
+and residual error variance as estimated by a REML fit to representative 
+pilot data or data from a representative prior clinical trial or cohort
+study.
 }
 \details{
+Default settings perform sample size / power / effect size calculations assuming
+equal covariance of repeated measures in the 2 groups, equal residual error
+variance across groups, equal allocation to groups, and assuming no study subject 
+attrition.  Specifically, variance parameters required for default settings 
+are sig2.s, the variance of random slopes, and sig2.e, the residual error
+variance, both either known or estimated from a mixed model fit by REML
+to prior data.
+
 This function will also provide sample size estimates for linear mixed
-models with random intercept only simply by setting \code{sig2.s = 0}
+models with random intercept only by setting \code{sig2.s = 0}  (although, 
+this is not generally recommended).
+
+This function was generalized April 2020. The function is back compatible,
+although the order of arguments has changed. The new function accommodates
+different variance parameters across groups, unequal allocation across groups, and
+study subject attrition (loss to followup), which may also vary across groups.
+  - Unequal allocation is accommodated by the parameter lambda, where
+    lambda = (sample size group 1)/(sample size group 2). lambda defaults 
+    to one (equal allocation).
+  - Study subject attrition is accommodated by the parameter 'p', where 
+    p is a vector of proportions.  If i indexes successive study visits,
+    p[i] = the proportion whose last visit is at visit i. p sums to 1. p
+    defaults to the case of no study subject attrition (everyone completes
+    all visits).
+  - differential study subject attrition is accommodated by the parameter p_2.
+    p_2 is analogous to p, but for group 2. p_2 defaults to p (equal pattern
+    of study subject attrition across groups).
+  - Note that when there is study subject attrition, sample size / power 
+    calculations are also a function of the variance of random intercepts and
+    the covariance of random intercepts and slopes.  When p and/or p_2 are 
+    specified, edland.linear.power requires specification of these parameters.
+    (These are part of the standard output of lmer and other software fitting 
+    REML models.)  These parameters are specified by sig2.int and sig.b0b1 (group 1), 
+    and sig2.int_2 and sigb0b1_2 (group 2).  
+  - different variance parameters across groups is accommodated by the variance
+    arguments sig2.int_2, sig.b0b1_2,sig2.s_2 and sig2.e_2, analogous to the
+    the corresponding arguments within group 1.  These values default to
+    to the corresponding group 1 variables (equal variance across groups).
+  - The parameter t is the design vector.  For example, a one year trial with
+    observations every three months would specify t = c(0, .25, .5, .75, 1).
 }
 \examples{
 
@@ -71,15 +115,11 @@ tab
 
 # An Alzheimer's Disease example using ADAS-cog pilot estimates
 t = seq(0,1.5,0.25)
-n = length(t)
-
 edland.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, sig.level=0.05, power = 0.80)
 
 }
 \references{
-Edland, S.D. (2009) Which MRI measure is best for Alzheimer's
-disease prevention trials: Statistical considerations of power and sample
-size. \emph{Joint Stat Meeting Proceedings}. 4996-4999.
+Ard and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease. \emph{Journal of Alzheimer’s Disease.} 21:369-377.
 }
 \seealso{
 \code{\link{lmmpower}}, \code{\link{diggle.linear.power}},
