@@ -79,9 +79,9 @@ liu.liang.linear.power
 
 The parameters include \texttt{d}, the effect size (possibly vector); \texttt{u}, the list of covariate vectors or matrices associated with the parameter of interest; \texttt{v}, the respective list of covariate vectors or matrices associated with the nuisance parameter; \texttt{sigma2}, the error variance; \texttt{R}, the correlation structure; and \texttt{Pi} the proportion of covariates of each type (\texttt{u}, \texttt{v}, and \texttt{Pi} are expected to be the same length and sorted with respect to each other).
 
-For example, we can reproduce the table exchangeable correlations on page 29 of \cite{diggle} for the case of $\mathbf{t} = (0,2,5)'$, $\alpha=0.05$, power=0.80, and $d=0.5$ as follows via the \texttt{\hlkwd{diggle.linear.power}} function:
+For example, we can reproduce the table of sample sizes (per group) on page 29 of \cite{diggle} for the given exchangeable correlations with $\mathbf{t} = (0,2,5)'$, $\alpha=0.05$, power=0.80, and $d=0.5$ via the \texttt{\hlkwd{diggle.linear.power}} function:
 ```{r }
-n = 3
+n = 3 # visits
 t = c(0,2,5)
 rho = c(0.2, 0.5, 0.8)
 sigma2 = c(100, 200, 300)
@@ -93,7 +93,7 @@ tab.diggle = outer(rho, sigma2,
           sigma2=sigma2,
           R=rho,
           alternative="one.sided",
-          power=0.80)$n)}))
+          power=0.80)$n[1])}))
 colnames(tab.diggle) = paste("sigma2 =", sigma2)
 rownames(tab.diggle) = paste("rho =", rho)
 tab.diggle
@@ -109,7 +109,7 @@ tab.ll = outer(rho, sigma2,
           delta=0.5, u=u, v=v,
           sigma2=sigma2,
           R=rho, alternative="one.sided",
-          power=0.80)$N/2)}))
+          power=0.80)$n[1])}))
 colnames(tab.ll) = paste("sigma2 =", sigma2)
 rownames(tab.ll) = paste("rho =", rho)
 tab.ll

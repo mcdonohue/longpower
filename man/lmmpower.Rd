@@ -32,7 +32,7 @@ lmer, lme, or gee "placebo" pilot estimates.}
   sig2.e = NULL,
   cov.s.i = NULL,
   R = NULL,
-  method = c("edland", "diggle", "liuliang"),
+  method = c("diggle", "liuliang", "edland"),
   tol = .Machine$double.eps^2,
   ...
 )
@@ -91,7 +91,7 @@ model working correlation matrix}
 
 \item{method}{the formula to use. Defaults
 to \code{"diggle"} for Diggle et al (2002). Alternatively \code{"liuliang"}
-can be selected for Liu & Liang (1997).}
+can be selected for Liu & Liang (1997), or  \code{"edland"} for Ard & Edland (2011).}
 
 \item{tol}{numerical tolerance used in root finding.}
 
@@ -157,10 +157,13 @@ Science Series.
 
 Liu, G., and Liang, K. Y. (1997) Sample size calculations for studies with
 correlated observations. \emph{Biometrics}, 53(3), 937-47.
+
+Ard, C. and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease. 
+\emph{Journal of Alzheimer's Disease.} 21:369-377.
 }
 \seealso{
-\code{\link{liu.liang.linear.power}}
-\code{\link{diggle.linear.power}}
+\code{\link{liu.liang.linear.power}},
+\code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}}
 }
 \author{
 Michael C. Donohue

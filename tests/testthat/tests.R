@@ -1,8 +1,14 @@
 library(longpower)
+fm1 <- lme4::lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
+fm2 <- nlme::lme(Reaction ~ Days, random=~Days|Subject, sleepstudy)
+fm3 <- nlme::lme(Reaction ~ Days, random=~1|Subject, sleepstudy)
+trash <- capture.output(capture.output(fm4 <- gee::gee(Reaction ~ Days, id = Subject,
+  data = sleepstudy,
+  corstr = "exchangeable"), type = 'message'), type = 'output')
 
 context("Power/sample size calculations")
 
-test_that("Reproduce table for exchangeable correlation on page 29 of Diggle et al. (1994)", {
+test_that("Reproduce table of n per group for exchangeable correlation on page 29 of Diggle et al. (1994)", {
   n = 3
   t = c(0,2,5)
   u = list(u1 = t, u2 = rep(0,n))
@@ -18,7 +24,7 @@ test_that("Reproduce table for exchangeable correlation on page 29 of Diggle et 
             sigma2=sigma2,
             R=rho,
             alternative="one.sided",
-            power=0.80)$n)}))
+            power=0.80)$n[1])}))
   expect_identical(tab, 
     matrix(c(313, 625, 938,
              196, 391, 586,
@@ -75,45 +81,35 @@ test_that("Reproduce Table 2 from Lu, Luo, & Chen (2008)", {
            ncol = 6, byrow = TRUE), tolerance = 1e-03)
 })
 
-test_that("lmmpower", {
+test_that("lmmpower (diggle)", {
   expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
-  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903, 
+  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n[1], 207.310093300903, 
     tolerance = 1e-03)
   expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
   	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$delta, 1.49751028943272, 
     tolerance = 1e-03)
   expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
-  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n, 207.310093300903, 
+  	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n[1], 207.310093300903, 
     tolerance = 1e-03)
 
-  library(lme4)
-  fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
-  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4699286748582, 
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 68.4699286748582, 
     tolerance = 1e-03)
 
-  library(nlme)
-  fm2 <- lme(Reaction ~ Days, random=~Days|Subject, sleepstudy)
-  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 68.4693809183413, 
+  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 68.4693809183413, 
     tolerance = 1e-03)
 
   # random intercept only
-  fm3 <- lme(Reaction ~ Days, random=~1|Subject, sleepstudy)
-  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 18.5332152601122, 
+  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 18.5332152601122, 
     tolerance = 1e-03)
 
-  library(gee)
-  trash <- capture.output(capture.output(fm4 <- gee(Reaction ~ Days, id = Subject,
-              data = sleepstudy,
-              corstr = "exchangeable"), type = 'message'), type = 'output')
-  expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n, 18.845000035132, 
+  expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 18.845000035132, 
     tolerance = 1e-03)
 })
 
 test_that("power.mmrm.ar1", {
-  library(nlme)
   Orthodont$t.index <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
 
-  fmOrth.corAR1 <- gls( distance ~ Sex * I(age - 11), 
+  fmOrth.corAR1 <- nlme::gls( distance ~ Sex * I(age - 11), 
     Orthodont,
     correlation = corAR1(form = ~ t.index | Subject),
     weights = varIdent(form = ~ 1 | age) )
@@ -171,4 +167,66 @@ test_that("Reproduce Diggle et al page 30 using liu.liang.linear.power", {
     c(145, 207, 268, 65, 92, 120, 37, 52, 67, 24, 33, 43), 
     tolerance = 1e-03
   )
+})
+
+test_that("lmmpower (liuliang)", {
+  meth <- 'liuliang'
+  expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
+    power = 0.80, method = meth)$n[1], 207.310093300903, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
+    power = 0.80, method = meth)$delta, 1.49751028943272, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
+    power = 0.80, method = meth)$n[1], 207.310093300903, 
+    tolerance = 1e-03)
+  
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 68.4699286748582, 
+    tolerance = 1e-03)
+  
+  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 68.4693809183413, 
+    tolerance = 1e-03)
+  
+  # random intercept only
+  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 18.5332152601122, 
+    tolerance = 1e-03)
+  
+  expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 18.845000035132, 
+    tolerance = 1e-03)
+})
+
+test_that("lmmpower (edland)", {
+  meth <- 'edland'
+  expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
+    power = 0.80, method = meth)$n[1], 207.310093300903, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
+    power = 0.80, method = meth)$delta, 1.49751028943272, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
+    power = 0.80, method = meth)$n[1], 207.310093300903, 
+    tolerance = 1e-03)
+  
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 68.4699286748582, 
+    tolerance = 1e-03)
+  
+  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 68.4693809183413, 
+    tolerance = 1e-03)
+  
+  # random intercept only
+  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 18.5332152601122, 
+    tolerance = 1e-03)
 })

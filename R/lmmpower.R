@@ -59,20 +59,24 @@ setGeneric("lmmpower")
 #' model working correlation matrix
 #' @param method the formula to use. Defaults
 #' to \code{"diggle"} for Diggle et al (2002). Alternatively \code{"liuliang"}
-#' can be selected for Liu & Liang (1997).
+#' can be selected for Liu & Liang (1997), or  \code{"edland"} for Ard & Edland (2011).
 #' @param tol numerical tolerance used in root finding.
 #' @param ... other arguments
 #' @return An object of class \code{power.htest} giving the calculated sample
 #' size, N, per group and other parameters.
 #' @author Michael C. Donohue
-#' @seealso \code{\link{liu.liang.linear.power}}
-#' \code{\link{diggle.linear.power}}
+#' @seealso \code{\link{liu.liang.linear.power}},
+#' \code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}}
 #' @references Diggle P.J., Heagerty P.J., Liang K., Zeger S.L. (2002)
 #' \emph{Analysis of longitudinal data}. Second Edition. Oxford Statistical
 #' Science Series.
 #' 
 #' Liu, G., and Liang, K. Y. (1997) Sample size calculations for studies with
 #' correlated observations. \emph{Biometrics}, 53(3), 937-47.
+#' 
+#' Ard, C. and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease. 
+#' \emph{Journal of Alzheimer's Disease.} 21:369-377. 
+#' 
 #' @keywords power sample size mixed effects random effects marginal model
 #' methods
 #' @examples
@@ -127,11 +131,11 @@ lmmpower.default <- function(object=NULL,
    sig2.e=NULL,
    cov.s.i=NULL,
    R=NULL,
-   method = c("edland", "diggle", "liuliang"),
+   method = c("diggle", "liuliang", "edland"),
    tol = .Machine$double.eps^2,
    ...)
 {
-	if(sum(!sapply(list(delta, pct.change), is.null))==2) 	
+  if(sum(!sapply(list(delta, pct.change), is.null))==2) 	
 		stop("Only one of delta and pct.change must be specified.")
 	if(is.null(delta)&!is.null(beta)&!is.null(pct.change))
 	  delta<-pct.change*beta
@@ -144,7 +148,7 @@ lmmpower.default <- function(object=NULL,
   method <- match.arg(method)
   
 	m <- length(t)
-	if(is.null(R) & method %in% c("edland", "liuliang")){
+	if(is.null(R) & method %in% c("diggle", "liuliang")){
 	  D <- matrix(c(sig2.i, cov.s.i, cov.s.i, sig2.s), nrow=2)
 	  R <- cbind(1,t)%*%D%*%rbind(1,t)  
 	  R <- R + diag(sig2.e, m, m)
@@ -178,18 +182,21 @@ lmmpower.default <- function(object=NULL,
 		
 	if(!is.null(results$delta.CI)){
 		n.upper <- switch(method,
-		  edland = edland.linear.power(n=NULL, results$delta.CI[1], t=t, sig2.s, sig2.e, 
-  	    sig.level=sig.level,
-  	    power=power,
-  	    alternative=alternative,tol=tol,...)$n,
-      diggle = diggle.linear.power(n=NULL, results$delta.CI[1], t=t, R=R, 
+		  edland = edland.linear.power(n=NULL, results$delta.CI[1], t=t, 
+		    sig2.s=sig2.s, sig2.e=sig2.e, 
 		    sig.level=sig.level,
-		    power=power,tol=tol,...)$n,
+		    power=power,
+		    alternative=alternative,tol=tol,...)$n,
+      diggle = diggle.linear.power(n=NULL, results$delta.CI[1], t=t, R=R, 
+        sig.level=sig.level,
+        power=power,
+        alternative=alternative,tol=tol,...)$n,
 		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[1], u=u, v=v, R=R, 
 		    sig.level=sig.level,
 		    power=power,tol=tol,...)$N/2)
 		n.lower <- switch(method,
-		  edland = edland.linear.power(n=NULL, results$delta.CI[2], t, sig2.s, sig2.e, 
+		  edland = edland.linear.power(n=NULL, results$delta.CI[2], t=t, 
+		    sig2.s=sig2.s, sig2.e=sig2.e, 
         sig.level=sig.level,
         power=power,
         alternative=alternative,tol=tol,...)$n,
@@ -239,7 +246,7 @@ lmmpower.lme <- function(object,
    sig2.s=NULL,
    sig2.e=NULL,
    cov.s.i=NULL,
-   method = c("edland", "diggle", "liuliang"),
+   method = c("diggle", "liuliang", "edland"),
    tol = .Machine$double.eps^2,
    ...)
 {
@@ -309,7 +316,7 @@ lmmpower.gee <- function(object,
    beta=NULL,
    beta.CI=NULL,
    delta.CI=NULL,
-   method = c("diggle", "liuliang"),
+   method = c("diggle", "liuliang", "edland"),
    tol = .Machine$double.eps^2,
    ...)
 {
@@ -364,7 +371,7 @@ setMethod("lmmpower", signature(object = "merMod"),
    sig2.s=NULL,
    sig2.e=NULL,
    cov.s.i=NULL,
-   method = c("edland", "diggle", "liuliang"),
+   method = c("diggle", "liuliang", "edland"),
    tol = .Machine$double.eps^2,
    ...)
 {

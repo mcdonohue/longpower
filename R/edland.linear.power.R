@@ -11,7 +11,7 @@
 #' equal covariance of repeated measures in the 2 groups, equal residual error
 #' variance across groups, equal allocation to groups, and assuming no study subject 
 #' attrition.  Specifically, variance parameters required for default settings 
-#' are sig2.s, the variance of random slopes, and sig2.e, the residual error
+#' are \code{sig2.s}, the variance of random slopes, and \code{sig2.e}, the residual error
 #' variance, both either known or estimated from a mixed model fit by REML
 #' to prior data.
 #'
@@ -23,30 +23,32 @@
 #' although the order of arguments has changed. The new function accommodates
 #' different variance parameters across groups, unequal allocation across groups, and
 #' study subject attrition (loss to followup), which may also vary across groups.
-#'   - Unequal allocation is accommodated by the parameter lambda, where
-#'     lambda = (sample size group 1)/(sample size group 2). lambda defaults 
-#'     to one (equal allocation).
-#'   - Study subject attrition is accommodated by the parameter 'p', where 
-#'     p is a vector of proportions.  If i indexes successive study visits,
-#'     p[i] = the proportion whose last visit is at visit i. p sums to 1. p
-#'     defaults to the case of no study subject attrition (everyone completes
-#'     all visits).
-#'   - differential study subject attrition is accommodated by the parameter p_2.
-#'     p_2 is analogous to p, but for group 2. p_2 defaults to p (equal pattern
-#'     of study subject attrition across groups).
-#'   - Note that when there is study subject attrition, sample size / power 
-#'     calculations are also a function of the variance of random intercepts and
-#'     the covariance of random intercepts and slopes.  When p and/or p_2 are 
-#'     specified, edland.linear.power requires specification of these parameters.
-#'     (These are part of the standard output of lmer and other software fitting 
-#'     REML models.)  These parameters are specified by sig2.int and sig.b0b1 (group 1), 
-#'     and sig2.int_2 and sigb0b1_2 (group 2).  
-#'   - different variance parameters across groups is accommodated by the variance
-#'     arguments sig2.int_2, sig.b0b1_2,sig2.s_2 and sig2.e_2, analogous to the
-#'     the corresponding arguments within group 1.  These values default to
-#'     to the corresponding group 1 variables (equal variance across groups).
-#'   - The parameter t is the design vector.  For example, a one year trial with
-#'     observations every three months would specify t = c(0, .25, .5, .75, 1).
+#' 
+#' * Unequal allocation is accommodated by the parameter \code{lambda}, where
+#' \code{lambda} = (sample size group 1)/(sample size group 2). \code{lambda} defaults 
+#' to one (equal allocation).
+#' * Study subject attrition is accommodated by the parameter '\code{p}', where 
+#' \code{p} is a vector of proportions.  If \code{i} indexes successive study visits,
+#' \code{p[i]} = the proportion whose last visit is at visit \code{i}. \code{p} sums to 1. \code{p}
+#' defaults to the case of no study subject attrition (everyone completes
+#' all visits).
+#' * differential study subject attrition is accommodated by the parameter \code{p_2}.
+#' \code{p_2} is analogous to \code{p}, but for group 2. \code{p_2} defaults to \code{p} (equal pattern
+#' of study subject attrition across groups).
+#' * Note that when there is study subject attrition, sample size / power 
+#' calculations are also a function of the variance of random intercepts and
+#' the covariance of random intercepts and slopes.  When \code{p} and/or \code{p_2} are 
+#' specified, \code{edland.linear.power} requires specification of these parameters.
+#' (These are part of the standard output of lmer and other software fitting 
+#' REML models.)  These parameters are specified by \code{sig2.int} and \code{sig.b0b1} (group 1), 
+#' and \code{sig2.int_2} and \code{sigb0b1_2} (group 2).  
+#' * different variance parameters across groups is accommodated by the variance
+#' arguments \code{sig2.int_2}, \code{sig.b0b1_2}, \code{sig2.s}_2 and \code{sig2.e_2}, analogous to the
+#' the corresponding arguments within group 1.  These values default to
+#' to the corresponding group 1 variables (equal variance across groups).
+#' * The parameter \code{t} is the design vector. For example, a one year trial with
+#' observations every three months would specify \code{t = c(0, .25, .5, .75, 1)}.
+#' @md
 #'
 #' @name edland.linear.power
 #' @param n sample size, group 1
@@ -54,7 +56,7 @@
 #' @param delta group difference in fixed effect slopes
 #' @param t the observation times
 #' @param sig2.s variance of random slopes, group 1
-#' @param sig2.s_2 variance of random slopes, group 2 (defaults to sig2.s)
+#' @param sig2.s_2 variance of random slopes, group 2 (defaults to \code{sig2.s})
 #' @param sig2.int variance of random intercepts, group 1
 #' @param sig2.int_2 variance of random intercepts, group 2 (defaults to sig2.int)
 #' @param sig.b0b1 covariance of random slopes and intercepts,group 1
@@ -66,34 +68,20 @@
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
-#' @return One of the number of subject required per arm, the \code{power}, or detectible effect size given \code{sig.level} and the other parameter estimates.
+#' @param tol	not used (no root finding used in this implementation).
+#' @return One of the number of subject required per arm, the \code{power}, or detectible effect size 
+#' given \code{sig.level} and the other parameter estimates.
 #' @author Michael C. Donohue, Steven D. Edland
 #' @seealso \code{\link{lmmpower}}, \code{\link{diggle.linear.power}},
 #' \code{\link{liu.liang.linear.power}}
-#' @references Ard and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease. \emph{Journal of Alzheimer’s Disease.} 21:369-377. 
+#' @references Ard and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease.
+#'  \emph{Journal of Alzheimer's Disease.} 21:369-377. 
 #' @keywords power sample size mixed effects random effects
 #' @examples
 #' 
 #' \dontrun{
 #' browseVignettes(package = "longpower")
 #' }
-#' # Reproduces the table on page 29 of Diggle et al
-#' n = 3
-#' t = c(0,2,5)
-#' rho = c(0.2, 0.5, 0.8)
-#' sigma2 = c(100, 200, 300)
-#' tab = outer(rho, sigma2, 
-#'       Vectorize(function(rho, sigma2){
-#'         ceiling(edland.linear.power(
-#'           delta=0.5,
-#'           t=t,
-#'           sig2.e=sigma2*(1-rho),
-#'           alternative="one.sided",
-#'           power=0.80)$n)}))
-#' colnames(tab) = paste("sigma2 =", sigma2)
-#' rownames(tab) = paste("rho =", rho)
-#' tab
-#' 
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
 #' t = seq(0,1.5,0.25)
 #' edland.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, sig.level=0.05, power = 0.80)
@@ -103,7 +91,7 @@ edland.linear.power<-function(n = NULL, delta = NULL, power = NULL, t = NULL, la
   sig2.int   = 0,    sig2.s   = NULL, sig.b0b1   = 0,    sig2.e   = NULL, 
   sig2.int_2 = NULL, sig2.s_2 = NULL, sig.b0b1_2 = NULL, sig2.e_2 = NULL, 
   sig.level=0.05, p=NULL ,p_2=NULL,
-  alternative = c("two.sided", "one.sided"))
+  alternative = c("two.sided", "one.sided"), tol=NULL)
 {
   
   if (sum(sapply(list(n, delta,  power), is.null)) != 1) 
@@ -189,10 +177,10 @@ edland.linear.power<-function(n = NULL, delta = NULL, power = NULL, t = NULL, la
     stop("internal error", domain = NA)
   
   METHOD <- "Zhao and Edland, in process"
-  structure(list(n1 = n, n2=n_2, delta = delta, t=t, p=p, p_2=p_2,
+  structure(list(N = n+n_2, n = c(n, n_2), delta = delta, t=t, p=p, p_2=p_2,
     sig2.int  =sig2.int  ,sig.b0b1  =sig.b0b1  ,sig2.s  =sig2.s  ,sig2.e   = sig2.e, 
     sig2.int_2=sig2.int_2,sig.b0b1_2=sig.b0b1_2,sig2.s_2=sig2.s_2,sig2.e_2 = sig2.e_2, 
     sig.level = sig.level, power = power, alternative = alternative, 
-    note = "n1 and n2 are sample size in groups 1 and 2",
+    note = "N is *total* sample size and n is sample size in *each* group",
     method = METHOD), class = "power.longtest")
 }
