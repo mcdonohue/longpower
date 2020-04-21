@@ -99,7 +99,7 @@ tab = outer(rho, delta,
          delta=delta, u=u, v=v,
          sigma2=1,
          R=rho, alternative="one.sided",
-         power=0.80)$N/2)}))
+         power=0.80)$n[1])}))
 colnames(tab) = paste("delta =", delta)
 rownames(tab) = paste("rho =", rho)
 tab

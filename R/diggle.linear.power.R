@@ -44,7 +44,7 @@
 #'           sigma2=sigma2,
 #'           R=rho,
 #'           alternative="one.sided",
-#'           power = 0.80)$n)}))
+#'           power = 0.80)$n[1])}))
 #' colnames(tab) = paste("sigma2 =", sigma2)
 #' rownames(tab) = paste("rho =", rho)
 #' tab
@@ -70,7 +70,7 @@
 #' 
 #' diggle.linear.power(d=1.5, t=t, R=R, sig.level=0.05, power=0.80)
 #' 
-#' @importFrom stats coef qnorm uniroot
+#' @importFrom stats coef qnorm pnorm uniroot
 #' 
 #' @export diggle.linear.power
 diggle.linear.power <-

@@ -68,7 +68,7 @@ tab = outer(rho, sigma2,
           sigma2=sigma2,
           R=rho,
           alternative="one.sided",
-          power = 0.80)$n)}))
+          power = 0.80)$n[1])}))
 colnames(tab) = paste("sigma2 =", sigma2)
 rownames(tab) = paste("rho =", rho)
 tab

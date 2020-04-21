@@ -34,10 +34,10 @@ measures analysis in randomized clinical trials with missing data.
 \emph{International Journal of Biostatistics}, 4, (1)
 }
 \seealso{
-\code{lmmpower}, \code{\link{power.mmrm}},
-\code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}},
-\code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}},
-\code{\link{liu.liang.linear.power}}
+[`lmmpower``], [`power.mmrm`],
+[`power.mmrm.ar1`], [`lmmpower`],
+[`diggle.linear.power`], [`edland.linear.power`],
+[`liu.liang.linear.power`]
 }
 \author{
 Michael C. Donohue <mdonohue@usc.edu> Anthony C. Gamst Steven D.

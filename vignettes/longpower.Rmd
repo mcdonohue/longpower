@@ -1,5 +1,5 @@
 ---
-title: "Poisson GLM, Cox PH, & degrees of freedom"
+title: "Power calculations for longitudinal data"
 output: rmarkdown::html_vignette
 bibliography: longpower.bib
 vignette: >

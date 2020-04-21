@@ -44,19 +44,19 @@ edland.linear.power(
 
 \item{sig2.e}{residual variance, group 1}
 
-\item{sig2.int_2}{variance of random intercepts, group 2 (defaults to sig2.int)}
+\item{sig2.int_2}{variance of random intercepts, group 2 (defaults to \code{sig2.int})}
 
 \item{sig2.s_2}{variance of random slopes, group 2 (defaults to \code{sig2.s})}
 
-\item{sig.b0b1_2}{covariance of random slopes and intercepts, group 2 (defaults to sig.b0b1)}
+\item{sig.b0b1_2}{covariance of random slopes and intercepts, group 2 (defaults to \code{sig.b0b1})}
 
-\item{sig2.e_2}{residual variance, group 2 (defaults to sig2.e)}
+\item{sig2.e_2}{residual variance, group 2 (defaults to \code{sig2.e})}
 
 \item{sig.level}{type one error}
 
-\item{p}{proportion vector for group 1, if i indexes visits, p\link{i} = the proportion whose last visit was at visit i (p sums to 1)}
+\item{p}{proportion vector for group 1, if i indexes visits, \code{p[i]} = the proportion whose last visit was at visit \code{i} (\code{p} sums to \code{1})}
 
-\item{p_2}{proportion vector for group 2 (defaults to p)}
+\item{p_2}{proportion vector for group 2 (defaults to \code{p})}
 
 \item{alternative}{one- or two-sided test}
 
@@ -133,8 +133,7 @@ Ard and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer'
 \emph{Journal of Alzheimer's Disease.} 21:369-377.
 }
 \seealso{
-\code{\link{lmmpower}}, \code{\link{diggle.linear.power}},
-\code{\link{liu.liang.linear.power}}
+\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}
 }
 \author{
 Michael C. Donohue, Steven D. Edland

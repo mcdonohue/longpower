@@ -91,17 +91,13 @@ test_that("lmmpower (diggle)", {
   expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
   	sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), power = 0.80)$n[1], 207.310093300903, 
     tolerance = 1e-03)
-
   expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 68.4699286748582, 
     tolerance = 1e-03)
-
   expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 68.4693809183413, 
     tolerance = 1e-03)
-
   # random intercept only
   expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 18.5332152601122, 
     tolerance = 1e-03)
-
   expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), power = 0.80)$n[1], 18.845000035132, 
     tolerance = 1e-03)
 })
@@ -183,20 +179,16 @@ test_that("lmmpower (liuliang)", {
     sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
     power = 0.80, method = meth)$n[1], 207.310093300903, 
     tolerance = 1e-03)
-  
   expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), 
     power = 0.80, method = meth)$n[1], 68.4699286748582, 
     tolerance = 1e-03)
-  
   expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), 
     power = 0.80, method = meth)$n[1], 68.4693809183413, 
     tolerance = 1e-03)
-  
   # random intercept only
   expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), 
     power = 0.80, method = meth)$n[1], 18.5332152601122, 
     tolerance = 1e-03)
-  
   expect_equal(lmmpower(fm4, pct.change = 0.30, t = seq(0,9,1), 
     power = 0.80, method = meth)$n[1], 18.845000035132, 
     tolerance = 1e-03)
@@ -216,15 +208,12 @@ test_that("lmmpower (edland)", {
     sig2.i = 55, sig2.s = 24, sig2.e = 10, cov.s.i=0.8*sqrt(55)*sqrt(24), 
     power = 0.80, method = meth)$n[1], 207.310093300903, 
     tolerance = 1e-03)
-  
   expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), 
     power = 0.80, method = meth)$n[1], 68.4699286748582, 
     tolerance = 1e-03)
-  
   expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), 
     power = 0.80, method = meth)$n[1], 68.4693809183413, 
     tolerance = 1e-03)
-  
   # random intercept only
   expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), 
     power = 0.80, method = meth)$n[1], 18.5332152601122, 

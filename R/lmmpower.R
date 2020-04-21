@@ -156,7 +156,7 @@ lmmpower.default <- function(object=NULL,
 
 	if(method == "liuliang"){
 	  u <- list(u1 = t, u2 = rep(0,m))
-	  v <- list(v1 = cbind(1,1,rep(0,m)),
+	  v <- list(v1 = cbind(1,1,t),
 	         v2 = cbind(1,0,t))
 	  if(!is.null(n)) N <- n*2 else N <- NULL
 	}
@@ -193,7 +193,7 @@ lmmpower.default <- function(object=NULL,
         alternative=alternative,tol=tol,...)$n,
 		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[1], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power,tol=tol,...)$N/2)
+		    power=power,tol=tol,...)$n)
 		n.lower <- switch(method,
 		  edland = edland.linear.power(n=NULL, results$delta.CI[2], t=t, 
 		    sig2.s=sig2.s, sig2.e=sig2.e, 
@@ -205,7 +205,7 @@ lmmpower.default <- function(object=NULL,
 		    power=power,tol=tol,...)$n,
 		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[2], u=u, v=v, R=R, 
 		    sig.level=sig.level,
-		    power=power,tol=tol,...)$N/2)
+		    power=power,tol=tol,...)$n)
 		n.CI <- c(n.lower, n.upper)
 		if(n.CI[1]>n.CI[2]) n.CI <- n.CI[2:1]
 		results$n.CI <- n.CI 

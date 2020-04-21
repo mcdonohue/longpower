@@ -33,4 +33,5 @@ Collate:
     'lmmpower.R'
     'power_mmrm.R'
     'print.power.longtest.R'
+Encoding: UTF-8
 RoxygenNote: 7.1.0
