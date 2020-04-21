@@ -1,8 +1,3 @@
-
-#' @export
-lmmpower <- function(object, ...) UseMethod("lmmpower")
-setGeneric("lmmpower")
-
 #' Sample size calculations for linear mixed models of rate of change based on
 #' lmer, lme, or gee "placebo" pilot estimates.
 #' 
@@ -115,108 +110,108 @@ setGeneric("lmmpower")
 #' @method lmmpower default
 #' @export
 lmmpower.default <- function(object=NULL,
-   n=NULL,
-   parameter = 2,
-   pct.change = NULL,
-   delta = NULL,
-   t = NULL,
-   sig.level = 0.05,
-   power = NULL, 
-   alternative = c("two.sided", "one.sided"),
-   beta=NULL,
-   beta.CI=NULL,
-   delta.CI=NULL,
-   sig2.i=NULL,
-   sig2.s=NULL,
-   sig2.e=NULL,
-   cov.s.i=NULL,
-   R=NULL,
-   method = c("diggle", "liuliang", "edland"),
-   tol = .Machine$double.eps^2,
-   ...)
+  n=NULL,
+  parameter = 2,
+  pct.change = NULL,
+  delta = NULL,
+  t = NULL,
+  sig.level = 0.05,
+  power = NULL, 
+  alternative = c("two.sided", "one.sided"),
+  beta=NULL,
+  beta.CI=NULL,
+  delta.CI=NULL,
+  sig2.i=NULL,
+  sig2.s=NULL,
+  sig2.e=NULL,
+  cov.s.i=NULL,
+  R=NULL,
+  method = c("diggle", "liuliang", "edland"),
+  tol = .Machine$double.eps^2,
+  ...)
 {
   if(sum(!sapply(list(delta, pct.change), is.null))==2) 	
-		stop("Only one of delta and pct.change must be specified.")
-	if(is.null(delta)&!is.null(beta)&!is.null(pct.change))
-	  delta<-pct.change*beta
+    stop("Only one of delta and pct.change must be specified.")
+  if(is.null(delta)&!is.null(beta)&!is.null(pct.change))
+    delta<-pct.change*beta
   if (sum(sapply(list(n, delta, power, sig.level), is.null)) != 1) 
-      stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
+    stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
   if (!is.null(sig.level) && !is.numeric(sig.level) || any(0 > 
       sig.level | sig.level > 1)) 
-      stop("'sig.level' must be numeric in [0, 1]")
+    stop("'sig.level' must be numeric in [0, 1]")
   alternative <- match.arg(alternative)
   method <- match.arg(method)
   
-	m <- length(t)
-	if(is.null(R) & method %in% c("diggle", "liuliang")){
-	  D <- matrix(c(sig2.i, cov.s.i, cov.s.i, sig2.s), nrow=2)
-	  R <- cbind(1,t)%*%D%*%rbind(1,t)  
-	  R <- R + diag(sig2.e, m, m)
-	}
-
-	if(method == "liuliang"){
-	  u <- list(u1 = t, u2 = rep(0,m))
-	  v <- list(v1 = cbind(1,1,t),
-	         v2 = cbind(1,0,t))
-	  if(!is.null(n)) N <- n*2 else N <- NULL
-	}
-
-	results <- switch(method,
-	  edland = edland.linear.power(n=n, delta=delta, t=t, 
+  m <- length(t)
+  if(is.null(R) & method %in% c("diggle", "liuliang")){
+    D <- matrix(c(sig2.i, cov.s.i, cov.s.i, sig2.s), nrow=2)
+    R <- cbind(1,t)%*%D%*%rbind(1,t)  
+    R <- R + diag(sig2.e, m, m)
+  }
+  
+  if(method == "liuliang"){
+    u <- list(u1 = t, u2 = rep(0,m))
+    v <- list(v1 = cbind(1,1,t),
+      v2 = cbind(1,0,t))
+    if(!is.null(n)) N <- n*2 else N <- NULL
+  }
+  
+  results <- switch(method,
+    edland = edland.linear.power(n=n, delta=delta, t=t, 
       sig2.s=sig2.s, sig2.e=sig2.e, 
       sig.level=sig.level,
       power=power,
       alternative=alternative,tol=tol,...),
-	  diggle = diggle.linear.power(n=n, delta=delta, t=t, R=R, 
-	    sig.level=sig.level,
-	    power=power,
-	    alternative=alternative,tol=tol,...),
-	  liuliang = liu.liang.linear.power(N=N, delta=delta, u=u, v=v, R=R,
-	    sig.level=sig.level,
-	    power=power,
-	    alternative=alternative,tol=tol,...))
-
-	if(is.null(delta.CI)&!is.null(beta.CI)) results$delta.CI <- (results$delta/beta)*beta.CI
-	if(!is.null(beta)) results$beta <- beta
-	if(!is.null(beta.CI)) results$beta.CI <- beta.CI
-		
-	if(!is.null(results$delta.CI)){
-		n.upper <- switch(method,
-		  edland = edland.linear.power(n=NULL, results$delta.CI[1], t=t, 
-		    sig2.s=sig2.s, sig2.e=sig2.e, 
-		    sig.level=sig.level,
-		    power=power,
-		    alternative=alternative,tol=tol,...)$n,
+    diggle = diggle.linear.power(n=n, delta=delta, t=t, R=R, 
+      sig.level=sig.level,
+      power=power,
+      alternative=alternative,tol=tol,...),
+    liuliang = liu.liang.linear.power(N=N, delta=delta, u=u, v=v, R=R,
+      sig.level=sig.level,
+      power=power,
+      alternative=alternative,tol=tol,...))
+  
+  if(is.null(delta.CI)&!is.null(beta.CI)) results$delta.CI <- (results$delta/beta)*beta.CI
+  if(!is.null(beta)) results$beta <- beta
+  if(!is.null(beta.CI)) results$beta.CI <- beta.CI
+  
+  if(!is.null(results$delta.CI)){
+    n.upper <- switch(method,
+      edland = edland.linear.power(n=NULL, results$delta.CI[1], t=t, 
+        sig2.s=sig2.s, sig2.e=sig2.e, 
+        sig.level=sig.level,
+        power=power,
+        alternative=alternative,tol=tol,...)$n,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[1], t=t, R=R, 
         sig.level=sig.level,
         power=power,
         alternative=alternative,tol=tol,...)$n,
-		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[1], u=u, v=v, R=R, 
-		    sig.level=sig.level,
-		    power=power,tol=tol,...)$n)
-		n.lower <- switch(method,
-		  edland = edland.linear.power(n=NULL, results$delta.CI[2], t=t, 
-		    sig2.s=sig2.s, sig2.e=sig2.e, 
+      liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[1], u=u, v=v, R=R, 
+        sig.level=sig.level,
+        power=power,tol=tol,...)$n)
+    n.lower <- switch(method,
+      edland = edland.linear.power(n=NULL, results$delta.CI[2], t=t, 
+        sig2.s=sig2.s, sig2.e=sig2.e, 
         sig.level=sig.level,
         power=power,
         alternative=alternative,tol=tol,...)$n,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[2], t=t, R=R, 
-		    sig.level=sig.level,
-		    power=power,tol=tol,...)$n,
-		  liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[2], u=u, v=v, R=R, 
-		    sig.level=sig.level,
-		    power=power,tol=tol,...)$n)
-		n.CI <- c(n.lower, n.upper)
-		if(n.CI[1]>n.CI[2]) n.CI <- n.CI[2:1]
-		results$n.CI <- n.CI 
-	}
-
-    if(is.character(parameter)){
-      names(results)[names(results) == "beta"] <- parameter
-      names(results)[names(results) == "beta.CI"] <- paste(parameter, "CI")
+        sig.level=sig.level,
+        power=power,tol=tol,...)$n,
+      liuliang = liu.liang.linear.power(N=NULL, results$delta.CI[2], u=u, v=v, R=R, 
+        sig.level=sig.level,
+        power=power,tol=tol,...)$n)
+    n.CI <- c(n.lower, n.upper)
+    if(n.CI[1]>n.CI[2]) n.CI <- n.CI[2:1]
+    results$n.CI <- n.CI 
   }
-	results <- results[unlist(lapply(results, function(x) !is.null(x)))]
-	structure(results, class = "power.longtest")
+  
+  if(is.character(parameter)){
+    names(results)[names(results) == "beta"] <- parameter
+    names(results)[names(results) == "beta.CI"] <- paste(parameter, "CI")
+  }
+  results <- results[unlist(lapply(results, function(x) !is.null(x)))]
+  structure(results, class = "power.longtest")
 }
 
 #' @export
@@ -226,6 +221,10 @@ lmmpower.double <- lmmpower.default
 #' @export
 #' @method lmmpower numeric
 lmmpower.numeric <- lmmpower.default
+
+#' @export
+lmmpower <- function(object, ...) UseMethod("lmmpower")
+setGeneric("lmmpower")
 
 #' @importFrom nlme getVarCov
 #' @method lmmpower lme
