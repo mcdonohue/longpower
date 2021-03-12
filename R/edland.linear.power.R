@@ -82,7 +82,7 @@
 #' browseVignettes(package = "longpower")
 #' }
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
-#' t = seq(0,1.5,0.25)
+#' t <- seq(0,1.5,0.25)
 #' edland.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, sig.level=0.05, power = 0.80)
 #' 
 #' @export edland.linear.power

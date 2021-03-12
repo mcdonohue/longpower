@@ -36,51 +36,51 @@
 #' # Reproduces the table on page 29 of Diggle et al for
 #' # difference in slopes between groups
 #' 
-#' n = 3
-#' t = c(0,2,5)
-#' u = list(u1 = t, u2 = rep(0,n))
-#' v = list(v1 = cbind(1,1,t),
+#' n <- 3
+#' t <- c(0,2,5)
+#' u <- list(u1 = t, u2 = rep(0,n))
+#' v <- list(v1 = cbind(1,1,t),
 #'          v2 = cbind(1,0,t))         
-#' rho = c(0.2, 0.5, 0.8)
-#' sigma2 = c(100, 200, 300)
-#' tab = outer(rho, sigma2, 
+#' rho <- c(0.2, 0.5, 0.8)
+#' sigma2 <- c(100, 200, 300)
+#' tab <- outer(rho, sigma2, 
 #'       Vectorize(function(rho, sigma2){
 #'         ceiling(liu.liang.linear.power(
 #'           delta=0.5, u=u, v=v,
 #'           sigma2=sigma2,
 #'           R=rho, alternative="one.sided",
 #'           power=0.80)$N/2)}))
-#' colnames(tab) = paste("sigma2 =", sigma2)
-#' rownames(tab) = paste("rho =", rho)
+#' colnames(tab) <- paste("sigma2 =", sigma2)
+#' rownames(tab) <- paste("rho =", rho)
 #' tab
 #' 
 #' # Reproduces the table on page 30 of Diggle et al for 
 #' # difference in average response between groups.
 #' 
-#' n = 3
-#' u = list(u1 = rep(1,n), u2 = rep(0,n))
-#' v = list(v1 = rep(1,n),
+#' n <- 3
+#' u <- list(u1 = rep(1,n), u2 = rep(0,n))
+#' v <- list(v1 = rep(1,n),
 #'          v2 = rep(1,n))
-#' rho = c(0.2, 0.5, 0.8)
-#' delta = c(20, 30, 40, 50)/100
-#' tab = outer(rho, delta, 
+#' rho <- c(0.2, 0.5, 0.8)
+#' delta <- c(20, 30, 40, 50)/100
+#' tab <- outer(rho, delta, 
 #'      Vectorize(function(rho, delta){
 #'        ceiling(liu.liang.linear.power(
 #'          delta=delta, u=u, v=v,
 #'          sigma2=1,
 #'          R=rho, alternative="one.sided",
 #'          power=0.80)$n[1])}))
-#' colnames(tab) = paste("delta =", delta)
-#' rownames(tab) = paste("rho =", rho)
+#' colnames(tab) <- paste("delta =", delta)
+#' rownames(tab) <- paste("rho =", rho)
 #' tab
 #' 
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
 #' # var of random intercept
-#' sig2.i = 55
+#' sig2.i <- 55
 #' # var of random slope
-#' sig2.s = 24
+#' sig2.s <- 24
 #' # residual var
-#' sig2.e = 10
+#' sig2.e <- 10
 #' # covariance of slope and intercep
 #' cov.s.i <- 0.8*sqrt(sig2.i)*sqrt(sig2.s)
 #' 
@@ -88,12 +88,12 @@
 #'         sig2.i + t1*t2*sig2.s + (t1+t2)*cov.s.i 
 #' }
 #' 
-#' t = seq(0,1.5,0.25)
-#' n = length(t)
-#' R = outer(t, t, function(x,y){cov.t(x,y, sig2.i, sig2.s, cov.s.i)})
-#' R = R + diag(sig2.e, n, n)
-#' u = list(u1 = t, u2 = rep(0,n))
-#' v = list(v1 = cbind(1,1,t),
+#' t <- seq(0,1.5,0.25)
+#' n <- length(t)
+#' R <- outer(t, t, function(x,y){cov.t(x,y, sig2.i, sig2.s, cov.s.i)})
+#' R <- R + diag(sig2.e, n, n)
+#' u <- list(u1 = t, u2 = rep(0,n))
+#' v <- list(v1 = cbind(1,1,t),
 #'          v2 = cbind(1,0,t))         
 #' 
 #' liu.liang.linear.power(delta=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
