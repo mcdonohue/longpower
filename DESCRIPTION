@@ -1,7 +1,7 @@
 Package: longpower
 Type: Package
 Title: Sample Size Calculations for Longitudinal Data
-Version: 1.0-21
+Version: 1.0-22
 Authors@R: c(
   person(c("Michael", "C."), "Donohue", email = "mdonohue@usc.edu", role = c("aut", "cre")),
   person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = c("ctb")))
@@ -18,10 +18,11 @@ Depends:
     lme4 (>= 1.0),
     nlme
 Suggests:
-    knitr,
     gee,
     testthat,
-    methods
+    methods,
+    knitr,
+    rmarkdown
 LazyLoad: yes
 VignetteBuilder: knitr
 URL: https://github.com/mcdonohue/longpower
@@ -34,4 +35,4 @@ Collate:
     'power_mmrm.R'
     'print.power.longtest.R'
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

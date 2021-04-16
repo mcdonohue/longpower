@@ -1,9 +1,11 @@
 ---
-title: "Power calculations for longitudinal data"
+title: "Power for linear models of longitudinal data with applications to Alzheimer's Disease Phase II study design"
+author: "Michael C. Donohue"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: longpower.bib
 vignette: >
-  %\VignetteIndexEntry{Power calculations for longitudinal data}
+  %\VignetteIndexEntry{Power for linear models of longitudinal data with applications to Alzheimer's Disease Phase II study design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,11 +14,6 @@ vignette: >
 library(knitr)
 opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, tidy = FALSE, comment = NA)
 ```
-
-\title{Power for linear models of longitudinal data with applications to Alzheimer's Disease Phase II study design}
-\author{Michael C. Donohue\\
-Alzheimer's Therapeutic Research Institute\\
-University of Southern California}
 
 \newcommand{\var}{\mathrm{var}}
 \newcommand{\corr}{\mathrm{corr}}
@@ -30,10 +27,13 @@ University of Southern California}
 \newcommand{\Ill}{I_{\lambda\lambda}}
 
 # Introduction
+
 We will discuss power and sample size estimation for randomized placebo controlled studies in which the primary inference is based on the interaction of treatment and time in a linear mixed effects model [@laird]. We will demonstrate how the sample size formulas of @liu for marginal or model fit by generalized estimating equation (GEE) [@zeger] can be adapted for mixed effects models. Finally, using mixed effects model estimates based on data from the Alzheimer's Disease Neuroimaging Initiative (ADNI), we will give examples of sample size calculations for models with and without baseline covariates which may help explain heterogeneity in cognitive decline and improve power.
 
 # Power calculations
+
 ## Exchangeable correlation and random intercept models
+
 Suppose we wish to estimate the required sample size for inference regarding the interaction of treatment and time in a longitudinal, placebo controlled study. Such calculations are relatively straightforward when the inference is based on a GEE model in which the correlation structure is assumed to be "exchangeable." An exchangeable correlation structure specifies that all observations from within the same cluster, or repeated measures on the same subject, are equally correlated. This is exactly equivalent to a random effects model which includes a random intercept for each cluster of correlated observations. Sample sizes for study designs using these models can be calculated using a simple formula such as that in [@diggle], page 29. The formula requires the number visits, the interval between visits, the estimated model variance ($\sigma^2$), the within subject correlation ($\rho$), and of course the usual sample size calculation inputs (power, significance level, and effect size). 
 
 To translate the formula of \cite{diggle} to the random effects setting, let us first consider the details of the assumed error structure of the GEE framework. The GEE model assumes that the response for subject $i$ at time $t_{ij}$, denoted $Y_{ij}$, is the group mean, dependent on time and treatment, plus an error term $\varepsilon_{ij}$. Or, borrowing notation from \cite{diggle}, for group A:
@@ -47,6 +47,7 @@ In the mixed effects framework we can assume a random intercept model which is e
 m = \frac{2(z_\alpha + z_Q)^2(\var(\alpha_i) + \var(\varepsilon_{ij}^*))^2(1-\var(\alpha_i)/\sigma^2)}{ns_x^2d^2}
 \]
 where $z_p$ is the $p$th standard normal quantile, $Q$ is $1-P$, $P$ is the specified power, and $s_x^2=n^{-1}\sum_j(t_{j}-\bar x)^2$. 
+
 ## General correlation and random slope models
 
 The random intercept model is not equipped to handle variations in the rate of change from subject to subject. In many diseases, such as Alzheimer's disease, the rate of improvement or decline will vary greatly within the treatment group, regardless of treatment. This variation can be modeled with a random slope term. That is, we assume:
@@ -70,9 +71,11 @@ Y_{ij}=\beta_0 + \beta_1\{{\rm Group}_{i}=A\} + \beta_2t_{ij} + \beta_3t_{ij}\{{
 That is, the parameter of interest for the interaction of treatment and time is $\psi = \beta_3$ and nuisance parameter is $\mathbf{\lambda} = (\beta_0,\beta_1,\beta_2)'$. The covariates are distributed as $\x_{i} = \ttt = (t_1, \ldots, t_n)'$ and $\mathbf{z}_j = [\mathbf{1}\, \mathbf{1}\, \ttt]_{n\times3}$ with probability 1/2 (Group A); and $\x_{i} = \mathbf{0}$ and $\mathbf{z}_j = [\mathbf{1}\, \mathbf{0}\, \ttt]_{n\times3}$ with probability 1/2 (Group B).
 
 The Liu and Liang's formula for linear models can be coded In R as:
+
 ```{r echo=TRUE, results='hide'}
 library(longpower)
 ```
+
 ```{r echo=TRUE}
 liu.liang.linear.power
 ```
@@ -80,6 +83,7 @@ liu.liang.linear.power
 The parameters include \texttt{d}, the effect size (possibly vector); \texttt{u}, the list of covariate vectors or matrices associated with the parameter of interest; \texttt{v}, the respective list of covariate vectors or matrices associated with the nuisance parameter; \texttt{sigma2}, the error variance; \texttt{R}, the correlation structure; and \texttt{Pi} the proportion of covariates of each type (\texttt{u}, \texttt{v}, and \texttt{Pi} are expected to be the same length and sorted with respect to each other).
 
 For example, we can reproduce the table of sample sizes (per group) on page 29 of \cite{diggle} for the given exchangeable correlations with $\mathbf{t} = (0,2,5)'$, $\alpha=0.05$, power=0.80, and $d=0.5$ via the \texttt{\hlkwd{diggle.linear.power}} function:
+
 ```{r }
 n = 3 # visits
 t = c(0,2,5)
@@ -98,7 +102,9 @@ colnames(tab.diggle) = paste("sigma2 =", sigma2)
 rownames(tab.diggle) = paste("rho =", rho)
 tab.diggle
 ```
+
 or via the \texttt{\hlkwd{liu.liang.linear.power}} function:
+
 ```{r }
 u <- list(u1 = t, u2 = rep(0,n))
 v <- list(v1 = cbind(1,1,t),
@@ -116,6 +122,7 @@ tab.ll
 ```
 
 As a second example, consider an Alzheimer's disease trial in which assessments are taken every three months for 18 months (7 visits). We assume an smallest detectable effect size of 1.5 points on the cognitive portion of the Alzheimer's Disease Assessment Scale (ADAS-Cog). This is a 70 point scale with great variability among sick individuals. We assume the random intercept to have a variance of 55, the random slope to have a variance of 24, and a residual variance of 10. The correlation between random slope term and random intercept term is 0.8. We can estimate the necessary sample size by first generating the correlation structure. Since $\varepsilon = \var(Y_{ij})$ is not constant over time in this model, we fix \texttt{sigma2=1} and set \texttt{R} equal to the covariance matrix for $\mathbf{\varepsilon_i}$:
+
 ```{r }
 # var of random intercept
 sig2.i <- 55
@@ -140,6 +147,7 @@ v <- list(v1 = cbind(1,1,t),
 
 liu.liang.linear.power(d=1.5, u=u, v=v, R=R, sig.level=0.05, power=0.80)
 ```
+
 So the study would require about 207 subjects per arm to achieve 80\% power, with a two-tailed $\alpha=0.05$.
 
 The simple formula provided in \cite{diggle} suggests the required number of subjects can be found by $2(z_\alpha+z_Q)^2\xi/d^2$, where
@@ -162,10 +170,12 @@ t_1 & \ldots & t_n \\
     \end{array}\right).
 \]
 Executing this for our Alzheimer's example, we get a sample size of:
+
 ```{r }
 x <- (rbind(1,t)%*%solve(R)%*%cbind(1,t))[2,2]
 x*2*(qnorm(1-0.05/2) + qnorm(0.80))^2/1.5^2
 ```
+
 which is clearly wrong. In fact, there is a typo in \cite{diggle}. The correct formula for $\xi$ is:
 \begin{equation}\label{eq:diggle3}
 \xi = 
@@ -185,7 +195,9 @@ which is clearly wrong. In fact, there is a typo in \cite{diggle}. The correct f
     0 \\ 1
     \end{array}\right).
 \end{equation}
+
 Applying the correct formula, we get
+
 ```{r }
 x <- solve(rbind(1,t)%*%solve(R)%*%cbind(1,t))[2,2]
 x*2*(qnorm(1-0.05/2) + qnorm(0.80))^2/1.5^2
