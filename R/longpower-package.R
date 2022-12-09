@@ -20,10 +20,10 @@
 #' @docType package
 #' @author Michael C. Donohue <mdonohue@@usc.edu> Anthony C. Gamst Steven D.
 #' Edland
-#' @seealso [`lmmpower``], [`power.mmrm`],
-#' [`power.mmrm.ar1`], [`lmmpower`],
-#' [`diggle.linear.power`], [`edland.linear.power`],
-#' [`liu.liang.linear.power`]
+#' @seealso \code{\link{lmmpower}}, \code{\link{power.mmrm}},
+#' \code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}},
+#' \code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}},
+#' \code{\link{liu.liang.linear.power}}
 #' @references Diggle PJ, Heagerty PJ, Liang K, Zeger SL. (2002) \emph{Analysis
 #' of longitudinal data}. Second Edition.  Oxford Statistical Science Series.
 #' 
