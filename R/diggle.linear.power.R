@@ -1,10 +1,7 @@
 #' Sample size calculations for difference in slopes between two groups.
 #' 
 #' This function performs the sample size calculation for difference in slopes 
-#' between two groups. See Diggle et al (2002) for parameter definitions 
-#' and other details.
-#' 
-#' See Diggle, et al (1997) and package vignette for more details.
+#' between two groups. See Diggle, et al (2002) and package vignette for more details.
 #' 
 #' @param n sample size per group
 #' @param delta group difference in slopes
