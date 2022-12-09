@@ -69,7 +69,7 @@
 #' @param power power
 #' @param alternative one- or two-sided test
 #' @param tol	not used (no root finding used in this implementation).
-#' @return One of the number of subject required per arm, the `power`, or detectible effect size 
+#' @return One of the number of subject required per arm, the `power`, or detectable effect size 
 #' given `sig.level` and the other parameter estimates.
 #' @author Michael C. Donohue, Steven D. Edland
 #' @seealso [`lmmpower`], [`diggle.linear.power`], [`liu.liang.linear.power`]
