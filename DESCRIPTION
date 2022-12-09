@@ -4,7 +4,8 @@ Title: Sample Size Calculations for Longitudinal Data
 Version: 1.0.23
 Authors@R: c(
   person(c("Michael", "C."), "Donohue", email = "mdonohue@usc.edu", role = c("aut", "cre")),
-  person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = c("ctb")))
+  person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = "ctb"),
+  person("Nan", "Hu", email = "hu.nan@gene.com", role = "ctb"))
 Date: 2021-04-19
 Description: Compute power and sample size for linear models of longitudinal
     data. Supported models include mixed-effects models and models fit by
@@ -34,5 +35,6 @@ Collate:
     'lmmpower.R'
     'power_mmrm.R'
     'print.power.longtest.R'
+    'hu.mackey.thomas.R'
 Encoding: UTF-8
 RoxygenNote: 7.1.1
