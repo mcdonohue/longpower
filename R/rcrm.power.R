@@ -12,8 +12,8 @@
 #' @param lambda allocation ratio (= (sample size group 1)/(sample size group 2)
 #' @param delta Effect size (absolute difference in rate of decline between tx and placebo)
 #' @param t Vector of visit time points (including time 0)
-#' @param sig2.int Variance of random intercept
-#' @param rho Correlation between random intercept & slope
+#' @param sig2.i Variance of random intercept
+#' @param cor.s.i Correlation between random intercept & slope
 #' @param sig2.s Variance of random slope
 #' @param sig2.e Variance of pure error
 #' @param droprate Exponential dropout rate
@@ -40,13 +40,19 @@
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
 #' t <- seq(0,1.5,0.25)
 #'
-#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80)
-#' rcrm.power(n=180, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80)
-#' rcrm.power(n=180, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05)
+#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
+#'   sig.level=0.05, power = 0.80)
+#' rcrm.power(n=180, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
+#'   sig.level=0.05, power = 0.80)
+#' rcrm.power(n=180, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, 
+#'   cor.s.i=0.5, sig.level=0.05)
 #'
-#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')
-#' rcrm.power(n=142, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')
-#' rcrm.power(n=142, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, alternative = 'one.sided')
+#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
+#'   sig.level=0.05, power = 0.80, alternative = 'one.sided')
+#' rcrm.power(n=142, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
+#'   sig.level=0.05, power = 0.80, alternative = 'one.sided')
+#' rcrm.power(n=142, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, 
+#'   cor.s.i=0.5, sig.level=0.05, alternative = 'one.sided')
 #'
 rcrm.power <-
   function(n = NULL,
@@ -54,8 +60,8 @@ rcrm.power <-
     power = NULL,
     t = NULL,
     lambda = 1,
-    sig2.int = 0,
-    rho = NULL,
+    sig2.i = 0,
+    cor.s.i = NULL,
     sig2.s   = 0,
     sig2.e = NULL,
     sig.level = 0.05,
@@ -75,9 +81,9 @@ rcrm.power <-
         power | power > 1))
       stop("'power' must be numeric in [0, 1]")
     
-    if (is.null(rho) |
+    if (is.null(cor.s.i) |
         is.null(sig2.e) | is.null(t) | is.null(lambda))
-      stop("input values are required for each of t, lambda, rho and sig2.e")
+      stop("input values are required for each of t, lambda, cor.s.i and sig2.e")
     
     if (t[1] != 0)
       stop("t[1] must be 0")
@@ -89,7 +95,7 @@ rcrm.power <-
       match.arg(alternative, c('two.sided', 'one.sided')) #defaults to 'two.sided'
     
     n_t <- length(t)
-    sig01 <- rho * sqrt(sig2.int) * sqrt(sig2.s)
+    sig01 <- cor.s.i * sqrt(sig2.i) * sqrt(sig2.s)
     if (!is.null(n)){
       n_2 <- n / lambda
       N <- n_2 + n
@@ -108,9 +114,9 @@ rcrm.power <-
       ti2_mean <- mean(ti ^ 2)
       Ci <-
         (exp(-droprate * t[i + 1]) - exp(-droprate * t[i + 2])) * (i + 1) * (sig2.e * ti2_mean +
-            (i + 1) * sig2.int * (ti2_mean - ti_mean ^ 2)) / (
-              sig2.e ^ 2 + (i + 1) * sig2.e * (sig2.s * ti2_mean + sig2.int + 2 * sig01 *
-                  ti_mean) + (i + 1) ^ 2 * (sig2.int * sig2.s - sig01 ^ 2) * (ti2_mean -
+            (i + 1) * sig2.i * (ti2_mean - ti_mean ^ 2)) / (
+              sig2.e ^ 2 + (i + 1) * sig2.e * (sig2.s * ti2_mean + sig2.i + 2 * sig01 *
+                  ti_mean) + (i + 1) ^ 2 * (sig2.i * sig2.s - sig01 ^ 2) * (ti2_mean -
                       ti_mean ^ 2)
             )
       C <- C + Ci
@@ -119,10 +125,10 @@ rcrm.power <-
     t2_mean <- mean(t ^ 2)
     
     C <-
-      C + exp(-droprate * t[n_t]) * n_t * (sig2.e * t2_mean + n_t * sig2.int * (t2_mean -
+      C + exp(-droprate * t[n_t]) * n_t * (sig2.e * t2_mean + n_t * sig2.i * (t2_mean -
           t_mean ^ 2)) / (
-            sig2.e ^ 2 + n_t * sig2.e * (sig2.s * t2_mean + sig2.int + 2 * sig01 * t_mean) +
-              n_t ^ 2 * (sig2.int * sig2.s - sig01 ^ 2) * (t2_mean - t_mean ^ 2)
+            sig2.e ^ 2 + n_t * sig2.e * (sig2.s * t2_mean + sig2.i + 2 * sig01 * t_mean) +
+              n_t ^ 2 * (sig2.i * sig2.s - sig01 ^ 2) * (t2_mean - t_mean ^ 2)
           )
     
     n.body <- quote({
@@ -188,10 +194,10 @@ rcrm.power <-
         delta = delta,
         t = t,
         droprate = droprate,
-        sig2.int = sig2.int  ,
+        sig2.i = sig2.i  ,
         sig2.s  = sig2.s  ,
         sig2.e   = sig2.e,
-        rho = rho,
+        cor.s.i = cor.s.i,
         sig.level = sig.level,
         power = power,
         alternative = alternative,

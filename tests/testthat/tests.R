@@ -219,3 +219,102 @@ test_that("lmmpower (edland)", {
     power = 0.80, method = meth)$n[1], 18.5332152601122, 
     tolerance = 1e-03)
 })
+
+test_that("lmmpower (hu)", {
+  meth <- 'hu'
+  expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, 
+    power = 0.80, method = meth)$n[1], 135.4827, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, 
+    power = 0.80, method = meth)$delta, 1.210603, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, 
+    power = 0.80, method = meth)$n[1], 135.4827, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 67.1745, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 67.17401, 
+    tolerance = 1e-03)
+  # random intercept only
+  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), 
+    power = 0.80, method = meth)$n[1], 15.9781, 
+    tolerance = 1e-03)
+})
+
+test_that("power.mmrm.ar1", {
+  Orthodont$t.index <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+  
+  fmOrth.corAR1 <- nlme::gls( distance ~ Sex * I(age - 11), 
+    Orthodont,
+    correlation = corAR1(form = ~ t.index | Subject),
+    weights = varIdent(form = ~ 1 | age) )
+  
+  C <- corMatrix(fmOrth.corAR1$modelStruct$corStruct)[[1]]
+  sigmaa <- fmOrth.corAR1$sigma *
+    coef(fmOrth.corAR1$modelStruct$varStruct, unconstrained = FALSE)['14']
+  ra <- seq(1,0.80,length=nrow(C))
+  
+  expect_equal(
+    power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)$delta,
+    power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)$delta, 
+    tolerance = 1e-03
+  )
+})
+
+test_that("rcrm.power", {
+  t <- seq(0,1.5,0.25)
+  expect_equal(
+    rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80)$n[1],
+    179.7096, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    rcrm.power(n=180, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80)$delta,
+    1.49879, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    rcrm.power(n=180, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05)$power,
+    0.8006337, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')$n[1],
+    141.5572, 
+    tolerance = 1e-04
+  )
+  expect_equal(
+    rcrm.power(n=142, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')$delta,
+    1.497659, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    rcrm.power(n=142, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, alternative = 'one.sided')$power,
+    0.8010862, 
+    tolerance = 1e-03
+  )
+  
+})
+
+test_that("two.stage.me", {
+  expect_equal(
+    two.stage.me.power(delta=1.5, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05, power = 0.80)$n[1],
+    207.3101, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    two.stage.me.power(n=207, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05, power = 0.80)$delta,
+    1.501123, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    two.stage.me.power(n=207, delta=1.5, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05)$power,
+    0.7994136, 
+    tolerance = 1e-03
+  )
+})

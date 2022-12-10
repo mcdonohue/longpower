@@ -31,8 +31,9 @@ lmer, lme, or gee "placebo" pilot estimates.}
   sig2.s = NULL,
   sig2.e = NULL,
   cov.s.i = NULL,
+  cor.s.i = NULL,
   R = NULL,
-  method = c("diggle", "liuliang", "edland"),
+  method = c("diggle", "liuliang", "edland", "hu"),
   tol = .Machine$double.eps^2,
   ...
 )
@@ -86,12 +87,16 @@ variance}
 \item{cov.s.i}{pilot estimate of
 covariance of random slope and intercept}
 
+\item{cor.s.i}{pilot estimate of
+correlation of random slope and intercept}
+
 \item{R}{pilot estimate of a marginal
 model working correlation matrix}
 
 \item{method}{the formula to use. Defaults
 to \code{"diggle"} for Diggle et al (2002). Alternatively \code{"liuliang"}
-can be selected for Liu & Liang (1997), or  \code{"edland"} for Ard & Edland (2011).}
+can be selected for Liu & Liang (1997), \code{"edland"} for Ard & Edland (2011), 
+or \code{"hu"} for Hu, Mackey & Thomas (2021).}
 
 \item{tol}{numerical tolerance used in root finding.}
 
@@ -159,11 +164,16 @@ Liu, G., and Liang, K. Y. (1997) Sample size calculations for studies with
 correlated observations. \emph{Biometrics}, 53(3), 937-47.
 
 Ard, C. and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease. 
-\emph{Journal of Alzheimer's Disease.} 21:369-377.
+\emph{Journal of Alzheimer's Disease.} 21:369-377. 
+
+Hu, N., Mackey, H., & Thomas, R. (2021). Power and sample size
+for random coefficient regression models in randomized experiments with
+monotone missing data. \emph{Biometrical Journal}, 63(4), 806-824.
 }
 \seealso{
 \code{\link{liu.liang.linear.power}},
-\code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}}
+\code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}},
+\code{\link{rcrm.power}}
 }
 \author{
 Michael C. Donohue

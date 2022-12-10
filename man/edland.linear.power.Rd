@@ -63,7 +63,7 @@ edland.linear.power(
 \item{tol}{not used (no root finding used in this implementation).}
 }
 \value{
-One of the number of subject required per arm, the \code{power}, or detectible effect size
+One of the number of subject required per arm, the \code{power}, or detectable effect size
 given \code{sig.level} and the other parameter estimates.
 }
 \description{

@@ -36,11 +36,13 @@
 #' browseVignettes(package = "longpower")
 #' }
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
-#' t <- seq(0,1.5,0.25)
 #'
-#' two.stage.me.power(delta=1.5, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05, power = 0.80)
-#' two.stage.me.power(n=207, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05, power = 0.80)
-#' two.stage.me.power(n=207, delta=1.5, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05)
+#' two.stage.me.power(delta=1.5, duration = 1.5, n_assessments = 7, sig2.b = 24, 
+#'   sig2.w = 10, sig.level=0.05, power = 0.80)
+#' two.stage.me.power(n=207, duration = 1.5, n_assessments = 7, sig2.b = 24, 
+#'   sig2.w = 10, sig.level=0.05, power = 0.80)
+#' two.stage.me.power(n=207, delta=1.5, duration = 1.5, n_assessments = 7, 
+#'   sig2.b = 24, sig2.w = 10, sig.level=0.05)
 #'
 two.stage.me.power <-
   function(n = NULL,
@@ -122,7 +124,7 @@ two.stage.me.power <-
         delta <- uniroot(
           function(delta)
             eval(n.body) - N,
-          sqrt(sig2.e) * c(1e-7, 1e+7),
+          sqrt(sig2.w) * c(1e-7, 1e+7),
           tol = tol,
           extendInt = "downX"
         )$root
