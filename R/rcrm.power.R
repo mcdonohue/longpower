@@ -1,15 +1,12 @@
 #' Power for Random Coefficient Regression Model (RCRM)
 #'
 #' The RCRM theoretical results are summarized in a manuscript (Hu, Mackey, and
-#' Thomas; in progress). The two-stage mixed effects model details can be found
-#' in Section 8.4 of Fitzmaurice, Laird, and Ware (2011).
+#' Thomas; 2021).
 #'
 #' This program was co-developed by Nan Hu (Genentech Inc., Biostatistics)
 #' and a summer intern Zhe Qu (Ph.D. candidate at Tulane University). If you
 #' have any technical questions or any ideas for improving functionality,
 #' please contact Nan Hu (hu.nan@@gene.com).
-#'
-#' Hu, N., Mackey, H., & Thomas, R. (2021). Power and sample size for random coefficient regression models in randomized experiments with monotone missing data. Biometrical Journal, 63(4), 806-824.
 #'
 #' @param n sample size, group 1
 #' @param lambda allocation ratio (= (sample size group 1)/(sample size group 2)
@@ -23,12 +20,13 @@
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
-#' @param tol	not used (no root finding used in this implementation).
+#' @param tol	numerical tolerance used in root finding
 #' @return One of the number of subject required per arm, the `power`, or
 #' detectable effect size given `sig.level` and the other parameter estimates.
 #'
 #' @author Nan Hu, Michael C. Donohue
-#' @seealso \code{\link{lmmpower}}, \code{\link{edland.linear.power}}
+#' @seealso \code{\link{lmmpower}}, \code{\link{edland.linear.power}}, 
+#' \code{\link{two.stage.me.power}}
 #' @references Hu, N., Mackey, H., & Thomas, R. (2021). Power and sample size
 #' for random coefficient regression models in randomized experiments with
 #' monotone missing data. \emph{Biometrical Journal}, 63(4), 806-824.
@@ -42,15 +40,15 @@
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
 #' t <- seq(0,1.5,0.25)
 #'
-#' hu.mackey.thomas.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80)
-#' hu.mackey.thomas.power(n=180, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80)
-#' hu.mackey.thomas.power(n=180, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05)
+#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80)
+#' rcrm.power(n=180, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80)
+#' rcrm.power(n=180, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05)
 #'
-#' hu.mackey.thomas.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')
-#' hu.mackey.thomas.power(n=142, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')
-#' hu.mackey.thomas.power(n=142, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, alternative = 'one.sided')
+#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')
+#' rcrm.power(n=142, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')
+#' rcrm.power(n=142, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, rho=0.5, sig.level=0.05, alternative = 'one.sided')
 #'
-hu.mackey.thomas.power <-
+rcrm.power <-
   function(n = NULL,
     delta = NULL,
     power = NULL,
@@ -138,6 +136,15 @@ hu.mackey.thomas.power <-
     power.body <- quote({
       var_btre <- (n + n_2) / (C * n * n_2)
       d <- delta / sqrt(var_btre)
+      if(alternative == "two.sided"){
+        # pr=1-(pnorm(qnorm(1-alpha/2)-d)-pnorm(qnorm(alpha/2)-d))
+        return(1 - (pnorm(qnorm(1 - sig.level / 2) - d) - 
+            pnorm(qnorm(sig.level / 2) - d)))
+      }
+      if(alternative == "one.sided"){
+        # pr=1-pnorm(qnorm(1-alpha)-d)
+        return(1 - pnorm(qnorm(1 - sig.level) - d))
+      }
       return(1 - (pnorm(qnorm(
         1 - ifelse(alternative == "two.sided", sig.level / 2, sig.level)
       ) - d) - pnorm(qnorm(sig.level / 2) -
@@ -189,7 +196,7 @@ hu.mackey.thomas.power <-
         power = power,
         alternative = alternative,
         note = "N is *total* sample size and n is sample size in *each* group",
-        method = "Hu, Mackey & Thomas (2021). Biometrical Journal."
+        method = "Random Coefficients Regression Model. Hu, Mackey & Thomas (2021)"
       ),
       class = "power.longtest"
     )
