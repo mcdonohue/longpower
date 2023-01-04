@@ -7,7 +7,8 @@
 #' 
 #' See Hu. Mackey, and Thomas (2021) for parameter details.
 #'
-#' @param n sample size, group 1
+#' @param N The total sample size. This formula can accommodate unbalanced
+#' group allocation via \code{lambda}.
 #' @param lambda allocation ratio (sample size group 1 divided by sample size group 2)
 #' @param delta Effect size (absolute difference in rate of decline between tx and placebo)
 #' @param t Vector of visit time points (including time 0)
@@ -17,6 +18,8 @@
 #' @param sig2.e Variance of pure error
 #' @param droprate Exponential dropout rate
 #' @param sig.level type one error
+#' @param p proportion vector for both groups; if i indexes visits, p[i] = the 
+#' proportion whose last visit was at visit i (p sums to 1)
 #' @param power power
 #' @param alternative one- or two-sided test
 #' @param tol	numerical tolerance used in root finding
@@ -38,24 +41,24 @@
 #' browseVignettes(package = "longpower")
 #' }
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
-#' t <- seq(0,1.5,0.25)
-#'
-#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
-#'   sig.level=0.05, power = 0.80)
-#' rcrm.power(n=180, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
-#'   sig.level=0.05, power = 0.80)
-#' rcrm.power(n=180, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, 
-#'   cor.s.i=0.5, sig.level=0.05)
-#'
-#' rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
-#'   sig.level=0.05, power = 0.80, alternative = 'one.sided')
-#' rcrm.power(n=142, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, 
-#'   sig.level=0.05, power = 0.80, alternative = 'one.sided')
-#' rcrm.power(n=142, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, 
-#'   cor.s.i=0.5, sig.level=0.05, alternative = 'one.sided')
-#'
+t <- seq(0,1.5,0.25)
+p <- c(rep(0, 6),1)
+rcrm.power(delta=1.5, t=t, p=p, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
+  sig.level=0.05, power = 0.80)
+rcrm.power(N=360, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
+  sig.level=0.05, power = 0.80)
+rcrm.power(N=360, delta=1.5, t=t, sig2.s = 24, sig2.e = 10,
+  cor.s.i=0.5, sig.level=0.05)
+
+rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
+  sig.level=0.05, power = 0.80, alternative = 'one.sided')
+rcrm.power(N=284, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
+  sig.level=0.05, power = 0.80, alternative = 'one.sided')
+rcrm.power(N=284, delta=1.5, t=t, sig2.s = 24, sig2.e = 10,
+  cor.s.i=0.5, sig.level=0.05, alternative = 'one.sided')
+
 rcrm.power <-
-  function(n = NULL,
+  function(N = NULL,
     delta = NULL,
     power = NULL,
     t = NULL,
@@ -65,13 +68,14 @@ rcrm.power <-
     sig2.s   = 0,
     sig2.e = NULL,
     sig.level = 0.05,
-    droprate = NULL,
+    p = NULL,
     alternative = c("two.sided", "one.sided"),
     tol = .Machine$double.eps^2)
   {
     # adapted from https://github.com/nan-hu-personal/RCRM_power_size/blob/master/app.R
-    if (sum(sapply(list(n, delta,  power), is.null)) != 1)
-      stop("exactly one of 'n', 'delta', and 'power' must be NULL")
+    # https://rcrm-power-size.shinyapps.io/
+    if (sum(sapply(list(N, delta,  power), is.null)) != 1)
+      stop("exactly one of 'N', 'delta', and 'power' must be NULL")
     
     if (!is.null(sig.level) && !is.numeric(sig.level) || any(0 >
         sig.level | sig.level > 1))
@@ -82,83 +86,120 @@ rcrm.power <-
       stop("'power' must be numeric in [0, 1]")
     
     if (is.null(cor.s.i) |
-        is.null(sig2.e) | is.null(t) | is.null(lambda))
-      stop("input values are required for each of t, lambda, cor.s.i and sig2.e")
+        is.null(sig2.e) | is.null(t) | is.null(lambda) | is.null(p))
+      stop("input values are required for each of t, p, lambda, cor.s.i and sig2.e")
     
     if (t[1] != 0)
       stop("t[1] must be 0")
     
-    if (is.null(droprate))
-      droprate <- 0
+    # Sum of p terms should be = 1
+    if (round(sum(p)) != 1) {
+      stop(cat("\n Sum of p terms not equal to 1, your sum of p is ", sum(p), "\n"))
+    }
+    
+    # cor.s.i should be between -1 to 1
+    if (cor.s.i < -1 | cor.s.i > 1) {
+      stop(cat("\n cor.s.i should range from -1 to 1, you have specified: ", cor.s.i, "\n"))
+    }
+    
+    # Negative delta to abs value
+    if (delta < 0) {
+      warning(cat(
+        "\n Converting negative delta to absolute value, you have specified: ",
+        delta,
+        "\n"
+      ))
+    }
+    
+    # Variance terms should be > 0
+    if (!any(sig2.i > 0, sig2.s > 0, sig2.e > 0)) {
+      stop(cat("\n sig2.i, sig2.s or sig2.e should be > 0 \n"))
+    }
+    
+    # Significance level should be between 0 to 1
+    if (sig.level < 0 | sig.level > 1) {
+      stop(cat(
+        "\n Significance level should range from 0 to 1, you have specified: ",
+        sig.level,
+        "\n"
+      ))
+    }
+    
+    # Sum of p terms should be = 1
+    if (round(sum(p)) != 1) {
+      stop(cat("\n Sum of p terms not equal to 1, your sum of p is ", sum(p), "\n"))
+    }
+    
+    # p values should be between 0 & 1
+    if (any(sapply(p, function(x)
+      x < 0 | x > 1))) {
+      stop(cat("\n p terms should be between 0 to 1 \n"))
+    }
+    
+    # Scan t and if baseline (0) is not mentioned give out warning message
+    
+    # t and p length should match
+    if (length(t) != length(p)) {
+      stop(cat("\n Length of t and p do not match \n"))
+    }
     
     alternative <-
       match.arg(alternative, c('two.sided', 'one.sided')) #defaults to 'two.sided'
     
-    n_t <- length(t)
-    sig01 <- cor.s.i * sqrt(sig2.i) * sqrt(sig2.s)
-    if (!is.null(n)){
-      n_2 <- n / lambda
-      N <- n_2 + n
+    if (!is.null(N)){
+      # Based on lambda (Sample Size allocation ratio between experimental group and control group)
+      # and n (total sample size), compute sample size in each group.
+      n <- (N * lambda) / (lambda + 1)
+      n_2 <- N / (lambda + 1)
     }
     
-    if (is.null(n))
-      N <- NULL
+    cumsumt <- cumsum(t)
+    cumsumtsq <- cumsum(t ** 2)
+    k <- seq(0, length(t) - 1)
     
-    C <- 0
-    n_t <- length(t)
-    # t_mean<-mean(t)
-    # t2_mean<-mean(t^2)
-    for (i in 1:(n_t - 2)) {
-      ti <- t[1:(i + 1)]
-      ti_mean <- mean(ti)
-      ti2_mean <- mean(ti ^ 2)
-      Ci <-
-        (exp(-droprate * t[i + 1]) - exp(-droprate * t[i + 2])) * (i + 1) * (sig2.e * ti2_mean +
-            (i + 1) * sig2.i * (ti2_mean - ti_mean ^ 2)) / (
-              sig2.e ^ 2 + (i + 1) * sig2.e * (sig2.s * ti2_mean + sig2.i + 2 * sig01 *
-                  ti_mean) + (i + 1) ^ 2 * (sig2.i * sig2.s - sig01 ^ 2) * (ti2_mean -
-                      ti_mean ^ 2)
-            )
-      C <- C + Ci
+    tbar <- rep(NA, length(t))
+    tbarsq <- rep(NA, length(t))
+    
+    num <- rep(NA, length(t))
+    deno <- rep(NA, length(t))
+    cstar <- rep(NA < length(t))
+    
+    for (i in 1:length(t)) {
+      tbar[i] <- 1 / (k[i] + 1) * cumsumt[i]
+      tbarsq[i] <- 1 / (k[i] + 1) * cumsumtsq[i]
+      
+      # Denominator
+      deno[i] <- sig2.e ** 2 +
+        (k[i] + 1) * sig2.e * (sig2.s * tbarsq[i] + sig2.i + 2 * cor.s.i * sqrt(sig2.i) * sqrt(sig2.s) * tbar[i]) +
+        (k[i] + 1) ** 2 * sig2.i * sig2.s * (1 - cor.s.i ** 2) * (tbarsq[i] - tbar[i] * tbar[i])
+      
+      # Numerator
+      num[i] <-
+        (k[i] + 1) * (sig2.e * tbarsq[i] + (k[i] + 1) * sig2.i * (tbarsq[i] - tbar[i] * tbar[i]))
+      
+      cstar[i] <- p[i] * (num[i] / deno[i])
+      
     }
-    t_mean <- mean(t)
-    t2_mean <- mean(t ^ 2)
-    
-    C <-
-      C + exp(-droprate * t[n_t]) * n_t * (sig2.e * t2_mean + n_t * sig2.i * (t2_mean -
-          t_mean ^ 2)) / (
-            sig2.e ^ 2 + n_t * sig2.e * (sig2.s * t2_mean + sig2.i + 2 * sig01 * t_mean) +
-              n_t ^ 2 * (sig2.i * sig2.s - sig01 ^ 2) * (t2_mean - t_mean ^ 2)
-          )
-    
-    n.body <- quote({
-      return((1 + lambda) ^ 2 * (qnorm(
-        1 -
-          ifelse(alternative == "two.sided", sig.level / 2, sig.level)
-      ) + qnorm(power)) ^ 2 /
-          (delta ^ 2 * C * lambda))
+        
+    N.body <- quote({
+      n_part1 <- (1 + lambda) ** 2 / (lambda * sum(cstar))
+      n_part2 <- ((qnorm(1 - ifelse(alternative == "two.sided", sig.level / 2, sig.level)) + qnorm(power)) / abs(delta)) ** 2
+      
+      return(n_part1 * n_part2)
     })
     
     power.body <- quote({
-      var_btre <- (n + n_2) / (C * n * n_2)
-      d <- delta / sqrt(var_btre)
-      if(alternative == "two.sided"){
-        # pr=1-(pnorm(qnorm(1-alpha/2)-d)-pnorm(qnorm(alpha/2)-d))
-        return(1 - (pnorm(qnorm(1 - sig.level / 2) - d) - 
-            pnorm(qnorm(sig.level / 2) - d)))
-      }
-      if(alternative == "one.sided"){
-        # pr=1-pnorm(qnorm(1-alpha)-d)
-        return(1 - pnorm(qnorm(1 - sig.level) - d))
-      }
-      return(1 - (pnorm(qnorm(
-        1 - ifelse(alternative == "two.sided", sig.level / 2, sig.level)
-      ) - d) - pnorm(qnorm(sig.level / 2) -
-          d)))
+      var_betahat <-
+        (n + n_2) / (sum(cstar) * n * n_2)
+      
+      power_int <-
+        abs(delta) / sqrt(var_betahat) - qnorm((1 - ifelse(alternative == "two.sided", sig.level / 2, sig.level)))
+      
+      return(pnorm(power_int))
     })
     
     if (is.null(N))
-      N <- eval(n.body)
+      N <- eval(N.body)
     else
       if (is.null(sig.level))
         sig.level <- uniroot(function(sig.level)
@@ -193,7 +234,7 @@ rcrm.power <-
         n = c(n, n_2),
         delta = delta,
         t = t,
-        droprate = droprate,
+        p = p,
         sig2.i = sig2.i  ,
         sig2.s  = sig2.s  ,
         sig2.e   = sig2.e,
