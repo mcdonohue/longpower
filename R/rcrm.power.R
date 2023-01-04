@@ -1,15 +1,14 @@
-#' Power for Random Coefficient Regression Model (RCRM)
+#' Random coefficient regression models (RCRM) sample size calculations
 #'
-#' The RCRM theoretical results are summarized in a manuscript (Hu, Mackey, and
-#' Thomas; 2021).
-#'
-#' This program was co-developed by Nan Hu (Genentech Inc., Biostatistics)
-#' and a summer intern Zhe Qu (Ph.D. candidate at Tulane University). If you
-#' have any technical questions or any ideas for improving functionality,
-#' please contact Nan Hu (hu.nan@@gene.com).
+#' This function computes sample size and power needed for the random coefficient 
+#' regression models (RCRM) based on the formula from Hu, Mackey, and Thomas (2021). 
+#' The RCRM assumes that the experimental and control arms have the same 
+#' population baseline value. 
+#' 
+#' See Hu. Mackey, and Thomas (2021) for parameter details.
 #'
 #' @param n sample size, group 1
-#' @param lambda allocation ratio (= (sample size group 1)/(sample size group 2)
+#' @param lambda allocation ratio (sample size group 1 divided by sample size group 2)
 #' @param delta Effect size (absolute difference in rate of decline between tx and placebo)
 #' @param t Vector of visit time points (including time 0)
 #' @param sig2.i Variance of random intercept
@@ -24,7 +23,8 @@
 #' @return One of the number of subject required per arm, the `power`, or
 #' detectable effect size given `sig.level` and the other parameter estimates.
 #'
-#' @author Nan Hu, Michael C. Donohue
+#' @details See Equations (7) and (8) in Hu, Mackey, and Thomas (2021)
+#' @author Monarch Shah
 #' @seealso \code{\link{lmmpower}}, \code{\link{edland.linear.power}}, 
 #' \code{\link{two.stage.me.power}}
 #' @references Hu, N., Mackey, H., & Thomas, R. (2021). Power and sample size
