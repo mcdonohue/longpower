@@ -34,7 +34,7 @@ edland.linear.power(
 
 \item{t}{the observation times}
 
-\item{lambda}{allocation ratio (= (sample size group 1)/(sample size group 2)}
+\item{lambda}{allocation ratio (sample size group 1 divided by sample size group 2)}
 
 \item{sig2.int}{variance of random intercepts, group 1}
 

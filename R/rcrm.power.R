@@ -7,7 +7,7 @@
 #' 
 #' See Hu. Mackey, and Thomas (2021) for parameter details.
 #'
-#' @param N The total sample size. This formula can accommodate unbalanced
+#' @param n sample size, group 1. This formula can accommodate unbalanced
 #' group allocation via \code{lambda}.
 #' @param lambda allocation ratio (sample size group 1 divided by sample size group 2)
 #' @param delta Effect size (absolute difference in rate of decline between tx and placebo)
@@ -16,10 +16,9 @@
 #' @param cor.s.i Correlation between random intercept & slope
 #' @param sig2.s Variance of random slope
 #' @param sig2.e Variance of pure error
-#' @param droprate Exponential dropout rate
-#' @param sig.level type one error
 #' @param p proportion vector for both groups; if i indexes visits, p[i] = the 
 #' proportion whose last visit was at visit i (p sums to 1)
+#' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test
 #' @param tol	numerical tolerance used in root finding
@@ -41,24 +40,24 @@
 #' browseVignettes(package = "longpower")
 #' }
 #' # An Alzheimer's Disease example using ADAS-cog pilot estimates
-t <- seq(0,1.5,0.25)
-p <- c(rep(0, 6),1)
-rcrm.power(delta=1.5, t=t, p=p, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
-  sig.level=0.05, power = 0.80)
-rcrm.power(N=360, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
-  sig.level=0.05, power = 0.80)
-rcrm.power(N=360, delta=1.5, t=t, sig2.s = 24, sig2.e = 10,
-  cor.s.i=0.5, sig.level=0.05)
-
-rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
-  sig.level=0.05, power = 0.80, alternative = 'one.sided')
-rcrm.power(N=284, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5,
-  sig.level=0.05, power = 0.80, alternative = 'one.sided')
-rcrm.power(N=284, delta=1.5, t=t, sig2.s = 24, sig2.e = 10,
-  cor.s.i=0.5, sig.level=0.05, alternative = 'one.sided')
-
-rcrm.power <-
-  function(N = NULL,
+#' t <- seq(0,1.5,0.25)
+#' p <- c(rep(0, 6),1)
+#' 
+#' hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=180, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=180, delta=1.5, t=t, sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
+#' 
+#' hu.mackey.thomas.linear.power(delta=1.5, t=t, lambda=2, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=270, t=t, lambda=2, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=270, delta=1.5, t=t, lambda=2, sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
+#' 
+#' hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
+#' hu.mackey.thomas.linear.power(n=142, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
+#' hu.mackey.thomas.linear.power(n=142, delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, sig.level=0.05, alternative='one.sided')
+#' 
+#' @export
+hu.mackey.thomas.linear.power <-
+  function(n = NULL,
     delta = NULL,
     power = NULL,
     t = NULL,
@@ -67,15 +66,15 @@ rcrm.power <-
     cor.s.i = NULL,
     sig2.s   = 0,
     sig2.e = NULL,
-    sig.level = 0.05,
     p = NULL,
+    sig.level = 0.05,
     alternative = c("two.sided", "one.sided"),
     tol = .Machine$double.eps^2)
   {
     # adapted from https://github.com/nan-hu-personal/RCRM_power_size/blob/master/app.R
     # https://rcrm-power-size.shinyapps.io/
-    if (sum(sapply(list(N, delta,  power), is.null)) != 1)
-      stop("exactly one of 'N', 'delta', and 'power' must be NULL")
+    if (sum(sapply(list(n, delta,  power), is.null)) != 1)
+      stop("exactly one of 'n', 'delta', and 'power' must be NULL")
     
     if (!is.null(sig.level) && !is.numeric(sig.level) || any(0 >
         sig.level | sig.level > 1))
@@ -85,9 +84,9 @@ rcrm.power <-
         power | power > 1))
       stop("'power' must be numeric in [0, 1]")
     
-    if (is.null(cor.s.i) |
+    if (is.null(cor.s.i) | is.null(sig2.i) | is.null(sig2.s) |
         is.null(sig2.e) | is.null(t) | is.null(lambda) | is.null(p))
-      stop("input values are required for each of t, p, lambda, cor.s.i and sig2.e")
+      stop("input values are required for each of t, p, lambda, cor.s.i, sig2.i, sig2.s and sig2.e")
     
     if (t[1] != 0)
       stop("t[1] must be 0")
@@ -103,6 +102,7 @@ rcrm.power <-
     }
     
     # Negative delta to abs value
+    if (!is.null(delta))
     if (delta < 0) {
       warning(cat(
         "\n Converting negative delta to absolute value, you have specified: ",
@@ -146,11 +146,11 @@ rcrm.power <-
     alternative <-
       match.arg(alternative, c('two.sided', 'one.sided')) #defaults to 'two.sided'
     
-    if (!is.null(N)){
+    if (!is.null(n)){
       # Based on lambda (Sample Size allocation ratio between experimental group and control group)
       # and n (total sample size), compute sample size in each group.
-      n <- (N * lambda) / (lambda + 1)
-      n_2 <- N / (lambda + 1)
+      n_2 <- n/lambda
+      N <- n + n_2
     }
     
     cumsumt <- cumsum(t)
@@ -198,15 +198,8 @@ rcrm.power <-
       return(pnorm(power_int))
     })
     
-    if (is.null(N))
+    if (is.null(n))
       N <- eval(N.body)
-    else
-      if (is.null(sig.level))
-        sig.level <- uniroot(function(sig.level)
-          eval(n.body) - N,
-          c(1e-10, 1 - 1e-10),
-          tol = tol,
-          extendInt = "yes")$root
     else
       if (is.null(power))
         power <- eval(power.body)
@@ -214,7 +207,7 @@ rcrm.power <-
       if (is.null(delta))
         delta <- uniroot(
           function(delta)
-            eval(n.body) - N,
+            eval(N.body) - N,
           sqrt(sig2.e) * c(1e-7, 1e+7),
           tol = tol,
           extendInt = "downX"
@@ -223,9 +216,7 @@ rcrm.power <-
       # Shouldn't happen
       stop("internal error", domain = NA)
     
-    if (is.null(n))
-      n <- lambda * N / (1 + lambda)
-    
+    n <- lambda * N / (1 + lambda)
     n_2 <- N - n
     
     structure(

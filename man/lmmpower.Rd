@@ -33,6 +33,7 @@ lmer, lme, or gee "placebo" pilot estimates.}
   cov.s.i = NULL,
   cor.s.i = NULL,
   R = NULL,
+  p = NULL,
   method = c("diggle", "liuliang", "edland", "hu"),
   tol = .Machine$double.eps^2,
   ...
@@ -92,6 +93,9 @@ correlation of random slope and intercept}
 
 \item{R}{pilot estimate of a marginal
 model working correlation matrix}
+
+\item{p}{proportion vector for both groups; if i indexes visits, p[i] = the 
+proportion whose last visit was at visit i (p sums to 1)}
 
 \item{method}{the formula to use. Defaults
 to \code{"diggle"} for Diggle et al (2002). Alternatively \code{"liuliang"}
@@ -173,7 +177,7 @@ monotone missing data. \emph{Biometrical Journal}, 63(4), 806-824.
 \seealso{
 \code{\link{liu.liang.linear.power}},
 \code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}},
-\code{\link{rcrm.power}}
+\code{\link{hu.mackey.thomas.linear.power}}
 }
 \author{
 Michael C. Donohue

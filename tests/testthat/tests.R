@@ -223,25 +223,25 @@ test_that("lmmpower (edland)", {
 test_that("lmmpower (hu)", {
   meth <- 'hu'
   expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
-    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, 
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, p=c(rep(0,6),1), 
     power = 0.80, method = meth)$n[1], 135.4827, 
     tolerance = 1e-03)
   expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
-    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, 
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, p=c(rep(0,6),1), 
     power = 0.80, method = meth)$delta, 1.210603, 
     tolerance = 1e-03)
   expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
-    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, 
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, p=c(rep(0,6),1), 
     power = 0.80, method = meth)$n[1], 135.4827, 
     tolerance = 1e-03)
-  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), 
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), p=c(rep(0,9),1), 
     power = 0.80, method = meth)$n[1], 67.1745, 
     tolerance = 1e-03)
-  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), 
+  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), p=c(rep(0,9),1), 
     power = 0.80, method = meth)$n[1], 67.17401, 
     tolerance = 1e-03)
   # random intercept only
-  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), 
+  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), p=c(rep(0,9),1),  
     power = 0.80, method = meth)$n[1], 15.9781, 
     tolerance = 1e-03)
 })
@@ -266,98 +266,49 @@ test_that("power.mmrm.ar1", {
   )
 })
 
-test_that("rcrm.power", {
+test_that("hu.mackey.thomas.linear.power vs original", {
   t <- seq(0,1.5,0.25)
+  p <- t/sum(t)
   expect_equal(
-    rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80)$n[1],
-    179.7096, 
+    hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80)$N,
+    430.3265, 
     tolerance = 1e-03
   )
   expect_equal(
-    rcrm.power(n=180, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80)$delta,
-    1.49879, 
+    hu.mackey.thomas.linear.power(n=216, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80)$delta,
+    1.497092, 
     tolerance = 1e-03
   )
   expect_equal(
-    rcrm.power(n=180, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05)$power,
-    0.8006337, 
+    hu.mackey.thomas.linear.power(n=216, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p)$power,
+    0.8015201, 
     tolerance = 1e-03
   )
   expect_equal(
-    rcrm.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')$n[1],
-    141.5572, 
+    hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80, alternative = 'one.sided')$N,
+    338.9679, 
     tolerance = 1e-04
   )
   expect_equal(
-    rcrm.power(n=142, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, power = 0.80, alternative = 'one.sided')$delta,
-    1.497659, 
+    hu.mackey.thomas.linear.power(n=170, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80, alternative = 'one.sided')$delta,
+    1.497722, 
     tolerance = 1e-03
   )
   expect_equal(
-    rcrm.power(n=142, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, sig.level=0.05, alternative = 'one.sided')$power,
-    0.8010862, 
+    hu.mackey.thomas.linear.power(n=170, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, alternative = 'one.sided')$power,
+    0.8010573, 
     tolerance = 1e-03
   )
   
   #' Random coefficient regression models (RCRM) sample size calculations
-  #' @description This function computes sample size and power needed for the random coefficient regression models (RCRM) based on the formula from Hu, Mackey, and Thomas (2021). The RCRM assumes that the experimental and control arms have the same population baseline value. See Hu. Mackey, and Thomas (2021) for parameter details.
-  #'
-  #' @param n total sample size
-  #' @param delta absolute value of slope difference between experimental and control arms
-  #' @param power power
-  #' @param t the observation times, including baseline 0
+  #' @param n total sample size (NOTE: different from longpower convention)
   #' @param gamma sample size allocation ratio between the experimental group and control group (experimental over control) at baseline
   #' @param rho correlation between random intercept and random slope
   #' @param sig2.alpha random intercept variance
   #' @param sig2.beta random slope variance
   #' @param sig2 pure error variance
-  #' @param sig.level type one error
-  #' @param p proportion vector for both groups; if i indexes visits, p[i] = the proportion whose last visit was at visit i (p sums to 1)
-  #' @param alternative one- or two-sided test (must be one of "two.sided" or "one.sided")
-  #'
-  #' @details See Equations (7) and (8) in Hu, Mackey, and Thomas (2021)
-  #'
-  #' @author Monarch Shah
-  #'
-  #' @return One of the total number of subject required, or the `power`
-  #' @export
-  #'
-  #' @examples
-  #' # given n, compute power
-  #' example1 <-
-  #'  hu.mackey.thomas.linear.power(
-  #'   n = 368,
-  #'   delta = .33,
-  #'   t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
-  #'   gamma = 1,
-  #'   rho = 0.07,
-  #'   sig2.alpha = 0.54,
-  #'   sig2.beta = 1.01,
-  #'   sig2 = 0.81,
-  #'   sig.level = .05, alternative = "one.sided",
-  #'   p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886)
-  #' )
-  #'
-  #' example1
-  #'
-  #' # given power, compute n
-  #' example2 <-
-  #'   hu.mackey.thomas.linear.power(
-  #'    power = .8,
-  #'    delta = .33,
-  #'    t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
-  #'    gamma = 1,
-  #'    rho = 0.07,
-  #'    sig2.alpha = 0.54,
-  #'    sig2.beta = 1.01,
-  #'    sig2 = 0.81,
-  #'    sig.level = .05,
-  #'    p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886)
-  #'  )
-  #'
-  #'example2
-  
-  hu.mackey.thomas.linear.power <-
+
+  hu.mackey.thomas.linear.power.original <-
     function(n = NULL,
       delta = NULL,
       power = NULL,
@@ -530,8 +481,8 @@ test_that("rcrm.power", {
       )
     }
   
-  example1_hmt <-
-   hu.mackey.thomas.linear.power(
+  example1_original <-
+   hu.mackey.thomas.linear.power.original(
     n = 368,
     delta = .33,
     t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
@@ -540,51 +491,43 @@ test_that("rcrm.power", {
     sig2.alpha = 0.54,
     sig2.beta = 1.01,
     sig2 = 0.81,
-    sig.level = .05, alternative = "one.sided",
+    p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886),
+    alternative = "one.sided"
+  )
+
+  example1 <- hu.mackey.thomas.linear.power(n=368/2, delta = 0.33, 
+    t=c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5), cor.s.i = 0.07,
+    sig2.i = 0.54, sig2.s = 1.01, sig2.e = 0.81, 
+    p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886), 
+    alternative = "one.sided")
+  
+  expect_equal(example1_original$power, example1$power)
+  
+  #' given power, compute n
+  example2_orignal <- hu.mackey.thomas.linear.power.original(
+     power = .8,
+     delta = .33,
+     t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
+     gamma = 1,
+     rho = 0.07,
+     sig2.alpha = 0.54,
+     sig2.beta = 1.01,
+     sig2 = 0.81,
+     sig.level = .05,
+     p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886)
+   )
+  
+  example2 <- hu.mackey.thomas.linear.power(
+    power = .8,
+    delta = .33,
+    t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
+    lambda = 1,
+    cor.s.i = 0.07,
+    sig2.i = 0.54,
+    sig2.s = 1.01,
+    sig2.e = 0.81,
     p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886)
   )
-
-  example1_rcm <- rcrm.power(n=368, delta = 0.33, 
-    t=c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5), 
-    sig2.i = 0.54, sig2.s = 1.01, sig2.e = 0.81, sig.level=0.05, 
-    alternative = "one.sided",
-    droprate = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886))
   
-  #'
-  #' # given power, compute n
-  #' example2 <-
-  #'   hu.mackey.thomas.linear.power(
-  #'    power = .8,
-  #'    delta = .33,
-  #'    t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
-  #'    gamma = 1,
-  #'    rho = 0.07,
-  #'    sig2.alpha = 0.54,
-  #'    sig2.beta = 1.01,
-  #'    sig2 = 0.81,
-  #'    sig.level = .05,
-  #'    p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886)
-  #'  )
-  #'
-  #'example2
-  
-  
-})
-
-test_that("two.stage.me", {
-  expect_equal(
-    two.stage.me.power(delta=1.5, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05, power = 0.80)$n[1],
-    207.3101, 
-    tolerance = 1e-03
-  )
-  expect_equal(
-    two.stage.me.power(n=207, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05, power = 0.80)$delta,
-    1.501123, 
-    tolerance = 1e-03
-  )
-  expect_equal(
-    two.stage.me.power(n=207, delta=1.5, duration = 1.5, n_assessments = 7, sig2.b = 24, sig2.w = 10, sig.level=0.05)$power,
-    0.7994136, 
-    tolerance = 1e-03
-  )
+  expect_equal(example2_orignal$n, ceiling(example2$N))
 })

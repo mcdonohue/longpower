@@ -52,7 +52,7 @@
 #'
 #' @name edland.linear.power
 #' @param n sample size, group 1
-#' @param lambda allocation ratio (= (sample size group 1)/(sample size group 2)
+#' @param lambda allocation ratio (sample size group 1 divided by sample size group 2)
 #' @param delta group difference in fixed effect slopes
 #' @param t the observation times
 #' @param sig2.s variance of random slopes, group 1
