@@ -133,7 +133,7 @@ Ard and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer'
 \emph{Journal of Alzheimer's Disease.} 21:369-377.
 }
 \seealso{
-\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}
+\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}, \code{\link{hu.mackey.thomas.linear.power}}
 }
 \author{
 Michael C. Donohue, Steven D. Edland

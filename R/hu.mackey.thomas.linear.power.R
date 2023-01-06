@@ -6,7 +6,9 @@
 #' population baseline value. 
 #' 
 #' See Hu. Mackey, and Thomas (2021) for parameter details.
+#' @md
 #'
+#' @name hu.mackey.thomas.linear.power
 #' @param n sample size, group 1. This formula can accommodate unbalanced
 #' group allocation via \code{lambda}.
 #' @param lambda allocation ratio (sample size group 1 divided by sample size group 2)
@@ -27,15 +29,12 @@
 #'
 #' @details See Equations (7) and (8) in Hu, Mackey, and Thomas (2021)
 #' @author Monarch Shah
-#' @seealso \code{\link{lmmpower}}, \code{\link{edland.linear.power}}, 
-#' \code{\link{two.stage.me.power}}
+#' @seealso [`lmmpower`], [`diggle.linear.power`], [`liu.liang.linear.power`], [`edland.linear.power`]
 #' @references Hu, N., Mackey, H., & Thomas, R. (2021). Power and sample size
 #' for random coefficient regression models in randomized experiments with
 #' monotone missing data. \emph{Biometrical Journal}, 63(4), 806-824.
-#'
-#' @export
-#'
 #' @examples
+#' 
 #' \dontrun{
 #' browseVignettes(package = "longpower")
 #' }
@@ -43,19 +42,28 @@
 #' t <- seq(0,1.5,0.25)
 #' p <- c(rep(0, 6),1)
 #' 
-#' hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-#' hu.mackey.thomas.linear.power(n=180, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-#' hu.mackey.thomas.linear.power(n=180, delta=1.5, t=t, sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
+#' hu.mackey.thomas.linear.power(delta=1.5, t=t, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=180, t=t, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=180, delta=1.5, t=t, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p)
 #' 
-#' hu.mackey.thomas.linear.power(delta=1.5, t=t, lambda=2, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-#' hu.mackey.thomas.linear.power(n=270, t=t, lambda=2, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-#' hu.mackey.thomas.linear.power(n=270, delta=1.5, t=t, lambda=2, sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
+#' hu.mackey.thomas.linear.power(delta=1.5, t=t, lambda=2, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=270, t=t, lambda=2, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+#' hu.mackey.thomas.linear.power(n=270, delta=1.5, t=t, lambda=2, 
+#'   sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
 #' 
-#' hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
-#' hu.mackey.thomas.linear.power(n=142, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
-#' hu.mackey.thomas.linear.power(n=142, delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, sig.level=0.05, alternative='one.sided')
+#' hu.mackey.thomas.linear.power(delta=1.5, t=t, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
+#' hu.mackey.thomas.linear.power(n=142, t=t, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
+#' hu.mackey.thomas.linear.power(n=142, delta=1.5, t=t, 
+#'   sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, sig.level=0.05, alternative='one.sided')
 #' 
-#' @export
+#' @export hu.mackey.thomas.linear.power
 hu.mackey.thomas.linear.power <-
   function(n = NULL,
     delta = NULL,
@@ -103,13 +111,13 @@ hu.mackey.thomas.linear.power <-
     
     # Negative delta to abs value
     if (!is.null(delta))
-    if (delta < 0) {
-      warning(cat(
-        "\n Converting negative delta to absolute value, you have specified: ",
-        delta,
-        "\n"
-      ))
-    }
+      if (delta < 0) {
+        warning(cat(
+          "\n Converting negative delta to absolute value, you have specified: ",
+          delta,
+          "\n"
+        ))
+      }
     
     # Variance terms should be > 0
     if (!any(sig2.i > 0, sig2.s > 0, sig2.e > 0)) {
@@ -180,7 +188,7 @@ hu.mackey.thomas.linear.power <-
       cstar[i] <- p[i] * (num[i] / deno[i])
       
     }
-        
+    
     N.body <- quote({
       n_part1 <- (1 + lambda) ** 2 / (lambda * sum(cstar))
       n_part2 <- ((qnorm(1 - ifelse(alternative == "two.sided", sig.level / 2, sig.level)) + qnorm(power)) / abs(delta)) ** 2

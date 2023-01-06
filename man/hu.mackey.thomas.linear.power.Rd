@@ -40,7 +40,7 @@ group allocation via \code{lambda}.}
 
 \item{sig2.e}{Variance of pure error}
 
-\item{p}{proportion vector for both groups; if i indexes visits, p[i] = the 
+\item{p}{proportion vector for both groups; if i indexes visits, p\link{i} = the
 proportion whose last visit was at visit i (p sums to 1)}
 
 \item{sig.level}{type one error}
@@ -50,13 +50,13 @@ proportion whose last visit was at visit i (p sums to 1)}
 \item{tol}{numerical tolerance used in root finding}
 }
 \value{
-One of the number of subject required per arm, the `power`, or
-detectable effect size given `sig.level` and the other parameter estimates.
+One of the number of subject required per arm, the \code{power}, or
+detectable effect size given \code{sig.level} and the other parameter estimates.
 }
 \description{
-This function computes sample size and power needed for the random coefficient 
-regression models (RCRM) based on the formula from Hu, Mackey, and Thomas (2021). 
-The RCRM assumes that the experimental and control arms have the same 
+This function computes sample size and power needed for the random coefficient
+regression models (RCRM) based on the formula from Hu, Mackey, and Thomas (2021).
+The RCRM assumes that the experimental and control arms have the same
 population baseline value.
 }
 \details{
@@ -65,6 +65,7 @@ See Hu. Mackey, and Thomas (2021) for parameter details.
 See Equations (7) and (8) in Hu, Mackey, and Thomas (2021)
 }
 \examples{
+
 \dontrun{
 browseVignettes(package = "longpower")
 }
@@ -72,17 +73,26 @@ browseVignettes(package = "longpower")
 t <- seq(0,1.5,0.25)
 p <- c(rep(0, 6),1)
 
-hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-hu.mackey.thomas.linear.power(n=180, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-hu.mackey.thomas.linear.power(n=180, delta=1.5, t=t, sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
+hu.mackey.thomas.linear.power(delta=1.5, t=t, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+hu.mackey.thomas.linear.power(n=180, t=t, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+hu.mackey.thomas.linear.power(n=180, delta=1.5, t=t, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p)
 
-hu.mackey.thomas.linear.power(delta=1.5, t=t, lambda=2, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-hu.mackey.thomas.linear.power(n=270, t=t, lambda=2, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
-hu.mackey.thomas.linear.power(n=270, delta=1.5, t=t, lambda=2, sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
+hu.mackey.thomas.linear.power(delta=1.5, t=t, lambda=2, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+hu.mackey.thomas.linear.power(n=270, t=t, lambda=2, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80)
+hu.mackey.thomas.linear.power(n=270, delta=1.5, t=t, lambda=2, 
+  sig2.s=24, sig2.e=10, p=p, cor.s.i=0.5)
 
-hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
-hu.mackey.thomas.linear.power(n=142, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
-hu.mackey.thomas.linear.power(n=142, delta=1.5, t=t, sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, sig.level=0.05, alternative='one.sided')
+hu.mackey.thomas.linear.power(delta=1.5, t=t, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
+hu.mackey.thomas.linear.power(n=142, t=t, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, power=0.80, alternative='one.sided')
+hu.mackey.thomas.linear.power(n=142, delta=1.5, t=t, 
+  sig2.s=24, sig2.e=10, cor.s.i=0.5, p=p, sig.level=0.05, alternative='one.sided')
 
 }
 \references{
@@ -91,8 +101,7 @@ for random coefficient regression models in randomized experiments with
 monotone missing data. \emph{Biometrical Journal}, 63(4), 806-824.
 }
 \seealso{
-\code{\link{lmmpower}}, \code{\link{edland.linear.power}}, 
-\code{\link{two.stage.me.power}}
+\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}, \code{\link{edland.linear.power}}
 }
 \author{
 Monarch Shah

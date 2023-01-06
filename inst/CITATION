@@ -12,7 +12,9 @@
               pages="264-281",
               year="2022",
               publisher="R Foundation for Statistical Computing",
-              textVersion="Iddi S & Donohue MC. (2022). Power and Sample Size for Longitudinal Models in R-The longpower Package and Shiny App. R Journal, 14(1), 264-281.")
+              textVersion="Iddi S & Donohue MC. (2022). Power and Sample Size for 
+                           Longitudinal Models in R-The longpower Package and Shiny 
+                           App. R Journal, 14(1), 264-281.")
      
      citEntry(entry="Manual",
               title = "longpower: Power and sample size calculations for linear mixed models",

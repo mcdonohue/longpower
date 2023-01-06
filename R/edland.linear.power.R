@@ -72,7 +72,7 @@
 #' @return One of the number of subject required per arm, the `power`, or detectable effect size 
 #' given `sig.level` and the other parameter estimates.
 #' @author Michael C. Donohue, Steven D. Edland
-#' @seealso [`lmmpower`], [`diggle.linear.power`], [`liu.liang.linear.power`]
+#' @seealso [`lmmpower`], [`diggle.linear.power`], [`liu.liang.linear.power`], [`hu.mackey.thomas.linear.power`]
 #' @references Ard and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease.
 #'  \emph{Journal of Alzheimer's Disease.} 21:369-377. 
 #' @keywords power sample size mixed effects random effects
