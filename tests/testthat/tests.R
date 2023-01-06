@@ -219,3 +219,315 @@ test_that("lmmpower (edland)", {
     power = 0.80, method = meth)$n[1], 18.5332152601122, 
     tolerance = 1e-03)
 })
+
+test_that("lmmpower (hu)", {
+  meth <- 'hu'
+  expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, p=c(rep(0,6),1), 
+    power = 0.80, method = meth)$n[1], 135.4827, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(n=208, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, p=c(rep(0,6),1), 
+    power = 0.80, method = meth)$delta, 1.210603, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(beta = 5, pct.change = 0.30, t = seq(0,1.5,0.25),
+    sig2.i = 55, sig2.s = 24, sig2.e = 10, cor.s.i=0.8, p=c(rep(0,6),1), 
+    power = 0.80, method = meth)$n[1], 135.4827, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(fm1, pct.change = 0.30, t = seq(0,9,1), p=c(rep(0,9),1), 
+    power = 0.80, method = meth)$n[1], 67.1745, 
+    tolerance = 1e-03)
+  expect_equal(lmmpower(fm2, pct.change = 0.30, t = seq(0,9,1), p=c(rep(0,9),1), 
+    power = 0.80, method = meth)$n[1], 67.17401, 
+    tolerance = 1e-03)
+  # random intercept only
+  expect_equal(lmmpower(fm3, pct.change = 0.30, t = seq(0,9,1), p=c(rep(0,9),1),  
+    power = 0.80, method = meth)$n[1], 15.9781, 
+    tolerance = 1e-03)
+})
+
+test_that("power.mmrm.ar1", {
+  Orthodont$t.index <- as.numeric(factor(Orthodont$age, levels = c(8, 10, 12, 14)))
+  
+  fmOrth.corAR1 <- nlme::gls( distance ~ Sex * I(age - 11), 
+    Orthodont,
+    correlation = corAR1(form = ~ t.index | Subject),
+    weights = varIdent(form = ~ 1 | age) )
+  
+  C <- corMatrix(fmOrth.corAR1$modelStruct$corStruct)[[1]]
+  sigmaa <- fmOrth.corAR1$sigma *
+    coef(fmOrth.corAR1$modelStruct$varStruct, unconstrained = FALSE)['14']
+  ra <- seq(1,0.80,length=nrow(C))
+  
+  expect_equal(
+    power.mmrm(N=100, Ra = C, ra = ra, sigmaa = sigmaa, power = 0.80)$delta,
+    power.mmrm.ar1(N=100, rho = C[1,2], ra = ra, sigmaa = sigmaa, power = 0.80)$delta, 
+    tolerance = 1e-03
+  )
+})
+
+test_that("hu.mackey.thomas.linear.power vs original", {
+  t <- seq(0,1.5,0.25)
+  p <- t/sum(t)
+  expect_equal(
+    hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80)$N,
+    430.3265, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    hu.mackey.thomas.linear.power(n=216, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80)$delta,
+    1.497092, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    hu.mackey.thomas.linear.power(n=216, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p)$power,
+    0.8015201, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    hu.mackey.thomas.linear.power(delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80, alternative = 'one.sided')$N,
+    338.9679, 
+    tolerance = 1e-04
+  )
+  expect_equal(
+    hu.mackey.thomas.linear.power(n=170, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, power = 0.80, alternative = 'one.sided')$delta,
+    1.497722, 
+    tolerance = 1e-03
+  )
+  expect_equal(
+    hu.mackey.thomas.linear.power(n=170, delta=1.5, t=t, sig2.s = 24, sig2.e = 10, cor.s.i=0.5, p=p, alternative = 'one.sided')$power,
+    0.8010573, 
+    tolerance = 1e-03
+  )
+  
+  #' Random coefficient regression models (RCRM) sample size calculations
+  #' @param n total sample size (NOTE: different from longpower convention)
+  #' @param gamma sample size allocation ratio between the experimental group and control group (experimental over control) at baseline
+  #' @param rho correlation between random intercept and random slope
+  #' @param sig2.alpha random intercept variance
+  #' @param sig2.beta random slope variance
+  #' @param sig2 pure error variance
+
+  hu.mackey.thomas.linear.power.original <-
+    function(n = NULL,
+      delta = NULL,
+      power = NULL,
+      t = NULL,
+      gamma = 1,
+      rho = NULL,
+      sig2.alpha = NULL,
+      sig2.beta = NULL,
+      sig2 = NULL,
+      sig.level = 0.05,
+      p = NULL,
+      alternative = "two.sided") {
+      # Warnings & Error Message Handling
+      # User should only input either n or power
+      if (sum(is.null(n), is.null(power)) != 1) {
+        stop(cat("\n Exactly one of 'n' or 'power' must be NULL \n"))
+      }
+      
+      # Expected parameters are missing
+      if (any(
+        is.null(delta),
+        is.null(t),
+        is.null(gamma),
+        is.null(rho),
+        is.null(sig2.alpha),
+        is.null(sig2.beta),
+        is.null(sig2.beta),
+        is.null(sig2),
+        is.null(p)
+      )) {
+        stop(cat("\n One or more expected parameters are missing \n"))
+      }
+      
+      # Power should be between 0 to 1
+      if (!is.null(power)) {
+        if (power < 0 | power > 1) {
+          stop(cat("\n Power should range from 0 to 1, you have specified: ", power, "\n"))
+        }
+      }
+      
+      # Rho should be between -1 to 1
+      if (rho < -1 | rho > 1) {
+        stop(cat("\n Rho should range from -1 to 1, you have specified: ", rho, "\n"))
+      }
+      
+      # Negative delta to abs value
+      if (delta < 0) {
+        warning(cat(
+          "\n Converting negative delta to absolute value, you have specified: ",
+          delta,
+          "\n"
+        ))
+      }
+      
+      # Variance terms should be > 0
+      if (!any(sig2.alpha > 0, sig2.beta > 0, sig2 > 0)) {
+        stop(cat("\n sig2.alpha, sig2.beta or sig2 should be > 0 \n"))
+      }
+      
+      # Significance level should be between 0 to 1
+      if (sig.level < 0 | sig.level > 1) {
+        stop(cat(
+          "\n Significance level should range from 0 to 1, you have specified: ",
+          sig.level,
+          "\n"
+        ))
+      }
+      
+      # Sum of p terms should be = 1
+      if (round(sum(p)) != 1) {
+        stop(cat("\n Sum of p terms not equal to 1, your sum of p is ", sum(p), "\n"))
+      }
+      
+      # p values should be between 0 & 1
+      if (any(sapply(p, function(x)
+        x < 0 | x > 1))) {
+        stop(cat("\n p terms should be between 0 to 1 \n"))
+      }
+      
+      # Scan t and if baseline (0) is not mentioned give out warning message
+      
+      # t and p length should match
+      if (length(t) != length(p)) {
+        stop(cat("\n Length of t and p do not match \n"))
+      }
+      
+      # Based on gamma (Sample Size allocation ratio between experimental group and control group)
+      # and n (total sample size), compute sample size in each group.
+      n_grp1 <- (n * gamma) / (gamma + 1)
+      n_grp2 <- n / (gamma + 1)
+      
+      cumsumt <- cumsum(t)
+      cumsumtsq <- cumsum(t ** 2)
+      k <- seq(0, length(t) - 1)
+      
+      tbar <- rep(NA, length(t))
+      tbarsq <- rep(NA, length(t))
+      
+      num <- rep(NA, length(t))
+      deno <- rep(NA, length(t))
+      cstar <- rep(NA < length(t))
+      
+      for (i in 1:length(t)) {
+        tbar[i] <- 1 / (k[i] + 1) * cumsumt[i]
+        tbarsq[i] <- 1 / (k[i] + 1) * cumsumtsq[i]
+        
+        # Denominator
+        deno[i] <- sig2 ** 2 +
+          (k[i] + 1) * sig2 * (sig2.beta * tbarsq[i] + sig2.alpha + 2 * rho * sqrt(sig2.alpha) * sqrt(sig2.beta) * tbar[i]) +
+          (k[i] + 1) ** 2 * sig2.alpha * sig2.beta * (1 - rho ** 2) * (tbarsq[i] - tbar[i] * tbar[i])
+        
+        # Numerator
+        num[i] <-
+          (k[i] + 1) * (sig2 * tbarsq[i] + (k[i] + 1) * sig2.alpha * (tbarsq[i] - tbar[i] * tbar[i]))
+        
+        cstar[i] <- p[i] * (num[i] / deno[i])
+        
+      }
+      
+      # Alpha set up
+      if (alternative == "two.sided") {
+        alpha <- sig.level / 2
+      }
+      else if (alternative == "one.sided") {
+        alpha <- sig.level
+      }
+      
+      # Power calculations
+      if (is.null(power)) {
+        var_betahat <-
+          (n_grp1 + n_grp2) / (sum(cstar) * n_grp1 * n_grp2)
+        
+        power_int <-
+          abs(delta) / sqrt(var_betahat) - qnorm((1 - alpha))
+        
+        power <- pnorm(power_int)
+        
+        # return(power)
+        
+      }
+      
+      if (is.null(n)) {
+        n_part1 <- (1 + gamma) ** 2 / (gamma * sum(cstar))
+        n_part2 <- ((qnorm(1 - alpha) + qnorm(power)) / abs(delta)) ** 2
+        n <- ceiling(n_part1 * n_part2)
+        
+        # return(n)
+        
+      }
+      
+      METHOD <- "Hu, Mackey, and Thomas (2021)"
+      structure(
+        list(
+          n = n,
+          delta = delta,
+          power = power,
+          t = t,
+          gamma = gamma,
+          rho = rho,
+          sig2.alpha = sig2.alpha,
+          sig2.beta = sig2.beta,
+          sig2 = sig2,
+          sig.level = sig.level,
+          p = p,
+          alternative = alternative,
+          note = "n is *total* sample size",
+          method = METHOD
+        ),
+        class = "power.longtest"
+      )
+    }
+  
+  example1_original <-
+   hu.mackey.thomas.linear.power.original(
+    n = 368,
+    delta = .33,
+    t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
+    gamma = 1,
+    rho = 0.07,
+    sig2.alpha = 0.54,
+    sig2.beta = 1.01,
+    sig2 = 0.81,
+    p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886),
+    alternative = "one.sided"
+  )
+
+  example1 <- hu.mackey.thomas.linear.power(n=368/2, delta = 0.33, 
+    t=c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5), cor.s.i = 0.07,
+    sig2.i = 0.54, sig2.s = 1.01, sig2.e = 0.81, 
+    p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886), 
+    alternative = "one.sided")
+  
+  expect_equal(example1_original$power, example1$power)
+  
+  #' given power, compute n
+  example2_orignal <- hu.mackey.thomas.linear.power.original(
+     power = .8,
+     delta = .33,
+     t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
+     gamma = 1,
+     rho = 0.07,
+     sig2.alpha = 0.54,
+     sig2.beta = 1.01,
+     sig2 = 0.81,
+     sig.level = .05,
+     p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886)
+   )
+  
+  example2 <- hu.mackey.thomas.linear.power(
+    power = .8,
+    delta = .33,
+    t = c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5),
+    lambda = 1,
+    cor.s.i = 0.07,
+    sig2.i = 0.54,
+    sig2.s = 1.01,
+    sig2.e = 0.81,
+    p = c(.0397, .0381, .0366, .0351, .2740, .2535, .2343, .0886)
+  )
+  
+  expect_equal(example2_orignal$n, ceiling(example2$N))
+})

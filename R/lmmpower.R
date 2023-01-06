@@ -50,18 +50,24 @@
 #' variance
 #' @param cov.s.i pilot estimate of
 #' covariance of random slope and intercept
+#' @param cor.s.i pilot estimate of
+#' correlation of random slope and intercept
 #' @param R pilot estimate of a marginal
 #' model working correlation matrix
+#' @param p proportion vector for both groups; if i indexes visits, p[i] = the 
+#' proportion whose last visit was at visit i (p sums to 1)
 #' @param method the formula to use. Defaults
 #' to \code{"diggle"} for Diggle et al (2002). Alternatively \code{"liuliang"}
-#' can be selected for Liu & Liang (1997), or  \code{"edland"} for Ard & Edland (2011).
+#' can be selected for Liu & Liang (1997), \code{"edland"} for Ard & Edland (2011), 
+#' or \code{"hu"} for Hu, Mackey & Thomas (2021).
 #' @param tol numerical tolerance used in root finding.
 #' @param ... other arguments
 #' @return An object of class \code{power.htest} giving the calculated sample
 #' size, N, per group and other parameters.
 #' @author Michael C. Donohue
 #' @seealso \code{\link{liu.liang.linear.power}},
-#' \code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}}
+#' \code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}},
+#' \code{\link{hu.mackey.thomas.linear.power}}
 #' @references Diggle P.J., Heagerty P.J., Liang K., Zeger S.L. (2002)
 #' \emph{Analysis of longitudinal data}. Second Edition. Oxford Statistical
 #' Science Series.
@@ -71,6 +77,10 @@
 #' 
 #' Ard, C. and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer's disease. 
 #' \emph{Journal of Alzheimer's Disease.} 21:369-377. 
+#' 
+#' Hu, N., Mackey, H., & Thomas, R. (2021). Power and sample size
+#' for random coefficient regression models in randomized experiments with
+#' monotone missing data. \emph{Biometrical Journal}, 63(4), 806-824.
 #' 
 #' @keywords power sample size mixed effects random effects marginal model
 #' methods
@@ -125,8 +135,10 @@ lmmpower.default <- function(object=NULL,
   sig2.s=NULL,
   sig2.e=NULL,
   cov.s.i=NULL,
+  cor.s.i=NULL,
   R=NULL,
-  method = c("diggle", "liuliang", "edland"),
+  p=NULL,
+  method = c("diggle", "liuliang", "edland", "hu"),
   tol = .Machine$double.eps^2,
   ...)
 {
@@ -157,8 +169,12 @@ lmmpower.default <- function(object=NULL,
   }
   
   results <- switch(method,
+    hu = hu.mackey.thomas.linear.power(n=n, delta=delta, t=t, 
+      sig2.i=sig2.i, cor.s.i=cor.s.i, sig2.s=sig2.s, sig2.e=sig2.e, 
+      p=p, sig.level=sig.level, power=power,
+      alternative=alternative,tol=tol,...),
     edland = edland.linear.power(n=n, delta=delta, t=t, 
-      sig2.s=sig2.s, sig2.e=sig2.e, 
+      sig2.int=sig2.i, sig2.s=sig2.s, sig2.e=sig2.e, 
       sig.level=sig.level,
       power=power,
       alternative=alternative,tol=tol,...),
@@ -177,8 +193,12 @@ lmmpower.default <- function(object=NULL,
   
   if(!is.null(results$delta.CI)){
     n.upper <- switch(method,
+      hu = hu.mackey.thomas.linear.power(n=NULL, results$delta.CI[1], t=t, 
+        sig2.i=sig2.i, cor.s.i=cor.s.i, sig2.s=sig2.s, sig2.e=sig2.e, 
+        p=p, sig.level=sig.level, power=power,
+        alternative=alternative, tol=tol,...)$n,
       edland = edland.linear.power(n=NULL, results$delta.CI[1], t=t, 
-        sig2.s=sig2.s, sig2.e=sig2.e, 
+        sig2.int=sig2.i, sig2.s=sig2.s, sig2.e=sig2.e, 
         sig.level=sig.level,
         power=power,
         alternative=alternative,tol=tol,...)$n,
@@ -190,10 +210,13 @@ lmmpower.default <- function(object=NULL,
         sig.level=sig.level,
         power=power,tol=tol,...)$n)
     n.lower <- switch(method,
+      hu = hu.mackey.thomas.linear.power(n=NULL, results$delta.CI[2], t=t, 
+        sig2.i=sig2.i, cor.s.i=cor.s.i, sig2.s=sig2.s, sig2.e=sig2.e, 
+        p=p, sig.level=sig.level, power=power,
+        alternative=alternative,tol=tol,...)$n,
       edland = edland.linear.power(n=NULL, results$delta.CI[2], t=t, 
-        sig2.s=sig2.s, sig2.e=sig2.e, 
-        sig.level=sig.level,
-        power=power,
+        sig2.int=sig2.i, sig2.s=sig2.s, sig2.e=sig2.e, 
+        sig.level=sig.level, power=power,
         alternative=alternative,tol=tol,...)$n,
       diggle = diggle.linear.power(n=NULL, results$delta.CI[2], t=t, R=R, 
         sig.level=sig.level,
@@ -245,7 +268,9 @@ lmmpower.lme <- function(object,
    sig2.s=NULL,
    sig2.e=NULL,
    cov.s.i=NULL,
-   method = c("diggle", "liuliang", "edland"),
+   cor.s.i=NULL,
+   p=NULL,
+   method = c("diggle", "liuliang", "edland", "hu"),
    tol = .Machine$double.eps^2,
    ...)
 {
@@ -280,7 +305,11 @@ lmmpower.lme <- function(object,
 	if(is.null(cov.s.i))
 	  cov.s.i = ifelse(nrow(tab)==1, 0, 
 	          ifelse(nrow(tab)==2, tab[1, 2], NA))
-
+	# cor of slope and intercep
+	if(is.null(cor.s.i))
+	  cor.s.i = ifelse(nrow(tab)==1, 0, 
+	    ifelse(nrow(tab)==2, tab[1, 2]/(sqrt(tab[1,1]) * sqrt(tab[2,2])), NA))
+	
 	lmmpower(object=NULL,
 		n = n,
 		parameter = parameter,
@@ -297,7 +326,9 @@ lmmpower.lme <- function(object,
 		sig2.s = sig2.s,
 		sig2.e = sig2.e,
 		cov.s.i = cov.s.i, 
-		method = method,
+	  cor.s.i = cor.s.i, 
+	  p = p,
+	  method = method,
     tol=tol, ...)
 }
 
@@ -315,7 +346,8 @@ lmmpower.gee <- function(object,
    beta=NULL,
    beta.CI=NULL,
    delta.CI=NULL,
-   method = c("diggle", "liuliang", "edland"),
+   p = p,
+   method = c("diggle", "liuliang", "edland", "hu"),
    tol = .Machine$double.eps^2,
    ...)
 {
@@ -346,7 +378,8 @@ lmmpower.gee <- function(object,
 		beta.CI=beta.CI,
 		delta.CI=delta.CI,
 		R=R,
-		t=t, 
+		t=t,
+	  p=p,
 		method=method,
     tol=tol, ...)
 }
@@ -370,7 +403,9 @@ setMethod("lmmpower", signature(object = "merMod"),
    sig2.s=NULL,
    sig2.e=NULL,
    cov.s.i=NULL,
-   method = c("diggle", "liuliang", "edland"),
+   cor.s.i=NULL,
+   p=NULL,
+   method = c("diggle", "liuliang", "edland", "hu"),
    tol = .Machine$double.eps^2,
    ...)
 {
@@ -414,7 +449,11 @@ setMethod("lmmpower", signature(object = "merMod"),
 	if(is.null(cov.s.i))
     cov.s.i = ifelse(nrow(tab)==1, 0, 
             ifelse(nrow(tab)==2, tab[2, 1], NA))
-
+  # cor of slope and intercept
+  if(is.null(cor.s.i))
+    cor.s.i = ifelse(nrow(tab)==1, 0, 
+      ifelse(nrow(tab)==2, tab[2, 1]/(sqrt(tab[1, 1]) * sqrt(tab[2, 2])), NA))
+  
 	lmmpower(n=n, object=NULL,
 		parameter = parameter,
 		pct.change = pct.change,
@@ -430,6 +469,8 @@ setMethod("lmmpower", signature(object = "merMod"),
 		sig2.s=sig2.s,
 		sig2.e=sig2.e,
 		cov.s.i=cov.s.i, 
-		method = method, 
+	  cor.s.i=cor.s.i,
+	  p=p,
+	  method = method, 
     tol=tol, ...)
 })

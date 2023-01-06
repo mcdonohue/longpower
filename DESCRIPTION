@@ -1,14 +1,16 @@
 Package: longpower
 Type: Package
 Title: Sample Size Calculations for Longitudinal Data
-Version: 1.0.23
+Version: 1.0.24
 Authors@R: c(
   person(c("Michael", "C."), "Donohue", email = "mdonohue@usc.edu", role = c("aut", "cre")),
-  person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = c("ctb")))
-Date: 2021-04-19
+  person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = "ctb"),
+  person("Nan", "Hu", email = "hu.nan@gene.com", role = "ctb"))
+Date: 2023-01-06
 Description: Compute power and sample size for linear models of longitudinal
     data. Supported models include mixed-effects models and models fit by
-    generalized least squares and generalized estimating equations. Relevant
+    generalized least squares and generalized estimating equations. The package
+    is described in Iddi and Donohue (2022) <DOI:10.32614/RJ-2022-022>. Relevant
     formulas are derived by Liu and Liang (1997) <DOI:10.2307/2533554>, 
     Diggle et al (2002) <ISBN:9780199676750>, and Lu, Luo, and Chen (2008)
     <DOI:10.2202/1557-4679.1098>.
@@ -31,8 +33,9 @@ Collate:
     'diggle.linear.power.R'
     'edland.linear.power.R'
     'liu.liang.linear.power.R'
+    'hu.mackey.thomas.linear.power.R'
     'lmmpower.R'
     'power_mmrm.R'
     'print.power.longtest.R'
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3

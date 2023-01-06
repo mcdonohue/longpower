@@ -34,7 +34,7 @@ edland.linear.power(
 
 \item{t}{the observation times}
 
-\item{lambda}{allocation ratio (= (sample size group 1)/(sample size group 2)}
+\item{lambda}{allocation ratio (sample size group 1 divided by sample size group 2)}
 
 \item{sig2.int}{variance of random intercepts, group 1}
 
@@ -63,7 +63,7 @@ edland.linear.power(
 \item{tol}{not used (no root finding used in this implementation).}
 }
 \value{
-One of the number of subject required per arm, the \code{power}, or detectible effect size
+One of the number of subject required per arm, the \code{power}, or detectable effect size
 given \code{sig.level} and the other parameter estimates.
 }
 \description{
@@ -133,7 +133,7 @@ Ard and Edland, S.D. (2011) Power calculations for clinical trials in Alzheimer'
 \emph{Journal of Alzheimer's Disease.} 21:369-377.
 }
 \seealso{
-\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}
+\code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}, \code{\link{hu.mackey.thomas.linear.power}}
 }
 \author{
 Michael C. Donohue, Steven D. Edland

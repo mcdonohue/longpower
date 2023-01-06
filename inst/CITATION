@@ -3,12 +3,24 @@
      year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
      vers <- paste("R package version", meta$Version)
      
+     citEntry(entry="article",
+              title="Power and Sample Size for Longitudinal Models in R-The longpower Package and Shiny App",
+              author=personList(as.person("Samuel Iddi"), as.person("Michael C. Donohue")),
+              journal="R Journal",
+              volume="14",
+              number="1",
+              pages="264-281",
+              year="2022",
+              publisher="R Foundation for Statistical Computing",
+              textVersion="Iddi S & Donohue MC. (2022). Power and Sample Size for 
+                           Longitudinal Models in R-The longpower Package and Shiny 
+                           App. R Journal, 14(1), 264-281.")
+     
      citEntry(entry="Manual",
               title = "longpower: Power and sample size calculations for linear mixed models",
               author = personList(as.person("Michael C. Donohue")),
               year = year,
               note = vers,
-     
               textVersion =
               paste("Michael C Donohue, (",
                     year,
@@ -29,21 +41,32 @@
 
      citEntry(entry="article",
               title = "Sample size calculations for studies with correlated observations",
-              author = personList(as.person("G. Liu"),
-                                  as.person("K. Y. Liang")),
+              author = personList(as.person("G Liu"),
+                                  as.person("KY Liang")),
               year = 1997,
               journal = "Biometrics",
               volume = "53(3)",
               pages = "937-47",
-              textVersion = "Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with correlated observations. Biometrics, 53(3), 937-47.")
+              textVersion = "Liu G & Liang KY. (1997). Sample size calculations for studies with correlated observations. Biometrics, 53(3), 937-47.")
 
      citEntry(entry="article",
               title = "Sample size estimation for repeated measures analysis in randomized clinical trials with missing data",
-              author = personList(as.person("K. Lu"),
-                                  as.person("X. Luo"),
-                                  as.person("P.-Y. Chen")),
+              author = personList(as.person("K Lu"),
+                                  as.person("X Luo"),
+                                  as.person("P-Y Chen")),
               year = 2008,
               journal = "International Journal of Biostatistics",
               volume = "4(1)",
               pages = "937-47",
-              textVersion = "Lu, K., Luo, X. & Chen, P. (2008). Sample Size Estimation for Repeated Measures Analysis in Randomized Clinical Trials with Missing Data. The International Journal of Biostatistics, 4(1).")
+              textVersion = "Lu K, Luo X & Chen P. (2008). Sample Size Estimation for Repeated Measures Analysis in Randomized Clinical Trials with Missing Data. The International Journal of Biostatistics, 4(1).")
+
+     citEntry(entry="article",
+              title="Power and sample size for random coefficient regression models in randomized experiments with monotone missing data",
+              author=personList(as.person("Nan Hu"), as.person("Mackey Howard"), as.person("Ronald Thomas")),
+              journal="Biometrical Journal",
+              volume="63",
+              number="4",
+              pages="806-824",
+              year="2021",
+              publisher="R Foundation for Statistical Computing",
+              textVersion="Hu N, Mackey H, Thomas R. (2021). Power and sample size for random coefficient regression models in randomized experiments with monotone missing data. Biometrical Journal. 63(4), 806-824.")
