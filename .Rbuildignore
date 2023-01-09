@@ -13,3 +13,4 @@ Makefile
 \.travis\.yml
 ^\.Rproj\.user$
 ^cran-comments\.md$
+^\.github$
