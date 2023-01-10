@@ -1,9 +1,10 @@
 ## Test environments
 
-* local OS X install, R 4.0.3
-* windows-latest, r: 'devel'
-* macOS-latest, r: 'devel'
-* ubuntu-16.04, r: '3.6'
+* macos-latest,    r: 'release'
+* windows-latest,  r: 'release'
+* ubuntu-latest,   r: 'devel', http-user-agent: 'release'
+* ubuntu-latest,   r: 'release'
+* ubuntu-latest,   r: 'oldrel-1'
 
 ## R CMD check results
 

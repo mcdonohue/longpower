@@ -10,7 +10,7 @@
 #'
 #' @name hu.mackey.thomas.linear.power
 #' @param n sample size, group 1. This formula can accommodate unbalanced
-#' group allocation via \code{lambda}.
+#' group allocation via `lambda`.
 #' @param lambda allocation ratio (sample size group 1 divided by sample size group 2)
 #' @param delta Effect size (absolute difference in rate of decline between tx and placebo)
 #' @param t Vector of visit time points (including time 0)
@@ -18,8 +18,8 @@
 #' @param cor.s.i Correlation between random intercept & slope
 #' @param sig2.s Variance of random slope
 #' @param sig2.e Variance of pure error
-#' @param p proportion vector for both groups; if i indexes visits, p[i] = the 
-#' proportion whose last visit was at visit i (p sums to 1)
+#' @param p proportion vector for both groups; if `i` indexes visits, `p[i]` = the 
+#' proportion whose last visit was at visit `i` (`p` sums to 1)
 #' @param sig.level type one error
 #' @param power power
 #' @param alternative one- or two-sided test

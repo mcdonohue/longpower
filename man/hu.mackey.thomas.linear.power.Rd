@@ -40,8 +40,8 @@ group allocation via \code{lambda}.}
 
 \item{sig2.e}{Variance of pure error}
 
-\item{p}{proportion vector for both groups; if i indexes visits, p\link{i} = the
-proportion whose last visit was at visit i (p sums to 1)}
+\item{p}{proportion vector for both groups; if \code{i} indexes visits, \code{p[i]} = the
+proportion whose last visit was at visit \code{i} (\code{p} sums to 1)}
 
 \item{sig.level}{type one error}
 
