@@ -30,6 +30,7 @@ VignetteBuilder: knitr
 URL: https://github.com/mcdonohue/longpower
 Collate:
     'longpower-package.R'
+    'cprm.power.R'
     'diggle.linear.power.R'
     'edland.linear.power.R'
     'liu.liang.linear.power.R'
