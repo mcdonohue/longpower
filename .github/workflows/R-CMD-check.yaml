@@ -45,7 +45,7 @@ jobs:
           needs: check
           
       - name: Fix Matrix lme4 issue
-        run: install.packages('lme4', type = 'source')
+        run: oo <- options(repos = "https://cran.r-project.org/"); install.packages("Matrix"); install.packages("lme4"); options(oo)
         shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
