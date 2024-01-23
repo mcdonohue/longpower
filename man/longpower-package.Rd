@@ -2,45 +2,27 @@
 % Please edit documentation in R/longpower-package.R
 \docType{package}
 \name{longpower-package}
+\alias{longpower}
 \alias{longpower-package}
-\title{Sample size calculations for longitudinal data}
+\title{longpower: Sample Size Calculations for Longitudinal Data}
 \description{
-The longpower package contains functions for computing power and sample size
-for linear models of longitudinal data based on the formula due to Liu and
-Liang (1997) and Diggle et al (1994). Either formula is expressed in terms
-of marginal model or Generalized Estimating Equations (GEE) parameters. This
-package contains functions which translate pilot mixed effect model
-parameters (e.g.  random intercept and/or slope) into marginal model
-parameters so that the formulas of Diggle et al or Liu and Liang formula can
-be applied to produce sample size calculations for two sample longitudinal
-designs assuming known variance. The package also handles the categorical
-time Mixed Model of Repeated Measures (MMRM) using the formula of Lu, Luo,
-and Chen (2008)
-}
-\details{
-\tabular{ll}{ Package: \tab longpower\cr Type: \tab Package\cr Version: \tab
-1.0\cr Date: \tab 2013-05-22\cr License: \tab GPL (>= 2)\cr LazyLoad: \tab
-yes\cr }
-}
-\references{
-Diggle PJ, Heagerty PJ, Liang K, Zeger SL. (2002) \emph{Analysis
-of longitudinal data}. Second Edition.  Oxford Statistical Science Series.
-
-Liu, G., & Liang, K. Y. (1997). Sample size calculations for studies with
-correlated observations.  \emph{Biometrics}, 53(3), 937-47.
-
-Lu, K., Luo, X., & Chen, P.-Y. (2008). Sample size estimation for repeated
-measures analysis in randomized clinical trials with missing data.
-\emph{International Journal of Biostatistics}, 4, (1)
+Compute power and sample size for linear models of longitudinal data. Supported models include mixed-effects models and models fit by generalized least squares and generalized estimating equations. The package is described in Iddi and Donohue (2022) \doi{10.32614/RJ-2022-022}. Relevant formulas are derived by Liu and Liang (1997) \doi{10.2307/2533554}, Diggle et al (2002) <ISBN:9780199676750>, and Lu, Luo, and Chen (2008) \doi{10.2202/1557-4679.1098}.
 }
 \seealso{
-\code{\link{lmmpower}}, \code{\link{power.mmrm}},
-\code{\link{power.mmrm.ar1}}, \code{\link{lmmpower}},
-\code{\link{diggle.linear.power}}, \code{\link{edland.linear.power}},
-\code{\link{liu.liang.linear.power}}
+Useful links:
+\itemize{
+  \item \url{https://github.com/mcdonohue/longpower}
+}
+
 }
 \author{
-Michael C. Donohue <mdonohue@usc.edu> Anthony C. Gamst Steven D.
-Edland
+\strong{Maintainer}: Michael C. Donohue \email{mdonohue@usc.edu}
+
+Other contributors:
+\itemize{
+  \item Steve D. Edland \email{sedland@health.ucsd.edu} [contributor]
+  \item Nan Hu \email{hu.nan@gene.com} [contributor]
 }
-\keyword{package}
+
+}
+\keyword{internal}
