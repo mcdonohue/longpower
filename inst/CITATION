@@ -1,72 +1,56 @@
-     citHeader("To cite package 'longpower' in publications use:")
-     
-     year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
-     vers <- paste("R package version", meta$Version)
-     
-     citEntry(entry="article",
-              title="Power and Sample Size for Longitudinal Models in R-The longpower Package and Shiny App",
-              author=personList(as.person("Samuel Iddi"), as.person("Michael C. Donohue")),
-              journal="R Journal",
-              volume="14",
-              number="1",
-              pages="264-281",
-              year="2022",
-              publisher="R Foundation for Statistical Computing",
-              textVersion="Iddi S & Donohue MC. (2022). Power and Sample Size for 
-                           Longitudinal Models in R-The longpower Package and Shiny 
-                           App. R Journal, 14(1), 264-281.")
-     
-     citEntry(entry="Manual",
-              title = "longpower: Power and sample size calculations for linear mixed models",
-              author = personList(as.person("Michael C. Donohue")),
-              year = year,
-              note = vers,
-              textVersion =
-              paste("Michael C Donohue, (",
-                    year,
-                    "). longpower: Power and sample size calculations for longitudinal data. ",
-                    vers, ".", sep=""))
-
-     citEntry(entry="book",
-              title = "Analysis of longitudinal data",
-              author = personList(as.person("P. J. Diggle"),
-                                  as.person("P. J. Heagerty"),
-                                  as.person("K. Y. Liang"),
-                                  as.person("S. L. Zeger")),
-              year = 2002,
-              edition = "Second Edition",
-              publisher = "Oxford Statistical Science Serires",
-              textVersion = "Diggle PJ, Heagerty PJ, Liang K, Zeger SL. Analysis of longitudinal 
-                             data. Second Edition. Oxford Statistical Science Serires. 2002.")
-
-     citEntry(entry="article",
-              title = "Sample size calculations for studies with correlated observations",
-              author = personList(as.person("G Liu"),
-                                  as.person("KY Liang")),
-              year = 1997,
-              journal = "Biometrics",
-              volume = "53(3)",
-              pages = "937-47",
-              textVersion = "Liu G & Liang KY. (1997). Sample size calculations for studies with correlated observations. Biometrics, 53(3), 937-47.")
-
-     citEntry(entry="article",
-              title = "Sample size estimation for repeated measures analysis in randomized clinical trials with missing data",
-              author = personList(as.person("K Lu"),
-                                  as.person("X Luo"),
-                                  as.person("P-Y Chen")),
-              year = 2008,
-              journal = "International Journal of Biostatistics",
-              volume = "4(1)",
-              pages = "937-47",
-              textVersion = "Lu K, Luo X & Chen P. (2008). Sample Size Estimation for Repeated Measures Analysis in Randomized Clinical Trials with Missing Data. The International Journal of Biostatistics, 4(1).")
-
-     citEntry(entry="article",
-              title="Power and sample size for random coefficient regression models in randomized experiments with monotone missing data",
-              author=personList(as.person("Nan Hu"), as.person("Mackey Howard"), as.person("Ronald Thomas")),
-              journal="Biometrical Journal",
-              volume="63",
-              number="4",
-              pages="806-824",
-              year="2021",
-              publisher="R Foundation for Statistical Computing",
-              textVersion="Hu N, Mackey H, Thomas R. (2021). Power and sample size for random coefficient regression models in randomized experiments with monotone missing data. Biometrical Journal. 63(4), 806-824.")
+c(
+  bibentry(
+    bibtype  = "Article",
+    title    = "Power and Sample Size for Longitudinal Models in R-The longpower Package and Shiny App",
+    author   = c(person("Samuel", "Iddi"), person("Michael C.", "Donohue")),
+    journal  = "R Journal",
+    year     = "2022",
+    volume   = "14",
+    number   = "1",
+    pages    = "264-281",
+    doi      = "10.32614/RJ-2022-022",
+    publisher = "R Foundation for Statistical Computing"
+  ),
+  bibentry(
+    bibtype="Book",
+    title = "Analysis of longitudinal data",
+    author = c(person("P. J.", "Diggle"),
+      person("P. J.", "Heagerty"),
+      person("K. Y.", "Liang"),
+      person("S. L.", "Zeger")),
+    year = 2002,
+    edition = "Second Edition",
+    publisher = "Oxford Statistical Science Serires"
+  ),
+  bibentry(
+    bibtype="Article",
+    title = "Sample size calculations for studies with correlated observations",
+    author = c(person("G.", "Liu"),
+      person("K. Y.", "Liang")),
+    year = 1997,
+    journal = "Biometrics",
+    volume = "53",
+    number = "3",
+    pages = "937-47"
+  ),
+  bibentry(
+    bibtype="Article",
+    title = "Sample size estimation for repeated measures analysis in randomized clinical trials with missing data",
+    author = c(person("K.", "Lu"),
+      person("X.", "Luo"),
+      person("P.-Y.", "Chen")),
+    year = 2008,
+    journal = "International Journal of Biostatistics",
+    volume = "4",
+    number = "1",
+    pages = "937-47"),
+  bibentry(bibtype="Article",
+    title="Power and sample size for random coefficient regression models in randomized experiments with monotone missing data",
+    author=c(person("Nan", "Hu"), person("Howard", "Mackey"), person("Ronald", "Thomas")),
+    journal="Biometrical Journal",
+    volume="63",
+    number="4",
+    pages="806-824",
+    year="2021",
+    publisher="R Foundation for Statistical Computing")
+)
