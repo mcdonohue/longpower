@@ -251,7 +251,7 @@ setGeneric("lmmpower")
 
 #' @importFrom nlme getVarCov
 #' @method lmmpower lme
-#' @export
+#' @export 
 lmmpower.lme <- function(object,
    n = NULL,
    parameter = 2,
@@ -385,6 +385,7 @@ lmmpower.gee <- function(object,
 }
 
 #' @importFrom lme4 VarCorr fixef getME
+#' @importFrom methods new initialize
 #' @export
 setMethod("lmmpower", signature(object = "merMod"),
   function(object, 

@@ -1,7 +1,7 @@
 Package: longpower
 Type: Package
 Title: Sample Size Calculations for Longitudinal Data
-Version: 1.0.24
+Version: 1.0.25
 Authors@R: c(
   person(c("Michael", "C."), "Donohue", email = "mdonohue@usc.edu", role = c("aut", "cre")),
   person(c("Steve", "D."), "Edland", email = "sedland@health.ucsd.edu", role = "ctb"),
@@ -19,10 +19,11 @@ Depends:
     R (>= 3.0.0),
     lme4 (>= 1.0),
     nlme
+Imports:
+    methods
 Suggests:
     gee,
     testthat,
-    methods,
     knitr,
     rmarkdown
 LazyLoad: yes
