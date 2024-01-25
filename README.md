@@ -3,8 +3,7 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mcdonohue/longpower/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mcdonohue/longpower/actions/workflows/R-CMD-check.yaml)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/longpower?color=blue)](http://cran.r-project.org/package=longpower)
-[![Downloads](http://cranlogs.r-pkg.org/badges/longpower?color=blue)](http://cran.rstudio.com/package=longpower)!
-[R build status](https://github.com/mcdonohue/longpower/workflows/R-CMD-check/badge.svg)
+[![Downloads](http://cranlogs.r-pkg.org/badges/longpower?color=blue)](http://cran.rstudio.com/package=longpower)
 <!-- badges: end -->
 
 
