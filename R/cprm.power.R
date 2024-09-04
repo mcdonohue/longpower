@@ -43,7 +43,7 @@
 #' @param tol	not used (no root finding used in this implementation).
 #' @return One of the number of subject required per arm, the `power`, or detectable effect size 
 #' given `sig.level` and the other parameter estimates.
-#' @author Michael C. Donohue, Steven D. Edland, Yu Zhao
+#' @author Steven D. Edland, Yu Zhao
 #' @seealso [`lmmpower`], [`diggle.linear.power`], [`liu.liang.linear.power`], [`edland.linear.power`], [`hu.mackey.thomas.linear.power`]
 #' @references Zhao Y, Edland SD. The chronic progressive repeated measures (CPRM) model for longitudinal data. 
 #'  \emph{In process.}
