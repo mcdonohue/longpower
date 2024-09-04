@@ -106,7 +106,7 @@ Zhao Y, Edland SD. The chronic progressive repeated measures (CPRM) model for lo
 \code{\link{lmmpower}}, \code{\link{diggle.linear.power}}, \code{\link{liu.liang.linear.power}}, \code{\link{edland.linear.power}}, \code{\link{hu.mackey.thomas.linear.power}}
 }
 \author{
-Michael C. Donohue, Steven D. Edland, Yu Zhao
+Steven D. Edland, Yu Zhao
 }
 \keyword{effects}
 \keyword{mixed}
