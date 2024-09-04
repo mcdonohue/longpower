@@ -220,6 +220,37 @@ test_that("lmmpower (edland)", {
     tolerance = 1e-03)
 })
 
+test_that("cprm.power", {
+  meth <- 'cprm'
+  # Table 3 in Zhao and Edland (2023)
+  expect_equal(cprm.power(n = 80,t = 0:6*.25,delta = 3.488879,sig2.int = 55.45902,
+                          sig.b0b1 = 13.58123,sig2.s = 15.44793,
+                          sig2.e = 13.63768)$power, 0.7999999, 
+               tolerance = 1e-03)
+  expect_equal(cprm.power(power = 0.8,t = 0:6*.25,delta = 3.488879,sig2.int = 55.45902,
+                          sig.b0b1 = 13.58123,sig2.s = 15.44793,
+                          sig2.e = 13.63768)$n[1], 80.00001,
+               tolerance = 1e-03)
+  expect_equal(cprm.power(n = 80, power = 0.8,t = 0:6*.25,sig2.int = 55.45902,
+                          sig.b0b1 = 13.58123,sig2.s = 15.44793,
+                          sig2.e = 13.63768)$delta, 3.488879,
+               tolerance = 1e-03)
+  # Figure 3 in Zhao and Edland (2023)
+  expect_equal(cprm.power(n = 200, delta = 0.25*4.0579*6*0.25,t = 0:6*.25,sig2.int = 55.45902,
+                          sig.b0b1 = 13.58123,sig2.s = 15.44793,
+                          sig2.e = 13.63768)$power, 0.4888692,
+               tolerance = 1e-03)
+  expect_equal(cprm.power(n = 400, delta = 0.25*4.0579*6*0.25,t = 0:6*.25,sig2.int = 55.45902,
+                          sig.b0b1 = 13.58123,sig2.s = 15.44793,
+                          sig2.e = 13.63768)$power, 0.7800555,
+               tolerance = 1e-03)
+  # random intercept only
+  expect_equal(cprm.power(n = 80,t = 0:6*.25,delta = 1.5,sig2.int = 20,
+                          sig.b0b1 = 0,sig2.s = 0,
+                          sig2.e = 10)$power, 0.5640936, 
+               tolerance = 1e-03)
+})
+
 test_that("lmmpower (hu)", {
   meth <- 'hu'
   expect_equal(lmmpower(delta=1.5, t = seq(0,1.5,0.25),
